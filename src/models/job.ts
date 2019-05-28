@@ -16,7 +16,7 @@ export interface AppliedJob {
     id?: string;
     jid: string;
     rid: string;
-    dateApplied: string;
+    date: string;
 }
 
 export interface ViewedJob {
@@ -24,7 +24,7 @@ export interface ViewedJob {
     id?: string;
     jid: string;
     rid: string;
-    dateViewed: string;
+    date: string;
 }
 
 export interface SharedJob {

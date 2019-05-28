@@ -8,6 +8,7 @@ import { User } from '../../models/user';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { COLLECTION } from '../../utils/const';
 import { Job } from '../../models/job';
+import { JobDetailsPage } from '../job-details/job-details';
 
 @IonicPage()
 @Component({
@@ -38,6 +39,7 @@ export class JobsPage {
         lat: -26.121747,
         lng: 28.173450
       }
+
       this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
     });
   }
@@ -62,8 +64,8 @@ export class JobsPage {
     // return this.dateProvider.getDateFromNow(date);
   }
 
-  jobDetails(job) {
-    // this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
+  viewJobDetails(job) {
+    this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
   }
 
   doRefresh(refresher) {

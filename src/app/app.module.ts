@@ -10,6 +10,7 @@ import { LoginPage } from '../pages/login/login';
 import { SignupPage } from '../pages/signup/signup';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { JobsPage } from '../pages/jobs/jobs';
+import { JobDetailsPage } from '../pages/job-details/job-details';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { AppointmentsPage } from '../pages/appointments/appointments';
 
@@ -25,6 +26,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { firebaseConfig } from '../config';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 
 @NgModule({
@@ -35,6 +37,7 @@ import { firebaseConfig } from '../config';
     DashboardPage,
     AppointmentsPage,
     JobsPage,
+    JobDetailsPage,
     ForgotPasswordPage
   ],
   imports: [
@@ -53,6 +56,7 @@ import { firebaseConfig } from '../config';
     DashboardPage,
     AppointmentsPage,
     JobsPage,
+    JobDetailsPage,
     ForgotPasswordPage
   ],
   providers: [
@@ -61,6 +65,7 @@ import { firebaseConfig } from '../config';
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     AngularFirestore,
     AngularFireAuth,
+    SocialSharing,
     AuthProvider,
     DataProvider,
     FeedbackProvider

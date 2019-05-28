@@ -8,6 +8,11 @@ export const COLLECTION = {
     sharedJobs: 'shared-jobs'
 }
 
+export const SUB_COLLECTION = {
+    views: 'views',
+    shared: 'shared',
+    applied: 'applied',
+}
 export const USER_TYPE = {
     candidate: 'candidate',
     recruiter: 'recruiter'

@@ -102,14 +102,13 @@ export class DataProvider {
   }
 
 
-
   applyHaversine(jobs, lat, lng) {
     if (jobs && lat && lng) {
       let usersLocation = {
         lat: lat,
         lng: lng
       };
-      jobs.map((job) => {
+      jobs.map(job => {
         let placeLocation = {
           lat: job.location.geo.latitude,
           lng: job.location.geo.longitude
