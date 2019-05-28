@@ -1,0 +1,39 @@
+<ion-menu [content]="content"  persistent="true" >
+  <ion-content class="user-profile">
+    <div *ngIf="profile" class="profile">
+      <img [src]="profilePicture()" (error)="img.src = defaultImg" #img alt="profile" class="profile-picture">
+      <h2>{{profile.firstname}} {{profile.lastname}}</h2>
+      <p>{{profile.email}}</p>
+      <p>{{profile.type}}</p>
+      <p>{{profile.uid}}</p>
+    </div>
+    <ion-list *ngIf="profile" class="menu">
+      <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.dashboardPage)">
+        <ion-icon class="light" name="home" item-start></ion-icon>
+          Dashboard
+      </ion-item>
+      <!-- <ion-item menuClose ion-item icon-left *ngIf="profile.type === 'recruiter'" (click)="nav.setRoot(pages.candidatesPage)">
+        <ion-icon class="light" name="people" item-start></ion-icon>
+          Candidates
+      </ion-item>
+      <ion-item menuClose ion-item icon-left *ngIf="profile.type === 'candidate'" (click)="nav.setRoot(pages.jobsPage)">
+        <ion-icon class="light" name="people" item-start></ion-icon>
+          Jobs
+      </ion-item> 
+      <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.profilePage)">
+        <ion-icon class="light" name="person" item-start></ion-icon>
+          Profile
+      </ion-item> -->
+    </ion-list>
+  </ion-content>
+
+  <ion-footer>
+    <button ion-button block clear menuClose class="dark logout" (click)="logout()" icon-start>
+      <ion-icon class="dark" name="log-out"></ion-icon>
+      Logout
+    </button>
+  </ion-footer>
+</ion-menu>
+
+<!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+<ion-nav [root]="rootPage" #content swipeBackEnabled="false"></ion-nav>

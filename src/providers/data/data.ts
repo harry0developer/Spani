@@ -1,0 +1,157 @@
+import { Injectable } from '@angular/core';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import * as moment from 'moment';
+
+import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireAuth } from '@angular/fire/auth';
+
+@Injectable()
+export class DataProvider {
+  KM: number = 1.60934;
+
+  constructor(
+    public angularFireStore: AngularFirestore,
+    public angularFireAuth: AngularFireAuth,
+  ) { }
+
+  getAllFromCollection(collectionName: string): Observable<any> {
+    return this.angularFireStore.collection<any>(collectionName).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
+  }
+
+  getCollectionById(collectionName: string, uid: string): Observable<any> {
+    return this.angularFireStore.collection<any>(collectionName, !!uid ? ref => ref.where('uid', '==', uid) : null).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
+  }
+
+  getCollectionByKeyValuePair(collectionName: string, key: string, value: string): Observable<any> {
+    return this.angularFireStore.collection<any>(collectionName, ref => ref.where(key, '==', value)).snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    );
+  }
+
+  getItemById(collectionName: string, id: string) {
+    return this.angularFireStore.collection(collectionName).doc<any>(id).valueChanges();
+  }
+
+  updateItem(collectionName: string, data: any, id: string) {
+    return this.angularFireStore.collection(collectionName).doc<any>(id).set(data, { merge: true });
+  }
+
+  addNewItemWithId(collectionName: string, data: any, id: string) {
+    return this.angularFireStore.collection(collectionName).doc<any>(id).set(data);
+  }
+
+  addNewItem(collectionName: string, data: any) {
+    return this.angularFireStore.collection(collectionName).add(data);
+  }
+
+  removeItem(collectionName: string, id: string) {
+    return this.angularFireStore.collection(collectionName).doc<any>(id).delete();
+  }
+
+  findItemById(collectionName: string, id: string) {
+    return this.getItemById(collectionName, id);
+  }
+
+  getProfilePicture(profile): string {
+    return `assets/imgs/users/${profile.gender}.svg`;
+  }
+
+  getDateTime(): string {
+    return moment(new Date()).format('YYYY/MM/DD HH:mm:ss');
+  }
+
+  getDateTimeMoment(dateTime): string {
+    return moment(dateTime).fromNow();
+  }
+
+  generateId(length: number): string { //must be 15 + timestamp
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for (var i = 0; i < length; i++) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result + this.getTimestampInMilliseconds();
+  }
+
+  getTimestampInMilliseconds(): string {
+    return new Date().getTime().toString();
+  }
+
+
+
+  applyHaversine(jobs, lat, lng) {
+    if (jobs && lat && lng) {
+      let usersLocation = {
+        lat: lat,
+        lng: lng
+      };
+      jobs.map((job) => {
+        let placeLocation = {
+          lat: job.location.geo.latitude,
+          lng: job.location.geo.longitude
+        };
+        job.distance = this.getDistanceBetweenPoints(
+          usersLocation,
+          placeLocation,
+          'miles'
+        ).toFixed(0);
+      });
+      return jobs;
+    } else {
+      return jobs;
+    }
+  }
+
+  getDistanceBetweenPoints(start, end, units) {
+    let earthRadius = {
+      miles: 3958.8,
+      km: 6371
+    };
+
+    let R = earthRadius[units || 'miles'];
+    let lat1 = start.lat;
+    let lon1 = start.lng;
+    let lat2 = end.lat;
+    let lon2 = end.lng;
+
+    let dLat = this.toRad((lat2 - lat1));
+    let dLon = this.toRad((lon2 - lon1));
+    let a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(this.toRad(lat1)) * Math.cos(this.toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    let d = R * c;
+
+    return d * this.KM; //convert miles to km
+  }
+
+  toRad(x) {
+    return x * Math.PI / 180;
+  }
+
+}
