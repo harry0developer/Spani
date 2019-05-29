@@ -4,7 +4,7 @@ import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { AppliedJob, SharedJob, ViewedJob } from '../../models/job';
-import { COLLECTION, USER_TYPE, SUB_COLLECTION } from '../../utils/const';
+import { COLLECTION } from '../../utils/const';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
 @IonicPage()
@@ -47,14 +47,20 @@ export class JobDetailsPage {
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'jid', this.job.jid).subscribe(viewedJobs => {
       this.viewedUsers = viewedJobs || [];
       if (!this.hasViewedJob()) {
+        console.log('not viewed');
+
         this.addToViewedJobs();
+      } else {
+
+        console.log('viewed');
       }
     });
 
-    this.dataProvider.getItemById(COLLECTION.appliedJobs, this.job.uid).subscribe(appliedJobs => {
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'jid', this.job.jid).subscribe(appliedJobs => {
       this.appliedUsers = appliedJobs || [];
-      this.hasUserApplied();
+      this.hasApplied = this.hasUserApplied();
     });
+
 
   }
 
@@ -156,12 +162,14 @@ export class JobDetailsPage {
     return this.authProvider.isRecruiter(this.profile);
   }
 
-  hasUserApplied() {
-    this.appliedUsers.map(appliedJob => {
-      if (appliedJob.uid === this.profile.uid && this.job.id === appliedJob.jid) {
-        this.hasApplied = true;
+  hasUserApplied(): boolean {
+    let applied = false;
+    this.appliedUsers.forEach(appliedJob => {
+      if (appliedJob.uid === this.profile.uid && appliedJob.uid === this.profile.uid && this.profile.uid === appliedJob.uid && this.job.jid === appliedJob.jid) {
+        applied = true;
       }
     });
+    return applied;
   }
 
   isJobViewed(): boolean {

@@ -108,6 +108,8 @@ export class DataProvider {
         lat: lat,
         lng: lng
       };
+      console.log(jobs);
+
       jobs.map(job => {
         let placeLocation = {
           lat: job.location.geo.latitude,

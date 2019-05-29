@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events, ModalController } from 'ionic-angular';
-import { FormControl } from '@angular/forms';
+import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { bounceIn } from '../../utils/animations';
 import { AuthProvider } from '../../providers/auth/auth';
@@ -34,6 +33,7 @@ export class JobsPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
+    this.feedbackProvider.presentLoading();
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       const loc = {
         lat: -26.121747,
@@ -41,6 +41,7 @@ export class JobsPage {
       }
 
       this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
+      this.feedbackProvider.dismissLoading();
     });
   }
 
