@@ -28,6 +28,13 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { firebaseConfig } from '../config';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
+// import { NgxMaskModule, IConfig } from 'ngx-mask'
+// export let options: Partial<IConfig> | (() => Partial<IConfig>);
+
+import { BrMaskerModule } from 'brmasker-ionic-3';
+import { MultiLoginPage } from '../pages/multi-login/multi-login';
+import { WindowProvider } from '../providers/window/window';
+
 
 @NgModule({
   declarations: [
@@ -38,7 +45,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     AppointmentsPage,
     JobsPage,
     JobDetailsPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    MultiLoginPage
   ],
   imports: [
     BrowserModule,
@@ -46,6 +54,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     BrowserAnimationsModule,
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
+    BrMaskerModule,
+    // NgxMaskModule.forRoot(options),
     RatingModule
   ],
   bootstrap: [IonicApp],
@@ -57,7 +67,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     AppointmentsPage,
     JobsPage,
     JobDetailsPage,
-    ForgotPasswordPage
+    ForgotPasswordPage,
+    MultiLoginPage
   ],
   providers: [
     StatusBar,
@@ -68,7 +79,8 @@ import { SocialSharing } from '@ionic-native/social-sharing';
     SocialSharing,
     AuthProvider,
     DataProvider,
-    FeedbackProvider
+    FeedbackProvider,
+    WindowProvider
   ]
 })
 export class AppModule { }

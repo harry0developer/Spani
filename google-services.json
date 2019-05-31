@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "454356312005",
+    "firebase_url": "https://my-spani.firebaseio.com",
+    "project_id": "my-spani",
+    "storage_bucket": "my-spani.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:454356312005:android:ceaabed86a55ba26",
+        "android_client_info": {
+          "package_name": "co.za.moralemedia.spani"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "454356312005-i1tbbk54o0qmu8nsjc7of5sc7bpco2pm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBVFLuIUqsI75Lv8REHtbLH0is1Br1EB_I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "454356312005-i1tbbk54o0qmu8nsjc7of5sc7bpco2pm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

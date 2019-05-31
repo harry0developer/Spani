@@ -11,108 +11,95 @@ import { SignupPage } from '../signup/signup';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { Job } from '../../models/job';
 import * as firebase from 'firebase';
+import { WindowProvider } from '../../providers/window/window';
 
 @Component({
-  selector: 'page-login',
-  templateUrl: 'login.html'
-
+  selector: 'page-multi-login',
+  templateUrl: 'multi-login.html',
 })
-export class LoginPage {
+export class MultiLoginPage {
+
+  loginType: string = 'phoneNumber';
   data = {
     email: '',
     password: '',
-    otp: '',
+    otpCode: '',
     phoneNumber: ''
   }
-  login = {
-    phoneNumber: false,
-    emailAndPassword: false
-  };
   type = 'password';
   showPass = false;
   showOTPPage = false;
+  verificationId: string = '';
 
-  user: any;
-
+  // user: any;
   applicationVerifier: any;
 
+
+  windowRef: any;
+  phoneNumber: any;
+  verificationCode: string;
+  user: any;
   constructor(
     private navCtrl: NavController,
     private authProvider: AuthProvider,
     private dataProvider: DataProvider,
     private feedbackProvider: FeedbackProvider,
-    private ionEvents: Events
+    private ionEvents: Events,
+    private win: WindowProvider
   ) { }
 
   ionViewDidLoad() {
-    if (this.authProvider.isLoggedIn()) {
-      this.navigate(this.authProvider.getStoredUser());
-    }
+    // if (this.authProvider.isLoggedIn()) {
+    //   this.navigate(this.authProvider.getStoredUser());
+    // }
+    this.windowRef = this.win.windowRef
+    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
+      'size': 'invisible'
+    })
+
+    this.windowRef.recaptchaVerifier
+      .render()
+      .then(widgetId => {
+
+        this.windowRef.recaptchaWidgetId = widgetId
+      });
+
   }
 
-  firebaseRecaptchaVerifier() {
-    this.applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-      'size': 'invisible',
-      'callback': function (response) {
-        // reCAPTCHA solved - will proceed with submit function
-        console.log('res: ', response);
-      },
-      'expired-callback': function () {
-        console.log('RecaptchaVerifier timedout');
-      }
-    });
-  }
-
-  verifyOtp() {
-    this.login = {
-      phoneNumber: false,
-      emailAndPassword: false
-    }
-    this.data.otp = this.data.otp.trim();
-    console.log(this.data.otp);
-  }
-
-  phoneAuth() {
+  sendLoginCode() {
+    const appVerifier = this.windowRef.recaptchaVerifier;
+    const num = "+27" + this.data.phoneNumber;
     this.feedbackProvider.presentLoading();
-    this.firebaseRecaptchaVerifier();
-    console.log(this.applicationVerifier);
+    firebase.auth()
+      .signInWithPhoneNumber(num, appVerifier)
+      .then(result => {
+        this.feedbackProvider.dismissLoading();
+        this.windowRef.confirmationResult = result;
+        console.log('sms sent', result);
+        this.showOTPPage = true;
+      })
+      .catch(error => {
+        console.log('error sending sms');
+        this.feedbackProvider.dismissLoading();
+        console.log(error)
+      });
 
-    const provider = new firebase.auth.PhoneAuthProvider();
-    provider.verifyPhoneNumber('+27829390061', this.applicationVerifier).then(verificationId => {
-      this.feedbackProvider.dismissLoading();
-      console.log(verificationId);
-      this.showOTPPage = true;
-      this.data.otp = this.data.otp.trim();
-      console.log(this.data);
+  }
 
-      //var verificationCode = window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.');
-      // return firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
-    }).then(function (phoneCredential) {
+  verifyLoginCode() {
+    this.feedbackProvider.presentLoading();
+    this.windowRef.confirmationResult.confirm(this.data.otpCode).then(result => {
       this.feedbackProvider.dismissLoading();
-      console.log(phoneCredential);
-    }).catch(err => {
+      console.log('code corret');
+      this.user = result.user;
+    }).catch(error => {
       this.feedbackProvider.dismissLoading();
-      console.log(err);
+      console.log(error, "Incorrect code entered?");
     });
   }
 
-  loginWithPhonenumber() {
-    this.phoneAuth();
-  }
-
-
-  loginWithPhoneNumber() {
-    this.login = {
-      phoneNumber: true,
-      emailAndPassword: false
-    }
-  }
-
-  loginWithEmailAndPassword() {
-    this.login = {
-      phoneNumber: false,
-      emailAndPassword: true
-    }
+  cancelOtpVerification() {
+    this.showOTPPage = false;
   }
 
   addJobs() {
@@ -220,3 +207,26 @@ export class LoginPage {
   }
 
 }
+
+
+// sendOtpCode() {
+//   this.feedbackProvider.presentLoading();
+//   this.firebaseRecaptchaVerifier();
+//   const provider = new firebase.auth.PhoneAuthProvider();
+//   provider.verifyPhoneNumber('+27829390061', this.applicationVerifier).then(verificationId => {
+//     this.feedbackProvider.dismissLoading();
+//     console.log(verificationId);
+//     this.showOTPPage = true;
+//     this.data.otpCode = this.data.otpCode.trim();
+//     console.log(this.data);
+
+//     //var verificationCode = window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.');
+//     // return firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+//   }).then(function (phoneCredential) {
+//     this.feedbackProvider.dismissLoading();
+//     console.log(phoneCredential);
+//   }).catch(err => {
+//     this.feedbackProvider.dismissLoading();
+//     console.log(err);
+//   });
+// }

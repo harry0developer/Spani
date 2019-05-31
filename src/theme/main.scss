@@ -1,12 +1,12 @@
-$primary: #EF6461;
+$primary: #68c496;
 $light-primary: #f8bbba;
-$secondary: #f4f4f4;
+$secondary: #9addbc;
 $white: #fff;
-$danger: #ff6473;
+$danger: #ff5e5e;
 $green: #37c396;
 $grey: #cecece;
 $light-grey: #f1f1f1f1;
-$dark: #4d4848;
+$dark: #333;
 
 
 .border-dark {
@@ -133,7 +133,7 @@ ion-thumbnail {
 }
 
 ion-input {
-    color: $primary;
+    color: $dark;
 }
 
 ion-item.item.item-input, ion-item.item.item-select {
@@ -172,3 +172,11 @@ ion-card {
 .spinner-crescent circle {
     stroke: $primary !important;
 }
+
+.validation p{
+	text-align: left;
+    color: $danger;
+    font-size: 12px;
+    margin-bottom: 20px;
+}
+

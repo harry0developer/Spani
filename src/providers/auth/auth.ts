@@ -69,6 +69,7 @@ export class AuthProvider {
   }
 
   logout() {
+    this.clearStoredUser();
     return this.angularFireAuth.auth.signOut();
   }
 
@@ -78,6 +79,10 @@ export class AuthProvider {
 
   getStoredUser(): User {
     return JSON.parse(localStorage.getItem('user'));
+  }
+
+  clearStoredUser() {
+    localStorage.clear();
   }
 
   isLoggedIn(): boolean {
@@ -92,5 +97,32 @@ export class AuthProvider {
   isRecruiter(user): boolean {
     return user && user.type === USER_TYPE.recruiter;
   }
+
+  // firebaseRecaptchaVerifier(){
+  //   let applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+  //     'size': 'invisible',
+  //     'callback': function (response) {
+  //       // reCAPTCHA solved - will proceed with submit function
+  //       console.log(response);
+  //     },
+  //     'expired-callback': function () {
+  //       // Reset reCAPTCHA?
+  //     }
+  //   });
+  // }
+
+  // phoneAuth() {
+
+  //   const provider = new firebase.auth.PhoneAuthProvider();
+  //   provider.verifyPhoneNumber('+27829390061', applicationVerifier).then(function (verificationId) {
+  //     var verificationCode = window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.');
+  //     return firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
+  //   }).then(function (phoneCredential) {
+  //     console.log(phoneCredential);
+  //   }).catch(err => {
+  //     console.log(err);
+  //   });
+  // }
+
 
 }
