@@ -9,13 +9,15 @@ import { DashboardPage } from '../dashboard/dashboard';
 import { JobsPage } from '../jobs/jobs';
 import { EMAIL_EXISTS } from '../../config';
 import { MultiLoginPage } from '../multi-login/multi-login';
+import { LoginPage } from '../login/login';
+import { SetupPage } from '../setup/setup';
 
 @IonicPage()
 @Component({
-  selector: 'page-signup',
-  templateUrl: 'signup.html',
+  selector: 'page-multi-signup',
+  templateUrl: 'multi-signup.html',
 })
-export class SignupPage {
+export class MultiSignupPage {
   signupType: string = 'phoneNumber';
   showOTPPage: boolean = false;
   countries: any = [];
@@ -46,19 +48,10 @@ export class SignupPage {
     public authProvider: AuthProvider,
     public feedbackProvider: FeedbackProvider) { }
 
-  ionViewDidLoad() {
-    this.getCountries();
-  }
-
-  getCountries() {
-    this.dataProvider.getCountries().subscribe(countries => {
-      this.countries = countries;
-      console.log(countries);
-    });
-  }
+  ionViewDidLoad() { }
 
   signupWithPhoneNumber() {
-    console.log(this.data);
+    this.showOTPPage = true;
   }
 
   signupWithEmailAndPassword() {
@@ -85,8 +78,17 @@ export class SignupPage {
       this.navCtrl.setRoot(JobsPage)
     }
   }
+
   backToLogin() {
     this.navCtrl.setRoot(MultiLoginPage);
+  }
+
+  verifyLoginCode() {
+    this.navCtrl.setRoot(SetupPage, { data: this.data });
+  }
+
+  cancelOtpVerification() {
+    this.navCtrl.setRoot(LoginPage);
   }
 
   showPassword() {
@@ -97,5 +99,4 @@ export class SignupPage {
       this.type = 'password';
     }
   }
-
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -7,10 +7,10 @@ import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { DataProvider } from '../../providers/data/data';
 import { USER_NOT_FOUND, INVALID_PASSWORD } from '../../config';
-import { SignupPage } from '../signup/signup';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { Job } from '../../models/job';
 import * as firebase from 'firebase';
+import { MultiSignupPage } from '../multi-signup/multi-signup';
 
 @Component({
   selector: 'page-login',
@@ -201,9 +201,8 @@ export class LoginPage {
     });
   }
 
-
   goToSignup() {
-    this.navCtrl.setRoot(SignupPage);
+    this.navCtrl.setRoot(MultiSignupPage);
   }
 
   goToForgotPassword() {

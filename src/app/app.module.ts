@@ -7,7 +7,6 @@ import { MyApp } from './app.component';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from '../pages/login/login';
-import { SignupPage } from '../pages/signup/signup';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { JobsPage } from '../pages/jobs/jobs';
 import { JobDetailsPage } from '../pages/job-details/job-details';
@@ -35,18 +34,23 @@ import { BrMaskerModule } from 'brmasker-ionic-3';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { WindowProvider } from '../providers/window/window';
 import { HttpClientModule } from '@angular/common/http';
+import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
+import { SetupPage } from '../pages/setup/setup';
+import { PlacesPage } from '../pages/places/places';
 
 @NgModule({
   declarations: [
     MyApp,
     LoginPage,
-    SignupPage,
     DashboardPage,
     AppointmentsPage,
     JobsPage,
     JobDetailsPage,
     ForgotPasswordPage,
-    MultiLoginPage
+    MultiLoginPage,
+    MultiSignupPage,
+    SetupPage,
+    PlacesPage
   ],
   imports: [
     BrowserModule,
@@ -63,13 +67,15 @@ import { HttpClientModule } from '@angular/common/http';
   entryComponents: [
     MyApp,
     LoginPage,
-    SignupPage,
     DashboardPage,
     AppointmentsPage,
     JobsPage,
     JobDetailsPage,
     ForgotPasswordPage,
-    MultiLoginPage
+    MultiLoginPage,
+    MultiSignupPage,
+    SetupPage,
+    PlacesPage
   ],
   providers: [
     StatusBar,

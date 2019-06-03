@@ -7,6 +7,8 @@ import { DashboardPage } from '../pages/dashboard/dashboard';
 import { AuthProvider } from '../providers/auth/auth';
 import { DataProvider } from '../providers/data/data';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
+import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
+import { SetupPage } from '../pages/setup/setup';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { MultiLoginPage } from '../pages/multi-login/multi-login';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = MultiLoginPage;
+  rootPage: any = SetupPage;
 
   pages: Array<{ title: string, component: any }>;
 
