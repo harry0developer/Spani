@@ -49,18 +49,7 @@ export class AuthProvider {
   }
 
   addUserToDatabase(user: User) {
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      gender: user.gender,
-      firstname: user.firstname,
-      lastname: user.lastname,
-      date: this.dataProvider.getDateTime(),
-      type: user.type,
-      location: null,
-      phone: null,
-      settings: { hide_dob: false, hide_phone: false },
-    };
+    const userData = {};
     return this.angularFireStore.collection('users').doc(user.uid).set(userData);
   }
 

@@ -1,10 +1,10 @@
 <ion-header></ion-header>
 
 <ion-content>
-  <div class="brand">
+  <!-- <div class="brand">
     <img src="assets/logo_light.svg" alt="Spani logo" class="logo">
   </div>
-  
+   -->
   <div padding *ngIf="!showOTPPage" >
     <ion-segment mode="md" color="dark" [(ngModel)]="signupType">
       <ion-segment-button value="phoneNumber">
@@ -22,31 +22,31 @@
         <ion-card padding> 
           <ion-item class="animated pulse">
             <ion-label>First Name</ion-label>
-            <ion-input [(ngModel)]="data.firstname" required firstName="firstName" #firstName="ngModel"
+            <ion-input [(ngModel)]="data.firstname" required firstname="firstname" #firstname="ngModel"
             pattern=".{2,}" type="text"></ion-input>
           </ion-item>
-          <div [hidden]="firstName.valid || firstName.pristine" class="validation">
-            <p class="animated tada" [hidden]="!firstName.hasError('required')">First Name is required</p>
+          <div [hidden]="firstname.valid || firstname.pristine" class="validation">
+            <p class="animated tada" [hidden]="!firstname.hasError('required')">First Name is required</p>
           </div>
       
           <ion-item class="animated pulse">
             <ion-label>Last Name</ion-label>
-            <ion-input [(ngModel)]="data.lastname" required lastName="lastName" #lastName="ngModel"
+            <ion-input [(ngModel)]="data.lastname" required lastname="lastname" #lastname="ngModel"
             pattern=".{2,}" type="text"></ion-input>
           </ion-item>
-          <div [hidden]="lastName.valid || lastName.pristine" class="validation">
-            <p class="animated tada" [hidden]="!lastName.hasError('required')">Last Name is required</p>
+          <div [hidden]="lastname.valid || lastname.pristine" class="validation">
+            <p class="animated tada" [hidden]="!lastname.hasError('required')">Last Name is required</p>
           </div>
             
           <ion-item class="animated pulse">
             <ion-label>Phone Number</ion-label>
-            <ion-input [(ngModel)]="data.phoneNumber" required phoneNumber="phoneNumber" minlength="13" #phoneNumber="ngModel" [brmasker]="{mask:'(000) 000 0000', len:25,  type:'num'}"
+            <ion-input [(ngModel)]="data.phonenumber" required phonenumber="phonenumber" minlength="14" #phonenumber="ngModel" [brmasker]="{mask:'(000) 000 0000', len:25,  type:'num'}"
             type="tel">
-            </ion-input>
+          </ion-input>
           </ion-item>
-          <div [hidden]="phoneNumber.valid || phoneNumber.pristine" class="validation">
-            <p class="animated fadeInLeft" [hidden]="!phoneNumber.hasError('required')">Phone Number is required</p>
-            <p class="animated fadeInLeft" [hidden]="!phoneNumber.hasError('minlength')">Too short</p>
+          <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">
+            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
+            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('minlength')">Phone Number is too short</p>
           </div>
 
           <ion-grid>
@@ -60,9 +60,9 @@
                 </ion-item>
               </ion-col>
               <ion-col col-6>
-                <ion-item class="animated pulse">
+                <ion-item class="animated pulse" primary>
                   <ion-label floating>Race</ion-label>
-                  <ion-select [(ngModel)]="data.race" required race="race" #gender="ngModel">
+                  <ion-select [(ngModel)]="data.race" required race="race" #race="ngModel">
                     <ion-option value="black">Black</ion-option>
                     <ion-option value="coloured">Coloured</ion-option>
                     <ion-option value="indian">Indian</ion-option>
@@ -78,7 +78,7 @@
               <ion-col col-6>
                 <ion-item>
                   <ion-label floating>Date of birth</ion-label>
-                  <ion-datetime displayFormat="YYYY/MM/DD" pickerFormat="YYYY MMMM DD" max="2001-01-01" [(ngModel)]="data.gender" required gender="gender" #gender="ngModel"></ion-datetime>
+                  <ion-datetime displayFormat="YYYY/MM/DD" pickerFormat="YYYY MMMM DD" max="2001-01-01" [(ngModel)]="data.dob" required dob="dob" #dob="ngModel"></ion-datetime>
                 </ion-item>
               </ion-col>
               <ion-col col-6>
@@ -94,7 +94,17 @@
             </ion-row>
           </ion-grid>
           
-          <button ion-button block color="light" class="dark border" [disabled]="!phoneNumber.valid" (click)="signupWithPhoneNumber()">Create Account</button>
+          <ion-item class="animated pulse">
+            <ion-label floating>Register as</ion-label>
+            <ion-select [(ngModel)]="data.userType" required userType="userType" #userType="ngModel">
+              <ion-option value="recruiter">Recruiter</ion-option>
+              <ion-option value="candidate">Candidate</ion-option>
+            </ion-select>
+          </ion-item>
+
+          <button ion-button block color="light" class="dark border" 
+            [disabled]="!userType.valid || !firstname.valid || !lastname.valid || !phonenumber.valid || !gender.valid || !nationality.valid || !dob.valid || !race.valid" 
+            (click)="signupWithPhoneNumber()">Create Account</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
       </div>
@@ -157,12 +167,5 @@
   <div id="my-recaptcha-container"></div>
 </ion-content>
 <ion-footer mode="md" *ngIf="!showOTPPage">
-  <div class="row controls">
-    <div class="col col-6 left">
-      <button ion-button clear small class="clear" (click)="goToSignup()">Sign up</button>
-    </div>
-    <div class="col col-6 right">
-      <button ion-button clear small class="clear" (click)="goToForgotPassword()">Forgot password</button>
-    </div>
-  </div>
+  <button ion-button block clear small class="clear" (click)="backToLogin()">Back to Login</button>
 </ion-footer>

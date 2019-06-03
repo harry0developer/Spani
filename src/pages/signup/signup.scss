@@ -20,8 +20,9 @@ page-signup {
         .col {
             padding: 0;
         }
-        ion-item.item-select {
-                height: 75px;;
+        ion-item.item-select, ion-item.item-datetime{
+            height: 75px;
+            border-radius: 4px;
         }
     }
     ion-card {

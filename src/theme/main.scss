@@ -76,25 +76,29 @@ $dark: #333;
     color: $white !important;
 }
 
-[aria-checked=true] .alert-checkbox-icon {
-    border-color: $primary !important;
-    background-color: $primary !important;
-}
+// [aria-checked=true] .alert-checkbox-icon {
+//     border-color: $primary !important;
+//     background-color: $primary !important;
+// }
 
 [aria-checked=true] .alert-radio-label {
     color: $primary !important;
 }
 
-[aria-checked=true] .alert-radio-icon {
+[aria-checked=true] .alert-radio-inner {
     border-color: $primary !important;
 }
-.alert-ios [aria-checked=true] .alert-radio-inner {
-    border-color: $primary !important;
+// [aria-checked=true] .alert-radio-icon {
+//     border-color: $primary !important;
+// }
 
-}
-.action-sheet-button {
-    color: $primary !important;
-}
+
+// .alert-radio-inner {
+//     background-color: $primary !important;
+// }
+// .action-sheet-button {
+//     color: $primary !important;
+// }
 
 .toggle-checked .toggle-icon {
     background-color: $white !important;

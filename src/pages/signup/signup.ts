@@ -9,6 +9,7 @@ import { USER_TYPE } from '../../utils/const';
 import { DashboardPage } from '../dashboard/dashboard';
 import { JobsPage } from '../jobs/jobs';
 import { EMAIL_EXISTS } from '../../config';
+import { MultiLoginPage } from '../multi-login/multi-login';
 
 @IonicPage()
 @Component({
@@ -20,13 +21,20 @@ export class SignupPage {
   showOTPPage: boolean = false;
   countries: any = [];
 
-  data = {
-    firstname: '',
-    lastname: '',
+  data: User = {
+    uid: '',
     email: '',
     password: '',
-    type: '',
-    gender: ''
+    userType: '',
+    firstname: '',
+    lastname: '',
+    gender: '',
+    nationality: '',
+    phonenumber: '',
+    location: null,
+    dob: '',
+    dateCreated: '',
+    settings: null
   }
 
   type = 'password';
@@ -49,12 +57,17 @@ export class SignupPage {
       console.log(countries);
     });
   }
+
+  signupWithPhoneNumber() {
+    console.log(this.data);
+  }
+
   signupWithEmailAndPassword() {
     const data: User = {
       ...this.data,
       uid: null,
       settings: { hide_dob: false, hide_phone: false },
-      date: this.dataProvider.getDateTime()
+      dateCreated: this.dataProvider.getDateTime()
     }
     this.authProvider.signUpWithEmailAndPassword(data).then(() => {
       console.log('Success');
@@ -73,8 +86,8 @@ export class SignupPage {
       this.navCtrl.setRoot(JobsPage)
     }
   }
-  goToLogin() {
-    this.navCtrl.setRoot(LoginPage);
+  backToLogin() {
+    this.navCtrl.setRoot(MultiLoginPage);
   }
 
   showPassword() {

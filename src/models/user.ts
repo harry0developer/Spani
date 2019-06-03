@@ -2,13 +2,15 @@ export interface User {
     uid: string;
     email: string;
     password?: string;
-    type: string;
+    userType: string;
     firstname: string;
     lastname: string;
+    dob: string;
     gender: string;
-    phone?: string;
+    nationality: string;
+    phonenumber?: string;
     location?: Location;
-    date: string;
+    dateCreated: string;
     settings: Settings
 }
 
