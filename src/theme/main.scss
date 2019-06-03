@@ -1,6 +1,5 @@
-$primary: #68c496;
-$light-primary: #f8bbba;
-$secondary: #9addbc;
+$primary: #c4a968;
+$secondary: #dfd0ae;
 $white: #fff;
 $danger: #ff5e5e;
 $green: #37c396;
@@ -89,8 +88,9 @@ $dark: #333;
 [aria-checked=true] .alert-radio-icon {
     border-color: $primary !important;
 }
-.alert-radio-inner {
-    background-color: $primary !important;
+.alert-ios [aria-checked=true] .alert-radio-inner {
+    border-color: $primary !important;
+
 }
 .action-sheet-button {
     color: $primary !important;

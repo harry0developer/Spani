@@ -66,23 +66,20 @@ export class MultiLoginPage {
 
   }
 
-  sendLoginCode() {
+  signinWithPhoneNumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = "+27" + this.data.phoneNumber;
     this.feedbackProvider.presentLoading();
-    firebase.auth()
-      .signInWithPhoneNumber(num, appVerifier)
-      .then(result => {
-        this.feedbackProvider.dismissLoading();
-        this.windowRef.confirmationResult = result;
-        console.log('sms sent', result);
-        this.showOTPPage = true;
-      })
-      .catch(error => {
-        console.log('error sending sms');
-        this.feedbackProvider.dismissLoading();
-        console.log(error)
-      });
+    this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
+      this.feedbackProvider.dismissLoading();
+      this.windowRef.confirmationResult = result;
+      console.log('sms sent', result);
+      this.showOTPPage = true;
+    }).catch(error => {
+      console.log('error sending sms');
+      this.feedbackProvider.dismissLoading();
+      console.log(error)
+    });
 
   }
 
@@ -90,7 +87,7 @@ export class MultiLoginPage {
     this.feedbackProvider.presentLoading();
     this.windowRef.confirmationResult.confirm(this.data.otpCode).then(result => {
       this.feedbackProvider.dismissLoading();
-      console.log('code corret');
+      console.log('code correct');
       this.user = result.user;
     }).catch(error => {
       this.feedbackProvider.dismissLoading();

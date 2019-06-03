@@ -2,31 +2,68 @@ page-signup {
     .content{
         background-color: $primary !important;
     }
-    .brand .logo {
-        width: 80px;
+
+    .brand {
+        margin-top: 15%;
+        margin-bottom: 6%;
+        .logo {
+            width: 80px;
+        }
+    }
+        
+    .segment-md-dark .segment-button {
+        color: $secondary;
+    }
+ 
+    .grid {
+        padding: 0;
+        .col {
+            padding: 0;
+        }
+        ion-item.item-select {
+                height: 75px;;
+        }
+    }
+    ion-card {
+        min-height: 240px;
+        .button {
+            margin-top: 10%;
+        }
+        .terms {
+            color: $secondary;
+            font-size: 10px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .otp-message {
+            font-size: 12px;
+            color: $primary;
+            text-align: center;
+            font-weight: bold;
+            margin: 20px 0;
+        }
     }
     .item-inner {
         border-bottom: none !important;
     }
+
     ion-item {
         border: 1px solid $secondary !important;
-        margin: 5px 0 !important;
+        margin: 10px 0 !important;
     }
 
-    ion-footer{
+    .controls {
         text-align: center;
-    }
-
-    ion-select, .text-input{
-        color: $primary;
-        font-weight: bold;
-        text-align: right;
-        float: right;
-    }
-
-    p {
         color: $white;
+        font-weight: lighter;
+
+        .col {
+            padding: 0;
+            margin: 0;
+        }
     }
+
+ 
     .label {
         color: $primary !important;
     }
@@ -34,5 +71,9 @@ page-signup {
     .button.eye {
         color: $primary;
         font-size: 1em;
+    }
+
+    #my-recaptcha-container {
+        visibility: hidden;
     }
 }

@@ -30,7 +30,7 @@
             <p class="animated fadeInLeft" [hidden]="!phoneNumber.hasError('required')">Phone Number is required</p>
             <p class="animated fadeInLeft" [hidden]="!phoneNumber.hasError('minlength')">Too short</p>
           </div>
-          <button ion-button block color="light" class="dark border" [disabled]="!phoneNumber.valid" (click)="sendLoginCode()">Login</button>
+          <button ion-button block color="light" class="dark border" [disabled]="!phoneNumber.valid" (click)="signinWithPhoneNumber()">Login</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
       </div>

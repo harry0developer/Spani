@@ -5,6 +5,7 @@ import * as moment from 'moment';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class DataProvider {
@@ -13,8 +14,12 @@ export class DataProvider {
   constructor(
     public angularFireStore: AngularFirestore,
     public angularFireAuth: AngularFireAuth,
+    public http: HttpClient,
   ) { }
 
+  getCountries() {
+    return this.http.get('assets/flag-emojis.pretty.json');
+  }
   getAllFromCollection(collectionName: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName).snapshotChanges().pipe(
       map(actions => {

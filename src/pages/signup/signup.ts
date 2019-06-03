@@ -16,6 +16,10 @@ import { EMAIL_EXISTS } from '../../config';
   templateUrl: 'signup.html',
 })
 export class SignupPage {
+  signupType: string = 'phoneNumber';
+  showOTPPage: boolean = false;
+  countries: any = [];
+
   data = {
     firstname: '',
     lastname: '',
@@ -35,8 +39,16 @@ export class SignupPage {
     public authProvider: AuthProvider,
     public feedbackProvider: FeedbackProvider) { }
 
-  ionViewDidLoad() { }
+  ionViewDidLoad() {
+    this.getCountries();
+  }
 
+  getCountries() {
+    this.dataProvider.getCountries().subscribe(countries => {
+      this.countries = countries;
+      console.log(countries);
+    });
+  }
   signupWithEmailAndPassword() {
     const data: User = {
       ...this.data,

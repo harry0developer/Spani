@@ -34,7 +34,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { WindowProvider } from '../providers/window/window';
-
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -55,6 +55,7 @@ import { WindowProvider } from '../providers/window/window';
     AngularFireModule.initializeApp(firebaseConfig),
     AngularFireDatabaseModule,
     BrMaskerModule,
+    HttpClientModule,
     // NgxMaskModule.forRoot(options),
     RatingModule
   ],

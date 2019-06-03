@@ -32,6 +32,10 @@ export class AuthProvider {
     return this.angularFireAuth.auth.signInWithPopup(provider);
   }
 
+  signInWithPhoneNumber(phoneNumber: string, verifier: auth.ApplicationVerifier) {
+    return this.angularFireAuth.auth.signInWithPhoneNumber(phoneNumber, verifier);
+  }
+
   signInWithEmailAndPassword(email: string, password: string) {
     return this.angularFireAuth.auth.signInWithEmailAndPassword(email, password);
   }
