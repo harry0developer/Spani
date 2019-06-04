@@ -48,17 +48,8 @@
             <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
             <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('minlength')">Phone Number is too short</p>
           </div> 
-          
-          <ion-item class="animated pulse">
-            <ion-label floating>Register as</ion-label>
-            <ion-select [(ngModel)]="data.userType" required userType="userType" #userType="ngModel">
-              <ion-option value="recruiter">Recruiter</ion-option>
-              <ion-option value="candidate">Candidate</ion-option>
-            </ion-select>
-          </ion-item>
 
-          <button ion-button block color="light" class="dark border" 
-            [disabled]="!userType.valid || !firstname.valid || !lastname.valid || !phonenumber.valid" 
+          <button ion-button block primary [disabled]="!firstname.valid || !lastname.valid || !phonenumber.valid" 
             (click)="signupWithPhoneNumber()">Create Account</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
@@ -69,7 +60,7 @@
           <p class="otp-message">Enter the 6 digit code sent to your phone</p>
           <ion-item class="animated pulse">
             <ion-label  floating>OTP code</ion-label>
-            <ion-input [(ngModel)]="data.otpCode" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
+            <ion-input [(ngModel)]="otp" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
             type="tel">
             </ion-input>
           </ion-item>
@@ -112,7 +103,7 @@
           <p class="animated fadeInLeft" [hidden]="!password.hasError('pattern')">Password must be 6 characters or longer</p>
         </div>
         <div  id="sign-in-button" ></div>
-        <button ion-button block color="light" class="dark border" [disabled]="!email.valid || !password.valid " (click)="signinWithEmailAndPassword()">Login</button>
+        <button ion-button block primary [disabled]="!email.valid || !password.valid " (click)="signinWithEmailAndPassword()">Login</button>
         <p class="terms">Terms and conditions apply</p>
       </ion-card>
 

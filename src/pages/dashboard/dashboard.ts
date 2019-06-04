@@ -4,6 +4,7 @@ import { DataProvider } from '../../providers/data/data';
 import { AppointmentsPage } from '../appointments/appointments';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
+import { User } from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -11,7 +12,7 @@ import { AuthProvider } from '../../providers/auth/auth';
   templateUrl: 'dashboard.html',
 })
 export class DashboardPage {
-  profile: any = {};
+  profile: User = null;
 
 
   constructor(

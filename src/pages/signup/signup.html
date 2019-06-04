@@ -96,14 +96,14 @@
           
           <ion-item class="animated pulse">
             <ion-label floating>Register as</ion-label>
-            <ion-select [(ngModel)]="data.userType" required userType="userType" #userType="ngModel">
+            <ion-select [(ngModel)]="data.type" required type="type" #type="ngModel">
               <ion-option value="recruiter">Recruiter</ion-option>
               <ion-option value="candidate">Candidate</ion-option>
             </ion-select>
           </ion-item>
 
           <button ion-button block color="light" class="dark border" 
-            [disabled]="!userType.valid || !firstname.valid || !lastname.valid || !phonenumber.valid || !gender.valid || !nationality.valid || !dob.valid || !race.valid" 
+            [disabled]="!type.valid || !firstname.valid || !lastname.valid || !phonenumber.valid || !gender.valid || !nationality.valid || !dob.valid || !race.valid" 
             (click)="signupWithPhoneNumber()">Create Account</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>

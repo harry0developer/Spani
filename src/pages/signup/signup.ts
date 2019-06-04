@@ -24,7 +24,7 @@ export class SignupPage {
     uid: '',
     email: '',
     password: '',
-    userType: '',
+    type: '',
     firstname: '',
     lastname: '',
     gender: '',

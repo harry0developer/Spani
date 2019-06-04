@@ -7,11 +7,11 @@ import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { DataProvider } from '../../providers/data/data';
 import { USER_NOT_FOUND, INVALID_PASSWORD } from '../../config';
-import { SignupPage } from '../signup/signup';
 import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { Job } from '../../models/job';
 import * as firebase from 'firebase';
 import { WindowProvider } from '../../providers/window/window';
+import { MultiSignupPage } from '../multi-signup/multi-signup';
 
 @Component({
   selector: 'page-multi-login',
@@ -24,7 +24,7 @@ export class MultiLoginPage {
     email: '',
     password: '',
     otpCode: '',
-    phoneNumber: ''
+    phonenumber: ''
   }
   type = 'password';
   showPass = false;
@@ -36,7 +36,6 @@ export class MultiLoginPage {
 
 
   windowRef: any;
-  phoneNumber: any;
   verificationCode: string;
   user: any;
   constructor(
@@ -57,18 +56,17 @@ export class MultiLoginPage {
       'size': 'invisible'
     })
 
-    this.windowRef.recaptchaVerifier
-      .render()
-      .then(widgetId => {
-
-        this.windowRef.recaptchaWidgetId = widgetId
-      });
+    this.windowRef.recaptchaVerifier.render().then(widgetId => {
+      this.windowRef.recaptchaWidgetId = widgetId;
+    }).catch(err => {
+      console.log(err);
+    });
 
   }
 
-  signinWithPhoneNumber() {
+  signinWithPhonenumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
-    const num = "+27" + this.data.phoneNumber;
+    const num = "+27" + this.data.phonenumber;
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
       this.feedbackProvider.dismissLoading();
@@ -87,63 +85,20 @@ export class MultiLoginPage {
     this.feedbackProvider.presentLoading();
     this.windowRef.confirmationResult.confirm(this.data.otpCode).then(result => {
       this.feedbackProvider.dismissLoading();
-      console.log('code correct');
-      this.user = result.user;
+      this.getDatabaseUserAndNavigate(result.user);
     }).catch(error => {
       this.feedbackProvider.dismissLoading();
+      this.feedbackProvider.presentErrorAlert('OTP code error', 'The OTP code entered does not match the one sent to you by sms');
       console.log(error, "Incorrect code entered?");
     });
-  }
-
-  cancelOtpVerification() {
-    this.showOTPPage = false;
-  }
-
-  addJobs() {
-    const job: Job = {
-      jid: this.dataProvider.generateId(15),
-      uid: 'LvdXgZjVXhbps8iUiD9GqOZVuP72',
-      title: 'Helper wanted',
-      description: 'We need a helper with our house chores and baby sitting, we have a place for your to stay.',
-      date: '2019/05/03 10:09:18',
-      skills: ['nanny', 'baby care', 'cleaning', 'washing', 'cooking'],
-      category: 'Security',
-      location: {
-        address: '102 Zola, Soweto Johannesburg',
-        geo: {
-          lat: '-19.10001',
-          lng: '29.669'
-        }
-      }
-    }
-
-    console.log(job);
-
-    this.dataProvider.addNewItemWithId(COLLECTION.jobs, job, job.jid).then(() => {
-      console.log('success');
-    }).catch((err) => {
-      console.log(err);
-
-    })
-
-  }
-  navigate(user) {
-    this.ionEvents.publish(EVENTS.loggedIn, user);
-    this.authProvider.storeUser(user);
-    if (user.type === USER_TYPE.candidate) {
-      this.navCtrl.setRoot(JobsPage)
-    } else if (user.type === USER_TYPE.recruiter) {
-      this.navCtrl.setRoot(DashboardPage)
-    }
   }
 
   signinWithEmailAndPassword() {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithEmailAndPassword(this.data.email, this.data.password).then(res => {
-      this.dataProvider.getItemById(COLLECTION.users, res.user.uid).subscribe(u => {
-        this.feedbackProvider.dismissLoading();
-        this.navigate(u);
-      });
+      this.feedbackProvider.dismissLoading();
+      this
+      // this.addUserToDatabase(res.user);
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
       if (err.code === USER_NOT_FOUND || err.code == INVALID_PASSWORD) {
@@ -156,10 +111,8 @@ export class MultiLoginPage {
   signInWithFacebook() {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithFacebook().then((res) => {
-      this.dataProvider.getItemById(COLLECTION.users, res.user.uid).subscribe(u => {
-        this.feedbackProvider.dismissLoading();
-        this.navigate(u);
-      });
+      this.feedbackProvider.dismissLoading();
+      this.getDatabaseUserAndNavigate(res.user);
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
       if (err.code === USER_NOT_FOUND || err.code == INVALID_PASSWORD) {
@@ -185,9 +138,57 @@ export class MultiLoginPage {
     });
   }
 
+  getDatabaseUserAndNavigate(user: firebase.User) {
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.getItemById(COLLECTION.users, user.uid).subscribe(u => {
+      this.feedbackProvider.dismissLoading();
+      console.log(u);
+
+      this.navigate(u);
+    });
+  }
+
+  navigate(user) {
+    this.ionEvents.publish(EVENTS.loggedIn, user);
+    this.authProvider.storeUser(user);
+    if (user.type.toLowerCase() === USER_TYPE.candidate) {
+      this.navCtrl.setRoot(JobsPage)
+    } else if (user.type.toLowerCase() === USER_TYPE.recruiter) {
+      this.navCtrl.setRoot(DashboardPage)
+    }
+  }
+
+  cancelOtpVerification() {
+    this.showOTPPage = false;
+  }
+
+  addJobs() {
+    const job: Job = {
+      jid: this.dataProvider.generateId(15),
+      uid: 'LvdXgZjVXhbps8iUiD9GqOZVuP72',
+      title: 'Helper wanted',
+      description: 'We need a helper with our house chores and baby sitting, we have a place for your to stay.',
+      date: '2019/05/03 10:09:18',
+      skills: ['nanny', 'baby care', 'cleaning', 'washing', 'cooking'],
+      category: 'Security',
+      location: {
+        address: '102 Zola, Soweto Johannesburg',
+        geo: {
+          lat: '-19.10001',
+          lng: '29.669'
+        }
+      }
+    }
+
+    this.dataProvider.addNewItemWithId(COLLECTION.jobs, job, job.jid).then(() => {
+      console.log('success');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
 
   goToSignup() {
-    this.navCtrl.setRoot(SignupPage);
+    this.navCtrl.setRoot(MultiSignupPage);
   }
 
   goToForgotPassword() {

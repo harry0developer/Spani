@@ -4,6 +4,10 @@ import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { User } from '../../models/user';
 import { PlacesPage } from '../places/places';
+import { COLLECTION, EVENTS, USER_TYPE } from '../../utils/const';
+import { AuthProvider } from '../../providers/auth/auth';
+import { JobsPage } from '../jobs/jobs';
+import { DashboardPage } from '../dashboard/dashboard';
 
 @IonicPage()
 @Component({
@@ -18,7 +22,7 @@ export class SetupPage {
     uid: '',
     email: '',
     password: '',
-    userType: '',
+    type: '',
     firstname: '',
     lastname: '',
     gender: '',
@@ -44,9 +48,14 @@ export class SetupPage {
   mode: string = 'vertical';
   selectedIndex = 0;
   constructor(public navCtrl: NavController,
-    public viewCtrl: ViewController, public ionEvents: Events, public dataProvider: DataProvider,
-    public actionSheetCtrl: ActionSheetController, private feedbackProvider: FeedbackProvider,
-    public modalCtrl: ModalController, public navParams: NavParams) {
+    private viewCtrl: ViewController,
+    private ionEvents: Events,
+    private dataProvider: DataProvider,
+    private actionSheetCtrl: ActionSheetController,
+    private feedbackProvider: FeedbackProvider,
+    private authProvider: AuthProvider,
+    private modalCtrl: ModalController,
+    private navParams: NavParams) {
   }
 
   ionViewDidLoad() {
@@ -57,9 +66,15 @@ export class SetupPage {
     // this.data.firstname = data.firstname;
     // this.data.lastname = data.lastname;
 
+    const data = this.navParams.get('data');
+    console.log(data);
+
+    this.data.firstname = data.firstname;
+    this.data.lastname = data.lastname;
+    this.data.phonenumber = data.phonenumber;
+    this.data.uid = data.uid;
     this.getCountries();
     this.getCategories();
-
   }
 
   selectChange(e) {
@@ -90,54 +105,35 @@ export class SetupPage {
   }
 
 
-  signup() {
+  completeAndSignup() {
     console.log(this.data);
-
-    // this.feedbackProvider.presentLoading("Please wait...");
-    // let res;
-    // this.data.last_login = this.dataProvider.getDate();
-    // this.data.nationality = this.data.nationality.trim();
-    // this.data.status = "Active";
-    // this.data.date_created = this.dataProvider.getDate();
-    // this.data.date_updated = this.dataProvider.getDate();
-    // this.data.title = this.data.type;
-    // console.log("Sending data ", this.data);
-
-    // this.dataProvider.postDataToDB(this.data, "signup").then((result) => {
-    //   res = result;
-    //   this.feedbackProvider.dismissLoading();
-    //   if (res && res.error) {
-    //     console.log(res.error);
-    //     this.feedbackProvider.presentErrorAlert("Signup Failed");
-    //   } else {
-    //     this.ionEvents.publish(this.dataProvider.USER_PROFILE_UPDATED, res.data);
-    //     this.init(res.data);
-    //   }
-    // }).catch(err => {
-    //   console.log(err);
-    //   this.feedbackProvider.dismissLoading();
-    // })
+    this.feedbackProvider.presentLoading("Please wait...");
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.addNewItemWithId(COLLECTION.users, this.data, this.data.uid).then(() => {
+      this.feedbackProvider.dismissLoading();
+      this.navigate(this.data);
+    }).catch(err => {
+      console.log(err);
+      this.feedbackProvider.presentErrorAlert('Signup failed', 'An error has occured while signing you up, please try again');
+    });
   }
 
   dismiss() {
     this.viewCtrl.dismiss(null);
   }
 
-  init(user) {
-    // this.ionEvents.publish(this.dataProvider.USER_LOGGED_IN, user);
-    // this.dataProvider.initializeData();
-    // if (user.type.toLowerCase() === "recruiter") {
-    //   this.navCtrl.setRoot(DashboardPage);
-    // }
-    // else {
-    //   this.navCtrl.setRoot(JobsPage);
-    // }
+  navigate(user) {
+    this.ionEvents.publish(EVENTS.loggedIn, user);
+    this.authProvider.storeUser(user);
+    if (user.type === USER_TYPE.candidate) {
+      this.navCtrl.setRoot(JobsPage)
+    } else if (user.type === USER_TYPE.recruiter) {
+      this.navCtrl.setRoot(DashboardPage)
+    }
   }
 
-
-
   getUserType(type) {
-    // this.data.type = type;
+    this.data.type = type;
     this.goNext();
   }
 

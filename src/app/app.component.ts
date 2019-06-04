@@ -17,7 +17,7 @@ import { SetupPage } from '../pages/setup/setup';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = SetupPage;
+  rootPage: any = MultiLoginPage;
 
   pages: Array<{ title: string, component: any }>;
 

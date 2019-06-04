@@ -2,7 +2,7 @@ export interface User {
     uid: string;
     email: string;
     password?: string;
-    userType: string;
+    type: string;
     firstname: string;
     lastname: string;
     dob: string;

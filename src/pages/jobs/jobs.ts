@@ -32,8 +32,8 @@ export class JobsPage {
   }
 
   ionViewDidLoad() {
-    this.profile = this.authProvider.getStoredUser();
     this.feedbackProvider.presentLoading();
+    this.profile = this.authProvider.getStoredUser();
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       const loc = {
         lat: -26.121747,
