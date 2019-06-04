@@ -91,6 +91,8 @@ export class SetupPage {
 
 
   signup() {
+    console.log(this.data);
+
     // this.feedbackProvider.presentLoading("Please wait...");
     // let res;
     // this.data.last_login = this.dataProvider.getDate();
@@ -144,6 +146,7 @@ export class SetupPage {
     modal.onDidDismiss(data => {
       if (data) {
         this.data.location.address = data.address;
+        this.pickedAddress = data.address;
         this.data.location.geo = {
           lat: data.lat,
           lng: data.lng
