@@ -6,6 +6,7 @@ import * as moment from 'moment';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
+import { Message } from '../../models/message';
 
 @Injectable()
 export class DataProvider {
@@ -79,6 +80,20 @@ export class DataProvider {
   findItemById(collectionName: string, id: string) {
     return this.getItemById(collectionName, id);
   }
+
+  getChats(rootCollection: string, receiverUid: string, senderUid: string) {
+    return this.angularFireStore.collection(rootCollection).doc(receiverUid).collection(senderUid, ref => ref.orderBy('date')).valueChanges();
+  }
+
+  getMyChats(rootCollection: string, senderUid: string) {
+    return this.angularFireStore.collection(rootCollection).doc(senderUid).snapshotChanges();
+  }
+
+
+  addNewMessage(rootCollection: string, receiverUid: string, senderUid: string, messageData: Message) {
+    return this.angularFireStore.collection(rootCollection).doc(receiverUid).collection(senderUid).add(messageData);
+  }
+
 
   getProfilePicture(profile): string {
     return `assets/imgs/users/${profile.gender}.svg`;

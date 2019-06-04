@@ -9,6 +9,7 @@ import { Job, AppliedJob, SharedJob, ViewedJob } from '../../models/job';
 import { COLLECTION } from '../../utils/const';
 import { Rating } from 'ngx-rating';
 import { Appointment } from '../../models/appointment';
+import { Message } from '../../models/message';
 
 @IonicPage()
 @Component({
@@ -24,6 +25,7 @@ export class DashboardPage {
   viewedJobs: ViewedJob[] = [];
   ratings: Rating[] = [];
   appointments: Appointment[] = [];
+  chats: Message[] = [];
 
   myJobs: Job[] = [];
 
@@ -70,6 +72,16 @@ export class DashboardPage {
       console.log(appointments);
     });
 
+    this.dataProvider.getAllFromCollection(COLLECTION.messages).subscribe(chats => {
+
+      console.log(chats);
+    });
+
+    this.dataProvider.getMyChats(COLLECTION.messages, this.profile.uid).subscribe(chats => {
+
+      console.log(chats);
+    });
+
   }
 
   profilePicture(): string {
@@ -105,7 +117,20 @@ export class DashboardPage {
   }
 
   viewRaters() {
-    // this.feedbackProvider.presentModal(RatingsPage);
+  }
+
+  addMessage() {
+    const m: Message = {
+      uid: 'ZTrFYN4arQao1yuAW7SmNDd21f93',
+      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
+      message: 'Hey babes',
+      date: this.dataProvider.getDateTime(),
+    }
+    this.dataProvider.addNewMessage(COLLECTION.messages, m.uid, m.rid, m).then(res => {
+      console.log('Message sent', res);
+    }).catch(err => {
+      console.log(err);
+    });
   }
 
   editProfile() {

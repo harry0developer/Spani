@@ -5,7 +5,8 @@ export const COLLECTION = {
     ratings: 'ratings',
     appliedJobs: 'applied-jobs',
     viewedJobs: 'viewed-jobs',
-    sharedJobs: 'shared-jobs'
+    sharedJobs: 'shared-jobs',
+    messages: 'messages',
 }
 
 export const SUB_COLLECTION = {

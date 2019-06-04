@@ -59,13 +59,6 @@ export class SetupPage {
   }
 
   ionViewDidLoad() {
-    // this.feedbackProvider.presentAlert("Welcome", "Complete your details, then you are good to go.");
-    // const data = this.navParams.get("data");
-    // this.data.email = data.email;
-    // this.data.password = data.password;
-    // this.data.firstname = data.firstname;
-    // this.data.lastname = data.lastname;
-
     const data = this.navParams.get('data');
     console.log(data);
 
