@@ -7,6 +7,8 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Message } from '../../models/message';
+import { User } from '../../models/user';
+import { COLLECTION } from '../../utils/const';
 
 @Injectable()
 export class DataProvider {
@@ -79,6 +81,14 @@ export class DataProvider {
 
   findItemById(collectionName: string, id: string) {
     return this.getItemById(collectionName, id);
+  }
+
+  getUserById(id): Observable<User> {
+    return this.getItemById(COLLECTION.users, id);
+  }
+
+  getUserByIdPromise(id) {
+    return this.getItemById(COLLECTION.users, id).toPromise();
   }
 
   getChats(rootCollection: string, receiverUid: string, senderUid: string) {

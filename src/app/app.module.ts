@@ -37,6 +37,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
 import { SetupPage } from '../pages/setup/setup';
 import { PlacesPage } from '../pages/places/places';
+import { ProfilePage } from '../pages/profile/profile';
 
 @NgModule({
   declarations: [
@@ -50,7 +51,8 @@ import { PlacesPage } from '../pages/places/places';
     MultiLoginPage,
     MultiSignupPage,
     SetupPage,
-    PlacesPage
+    PlacesPage,
+    ProfilePage
   ],
   imports: [
     BrowserModule,
@@ -75,7 +77,8 @@ import { PlacesPage } from '../pages/places/places';
     MultiLoginPage,
     MultiSignupPage,
     SetupPage,
-    PlacesPage
+    PlacesPage,
+    ProfilePage
   ],
   providers: [
     StatusBar,

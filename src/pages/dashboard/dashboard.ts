@@ -10,6 +10,7 @@ import { COLLECTION } from '../../utils/const';
 import { Rating } from 'ngx-rating';
 import { Appointment } from '../../models/appointment';
 import { Message } from '../../models/message';
+import { ProfilePage } from '../profile/profile';
 
 @IonicPage()
 @Component({
@@ -119,20 +120,9 @@ export class DashboardPage {
   viewRaters() {
   }
 
-  addMessage() {
-    const m: Message = {
-      uid: 'ZTrFYN4arQao1yuAW7SmNDd21f93',
-      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
-      message: 'Hey babes',
-      date: this.dataProvider.getDateTime(),
-    }
-    this.dataProvider.addNewMessage(COLLECTION.messages, m.uid, m.rid, m).then(res => {
-      console.log('Message sent', res);
-    }).catch(err => {
-      console.log(err);
-    });
+  viewProfile() {
+    this.navCtrl.push(ProfilePage);
   }
-
   editProfile() {
     // let modal = this.modalCtrl.create(SettingsPage);
     // modal.onDidDismiss(data => {

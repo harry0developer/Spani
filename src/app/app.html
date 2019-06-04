@@ -8,22 +8,18 @@
       <p>{{profile.uid}}</p>
     </div>
     <ion-list *ngIf="profile" class="menu">
-      <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.dashboardPage)">
+      <ion-item menuClose ion-item icon-left *ngIf="isRecruiter()" (click)="nav.setRoot(pages.dashboardPage)">
         <ion-icon class="light" name="home" item-start></ion-icon>
           Dashboard
       </ion-item>
-      <!-- <ion-item menuClose ion-item icon-left *ngIf="profile.type === 'recruiter'" (click)="nav.setRoot(pages.candidatesPage)">
-        <ion-icon class="light" name="people" item-start></ion-icon>
-          Candidates
-      </ion-item>
-      <ion-item menuClose ion-item icon-left *ngIf="profile.type === 'candidate'" (click)="nav.setRoot(pages.jobsPage)">
+      <ion-item menuClose ion-item icon-left *ngIf="!isRecruiter()" (click)="nav.setRoot(pages.jobsPage)">
         <ion-icon class="light" name="people" item-start></ion-icon>
           Jobs
       </ion-item> 
       <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.profilePage)">
         <ion-icon class="light" name="person" item-start></ion-icon>
           Profile
-      </ion-item> -->
+      </ion-item>
     </ion-list>
   </ion-content>
 

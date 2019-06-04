@@ -9,6 +9,9 @@ import { DataProvider } from '../providers/data/data';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
 import { SetupPage } from '../pages/setup/setup';
+import { ProfilePage } from '../pages/profile/profile';
+import { JobsPage } from '../pages/jobs/jobs';
+import { User } from '../models/user';
 
 
 @Component({
@@ -19,7 +22,8 @@ export class MyApp {
 
   rootPage: any = MultiLoginPage;
 
-  pages: Array<{ title: string, component: any }>;
+  pages: any;
+  profile: User;
 
   constructor(public platform: Platform,
     public statusBar: StatusBar,
@@ -29,26 +33,38 @@ export class MyApp {
   ) {
     this.initializeApp();
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: 'Home', component: DashboardPage }
-    ];
-
+    this.pages = {
+      jobsPage: JobsPage,
+      dashboardPage: DashboardPage,
+      profilePage: ProfilePage
+    }
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.setProfile();
     });
   }
 
+
+  setProfile() {
+    if (this.authProvider.isLoggedIn()) {
+      this.profile = this.authProvider.getStoredUser();
+    }
+  }
+
   openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+  }
+
+  profilePicture(): string {
+    return this.dataProvider.getProfilePicture(this.profile);
+  }
+
+  isRecruiter(): boolean {
+    return this.authProvider.isRecruiter(this.profile);
   }
 
   logout() {
@@ -56,4 +72,6 @@ export class MyApp {
       this.nav.setRoot(LoginPage);
     });
   }
+
+
 }

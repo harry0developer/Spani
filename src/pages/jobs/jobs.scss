@@ -17,7 +17,7 @@ page-jobs {
 		h2 {
 			color: $dark !important;
 			margin: 10px 0 !important;
-			font-weight: bold !important;
+			font-weight: normal !important;
 		}
 		p {
 			font-size: .8em !important;
@@ -45,7 +45,7 @@ page-jobs {
 	.item-divider {
 		background-color: $white !important;
 		color: $primary !important;
-		border-top: 1px solid $secondary !important;
+		border-top: 1px solid $light-grey !important;
 		padding: 5px 10px !important;
 		font-size: 1.1em;
 	}
