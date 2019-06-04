@@ -36,7 +36,7 @@ export class SetupPage {
       }
     },
     dob: '',
-    dateCreated: '',
+    date: '',
     settings: null
   }
   pickedAddress: string;
@@ -109,6 +109,7 @@ export class SetupPage {
     console.log(this.data);
     this.feedbackProvider.presentLoading("Please wait...");
     this.feedbackProvider.presentLoading();
+    this.data.date = this.dataProvider.getDateTime();
     this.dataProvider.addNewItemWithId(COLLECTION.users, this.data, this.data.uid).then(() => {
       this.feedbackProvider.dismissLoading();
       this.navigate(this.data);

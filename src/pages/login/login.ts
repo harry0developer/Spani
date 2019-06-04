@@ -45,7 +45,10 @@ export class LoginPage {
   ) { }
 
   ionViewDidLoad() {
-    if (this.authProvider.isLoggedIn()) {
+    const user = this.authProvider.isLoggedIn();
+    if (user) {
+      console.log('autologin');
+
       this.navigate(this.authProvider.getStoredUser());
     }
   }

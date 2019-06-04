@@ -48,19 +48,20 @@ export class MultiLoginPage {
   ) { }
 
   ionViewDidLoad() {
-    // if (this.authProvider.isLoggedIn()) {
-    //   this.navigate(this.authProvider.getStoredUser());
-    // }
-    this.windowRef = this.win.windowRef
-    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
-      'size': 'invisible'
-    })
+    if (this.authProvider.isLoggedIn()) {
+      this.navigate(this.authProvider.getStoredUser());
+    } else {
+      this.windowRef = this.win.windowRef
+      this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
+        'size': 'invisible'
+      })
 
-    this.windowRef.recaptchaVerifier.render().then(widgetId => {
-      this.windowRef.recaptchaWidgetId = widgetId;
-    }).catch(err => {
-      console.log(err);
-    });
+      this.windowRef.recaptchaVerifier.render().then(widgetId => {
+        this.windowRef.recaptchaWidgetId = widgetId;
+      }).catch(err => {
+        console.log(err);
+      });
+    }
 
   }
 

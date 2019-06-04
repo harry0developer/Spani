@@ -10,7 +10,7 @@ export interface User {
     nationality: string;
     phonenumber?: string;
     location?: Location;
-    dateCreated: string;
+    date: string;
     settings: Settings
 }
 

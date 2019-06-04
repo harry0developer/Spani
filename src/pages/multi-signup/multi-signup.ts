@@ -36,7 +36,7 @@ export class MultiSignupPage {
     phonenumber: '',
     location: null,
     dob: '',
-    dateCreated: '',
+    date: '',
     settings: null
   };
   otp: string;
@@ -118,7 +118,7 @@ export class MultiSignupPage {
       ...this.data,
       uid: null,
       settings: { hide_dob: false, hide_phone: false },
-      dateCreated: this.dataProvider.getDateTime()
+      date: this.dataProvider.getDateTime()
     }
     this.authProvider.signUpWithEmailAndPassword(data).then(() => {
       console.log('Success');

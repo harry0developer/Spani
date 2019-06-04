@@ -5,6 +5,10 @@ import { AppointmentsPage } from '../appointments/appointments';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
+import { Job, AppliedJob, SharedJob, ViewedJob } from '../../models/job';
+import { COLLECTION } from '../../utils/const';
+import { Rating } from 'ngx-rating';
+import { Appointment } from '../../models/appointment';
 
 @IonicPage()
 @Component({
@@ -14,6 +18,14 @@ import { User } from '../../models/user';
 export class DashboardPage {
   profile: User = null;
 
+  postedJobs: Job[] = [];
+  appliedJobs: AppliedJob[] = [];
+  sharedJobs: SharedJob[] = [];
+  viewedJobs: ViewedJob[] = [];
+  ratings: Rating[] = [];
+  appointments: Appointment[] = [];
+
+  myJobs: Job[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -27,6 +39,36 @@ export class DashboardPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
+    console.log(this.profile);
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
+      this.myJobs = jobs;
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'rid', this.profile.uid).subscribe(jobs => {
+      this.appliedJobs = jobs;
+      console.log(jobs);
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'rid', this.profile.uid).subscribe(jobs => {
+      this.viewedJobs = jobs;
+      console.log(jobs);
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.sharedJobs, 'rid', this.profile.uid).subscribe(jobs => {
+      this.sharedJobs = jobs;
+      console.log(jobs);
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(ratings => {
+      this.ratings = ratings;
+      console.log(ratings);
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
+      this.appointments = appointments;
+      console.log(appointments);
+    });
 
   }
 
@@ -51,11 +93,15 @@ export class DashboardPage {
   }
 
   viewPostedJobs() {
-    // this.feedbackProvider.presentModal(MyJobsPage);
+  }
+
+  viewAppliedJobs() {
+  }
+
+  viewSharedJobs() {
   }
 
   viewViewedJobs() {
-    // this.feedbackProvider.presentModal(ViewedJobsPage);
   }
 
   viewRaters() {

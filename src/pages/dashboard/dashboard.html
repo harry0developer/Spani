@@ -20,13 +20,13 @@
     <p class="animated slideInRight">{{profile.title || profile.type}}</p>
     <button ion-button round small class="primary animated zoomIn" (click)="editProfile()" color="primary">Edit Profile</button>
   </div>
-  <ion-grid class="contact-info"  *ngIf="profile">
+  <ion-grid class="contact-info" *ngIf="profile">
     <ion-row>
-      <ion-col col-6 class="animated slideInLeft">
+      <ion-col col-6 class="animated slideInLeft" *ngIf="profile.phonenumber">
         <i class="fa fa-phone" item-start></i>
-        {{ profile.phone}}
+        {{profile.phonenumber}}
       </ion-col>
-      <ion-col col-6 class="animated slideInRight">
+      <ion-col col-6 class="animated slideInRight" *ngIf="profile.email">
         <i class="fa fa-envelope" item-start></i>
         {{ profile.email}}
       </ion-col>
@@ -35,7 +35,8 @@
 
   <ion-grid *ngIf="profile">
     <ion-row>
-      <ion-col *ngIf="isRecruiter()" col-6 class="animated zoomIn">
+
+      <ion-col col-6 *ngIf="isRecruiter()" class="animated zoomIn">
         <ion-card class="summary" (tap)="viewPostedJobs()">
           <ion-item>
             <div class="card-icon">
@@ -48,19 +49,7 @@
           </ion-item>
         </ion-card>
       </ion-col>
-      <ion-col *ngIf="!isRecruiter()" col-6 class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewPopularity()">
-          <ion-item>
-            <div class="card-icon">
-              <i class="fa fa-users"></i>
-            </div>
-            <div class="card-details" text-wrap>
-              <h2>20%</h2>
-              <p>Popularity</p>
-            </div>
-          </ion-item>
-        </ion-card>
-      </ion-col> 
+
       <ion-col col-6 class="animated zoomIn">
         <ion-card class="summary" (tap)="viewViewedJobs()">
           <ion-item>
@@ -68,15 +57,41 @@
               <i class="fa fa-eye"></i>
             </div>
             <div class="card-details" text-wrap>
-              <h2>{{ viewedJobs.length + appliedJobs.length + sharedJobs.length  }}</h2>
-              <p>Jobs Summary</p>
+              <h2>{{viewedJobs.length }}</h2>
+              <p>Viewed Jobs</p>
+            </div>
+          </ion-item>
+        </ion-card>
+      </ion-col> 
+
+      <ion-col col-6 class="animated zoomIn">
+        <ion-card class="summary" (tap)="viewSharedJobs()">
+          <ion-item>
+            <div class="card-icon">
+              <i class="fa fa-eye"></i>
+            </div>
+            <div class="card-details" text-wrap>
+              <h2>{{sharedJobs.length }}</h2>
+              <p>Shared Jobs</p>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
-    </ion-row>
 
-    <ion-row>
+      <ion-col col-6 class="animated zoomIn">
+        <ion-card class="summary" (tap)="viewAppliedJobs()">
+          <ion-item>
+            <div class="card-icon">
+              <i class="fa fa-eye"></i>
+            </div>
+            <div class="card-details" text-wrap>
+              <h2>{{appliedJobs.length }}</h2>
+              <p>Applied Jobs</p>
+            </div>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+ 
       <ion-col col-6 class="animated zoomIn"> 
         <ion-card class="summary" *ngIf="appointments" (tap)="viewAppointments()">
           <ion-item>
@@ -84,12 +99,13 @@
               <i class="fa fa-calendar"></i>
             </div>
             <div class="card-details" text-wrap>
-              <h2>{{ appointments?.length }}</h2>
+              <h2>{{appointments?.length }}</h2>
               <p>Appointments</p>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
+
       <ion-col col-6 class="animated zoomIn">
         <ion-card class="summary" (tap)="viewRaters()">
           <ion-item>
