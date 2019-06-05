@@ -33,6 +33,8 @@
     </ion-row>
   </ion-grid>
 
+  <button ion-button (click)="add()">Add to Viewed</button>
+
   <ion-grid *ngIf="profile">
     <ion-row>
       <ion-col col-6 *ngIf="isRecruiter()" class="animated zoomIn">

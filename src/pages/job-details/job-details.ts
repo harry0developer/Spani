@@ -40,9 +40,7 @@ export class JobDetailsPage {
     this.profile = this.authProvider.getStoredUser();
     this.job = this.navParams.get('job');
 
-    this.dataProvider.getItemById(COLLECTION.users, this.job.uid).subscribe(v => {
-      this.job.postedBy = v;
-    });
+    this.getJobPoster();
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'jid', this.job.jid).subscribe(viewedJobs => {
       this.viewedUsers = viewedJobs || [];
@@ -60,8 +58,16 @@ export class JobDetailsPage {
       this.appliedUsers = appliedJobs || [];
       this.hasApplied = this.hasUserApplied();
     });
+  }
 
-
+  getJobPoster() {
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.getItemById(COLLECTION.users, this.job.uid).subscribe(v => {
+      this.job.postedBy = v;
+      this.feedbackProvider.dismissLoading();
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+    });
   }
 
   hasViewedJob(): boolean {

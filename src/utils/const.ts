@@ -22,3 +22,13 @@ export const USER_TYPE = {
 export const EVENTS = {
     loggedIn: 'logged-in'
 }
+
+export const ERRORS = {
+    connection: 'connection'
+}
+
+export const NETWORK = {
+    error: 'error',
+    connected: 'connected',
+
+}

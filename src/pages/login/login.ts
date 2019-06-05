@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, Events } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
+import { COLLECTION, USER_TYPE, EVENTS, NETWORK, ERRORS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
@@ -11,6 +11,7 @@ import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { Job } from '../../models/job';
 import * as firebase from 'firebase';
 import { MultiSignupPage } from '../multi-signup/multi-signup';
+import { ErrorPage } from '../error/error';
 
 @Component({
   selector: 'page-login',
@@ -45,6 +46,10 @@ export class LoginPage {
   ) { }
 
   ionViewDidLoad() {
+
+    this.ionEvents.subscribe(NETWORK.error, () => {
+      this.feedbackProvider.presentModal(ErrorPage, { type: ERRORS.connection })
+    })
     const user = this.authProvider.isLoggedIn();
     if (user) {
       console.log('autologin');

@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
+import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { LoginPage } from '../pages/login/login';
@@ -12,6 +12,10 @@ import { SetupPage } from '../pages/setup/setup';
 import { ProfilePage } from '../pages/profile/profile';
 import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
+import { Network } from '@ionic-native/network';
+import { FeedbackProvider } from '../providers/feedback/feedback';
+import { ErrorPage } from '../pages/error/error';
+import { ERRORS, NETWORK } from '../utils/const';
 
 
 @Component({
@@ -29,7 +33,9 @@ export class MyApp {
     public statusBar: StatusBar,
     public splashScreen: SplashScreen,
     public authProvider: AuthProvider,
-    public dataProvider: DataProvider
+    public dataProvider: DataProvider,
+    private ionEvents: Events,
+    private network: Network,
   ) {
     this.initializeApp();
 
@@ -42,6 +48,12 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
+      this.network.onDisconnect().subscribe(() => {
+        this.ionEvents.publish(NETWORK.error)
+        // this.feedbackProvider.presentModal(ErrorPage, { type: ERRORS.connection });
+      });
+
+
       this.statusBar.styleDefault();
       this.splashScreen.hide();
       this.setProfile();

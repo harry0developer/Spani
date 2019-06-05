@@ -61,13 +61,13 @@
 
       <ion-card class="center" *ngIf="job.skills">
         <ion-item text-wrap>
-          <i class="animated slideInLeft fa fa-certificate icon" item-start></i>
+          <i class="animated slideInLeft fa fa-award icon" item-start></i>
           <h2 class="animated slideInDown">Required skills</h2>
           <ion-badge color="dark" class="animated slideInUp" *ngFor="let skill of job.skills">{{skill}}</ion-badge>
         </ion-item>
       </ion-card>
 
-      <ion-card class="center" *ngIf="job.postedBy">
+      <ion-card class="center" *ngIf="job.postedBy && job.postedBy.firstname">
         <ion-item text-wrap>
           <h2 class="animated slideInDown">Posted by <span class="black">{{ job.postedBy.firstname }} {{job.postedBy.lastname}}</span></h2>
           <p class="animated slideInUp">
@@ -76,9 +76,9 @@
               {{ job.postedBy.email}} 
             </span>
             <br>
-            <span [hidden]="!job.postedBy.phone">
+            <span [hidden]="!job.postedBy.phonenumber">
               <i class="animated slideInLeft fa fa-phone icon" item-start></i>
-              {{ job.postedBy.phone}} 
+              {{ job.postedBy.phonenumber}} 
             </span>
           </p>
         </ion-item>

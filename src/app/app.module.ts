@@ -38,6 +38,10 @@ import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
 import { SetupPage } from '../pages/setup/setup';
 import { PlacesPage } from '../pages/places/places';
 import { ProfilePage } from '../pages/profile/profile';
+import { ErrorPage } from '../pages/error/error';
+import { Network } from '@ionic-native/network';
+import { NetworkProvider } from '../providers/network/network';
+import { JobsListPage } from '../pages/jobs-list/jobs-list';
 
 @NgModule({
   declarations: [
@@ -52,7 +56,9 @@ import { ProfilePage } from '../pages/profile/profile';
     MultiSignupPage,
     SetupPage,
     PlacesPage,
-    ProfilePage
+    ProfilePage,
+    ErrorPage,
+    JobsListPage
   ],
   imports: [
     BrowserModule,
@@ -78,7 +84,9 @@ import { ProfilePage } from '../pages/profile/profile';
     MultiSignupPage,
     SetupPage,
     PlacesPage,
-    ProfilePage
+    ProfilePage,
+    ErrorPage,
+    JobsListPage
   ],
   providers: [
     StatusBar,
@@ -87,10 +95,12 @@ import { ProfilePage } from '../pages/profile/profile';
     AngularFirestore,
     AngularFireAuth,
     SocialSharing,
+    Network,
     AuthProvider,
     DataProvider,
     FeedbackProvider,
-    WindowProvider
+    WindowProvider,
+    NetworkProvider
   ]
 })
 export class AppModule { }

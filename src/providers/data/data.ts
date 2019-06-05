@@ -47,6 +47,9 @@ export class DataProvider {
     );
   }
 
+  getDocumentFromCollectionById(collectionName, id) {
+    return this.angularFireStore.collection<any>(collectionName).doc(id).valueChanges();
+  }
   getCollectionByKeyValuePair(collectionName: string, key: string, value: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName, ref => ref.where(key, '==', value)).snapshotChanges().pipe(
       map(actions => {

@@ -11,6 +11,7 @@ import { Rating } from 'ngx-rating';
 import { Appointment } from '../../models/appointment';
 import { Message } from '../../models/message';
 import { ProfilePage } from '../profile/profile';
+import { JobsListPage } from '../jobs-list/jobs-list';
 
 @IonicPage()
 @Component({
@@ -28,7 +29,7 @@ export class DashboardPage {
   appointments: Appointment[] = [];
   chats: Message[] = [];
 
-  myJobs: Job[] = [];
+  jobs: Job[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -44,43 +45,47 @@ export class DashboardPage {
     this.profile = this.authProvider.getStoredUser();
     console.log(this.profile);
 
+    this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
+      this.jobs = jobs;
+    });
+
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
-      this.myJobs = jobs;
+      this.postedJobs = jobs;
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'rid', this.profile.uid).subscribe(jobs => {
       this.appliedJobs = jobs;
-      console.log(jobs);
+      // console.log(jobs);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'rid', this.profile.uid).subscribe(jobs => {
       this.viewedJobs = jobs;
-      console.log(jobs);
+      // console.log(jobs);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.sharedJobs, 'rid', this.profile.uid).subscribe(jobs => {
       this.sharedJobs = jobs;
-      console.log(jobs);
+      // console.log(jobs);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(ratings => {
       this.ratings = ratings;
-      console.log(ratings);
+      // console.log(ratings);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
       this.appointments = appointments;
-      console.log(appointments);
+      // console.log(appointments);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.messages).subscribe(chats => {
 
-      console.log(chats);
+      // console.log(chats);
     });
 
     this.dataProvider.getMyChats(COLLECTION.messages, this.profile.uid).subscribe(chats => {
 
-      console.log(chats);
+      // console.log(chats);
     });
 
   }
@@ -101,23 +106,132 @@ export class DashboardPage {
     return this.authProvider.isRecruiter(this.profile);
   }
 
+
+  add() {
+    const job = {
+      jid: 'IBJbPY3Uxq8ZHiI1559071115675',
+      uid: 'qpsLMVTKL7ftvJQkJ10qLlCyQDl2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
+      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
+      date: this.dataProvider.getDateTime()
+    };
+    this.addUserActionToJobCollection(COLLECTION.viewedJobs, job)
+  }
+
+  addUserActionToJobCollection(collection: string, newJob: any) {
+    const key = new Date().getTime().toString();
+    this.dataProvider.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
+      if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
+        const jobsArray = this.getArrayFromObjectList(jobs);
+        console.log(jobsArray);
+
+        if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
+          const newJobs = { ...jobs, [key]: newJob };
+          this.updateCollection(collection, newJobs, newJob.jid);
+        } else { //check if user has 
+          console.log('do nothing');
+        }
+      } else { //Job is NOT root document eg /viewed-jobs/otherjobIdNotThisOne
+        const newJobs = { [key]: newJob };
+        this.updateCollection(collection, newJobs, newJob.jid);
+      }
+
+    });
+  }
+
+  doesCollectionHaveDocument(collection: string, docId: string) {
+    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
+      console.log(jobs);
+
+    })
+  }
+
+
+  getArrayFromObjectList(obj): any[] {
+    return Object.keys(obj).map((k) => obj[k]);
+  }
+
+  isUserInJobDocumentArray(jobs: any[], job): any[] {
+    return jobs.find(res => {
+      return res.uid === job.uid && res.jid === job.jid;
+    });
+  }
+
+  updateCollection(collection, newJobs, id) {
+    this.dataProvider.addNewItemWithId(collection, newJobs, id).then(res => {
+      console.log('added', res);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+
+  viewPostedJobs() {
+    this.navCtrl.push(JobsListPage, { jobs: this.postedJobs });
+  }
+
+  viewAppliedJobs() {
+    const mappedJobs = this.mapJobs(this.appliedJobs);
+    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+  }
+
+  viewSharedJobs() {
+    const mappedJobs = this.mapJobs(this.sharedJobs);
+    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+  }
+
+  viewViewedJobs() {
+    const mappedJobs = this.mapJobs(this.viewedJobs);
+    // const d = this.getDuplicates(mappedJobs);
+    // console.log(d);
+    // console.log(this.getItemById(d));
+
+    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+  }
+
+  viewRaters() {
+  }
+
   viewAppointments() {
     this.feedbackProvider.presentModal(AppointmentsPage);
   }
 
-  viewPostedJobs() {
+  getItemById(jid): any {
+    this.jobs.find(j => {
+      return j.jid === jid;
+    });
   }
 
-  viewAppliedJobs() {
+  removeDuplicates(array, key: string) {
+    return array.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[key]).indexOf(obj[key]) === pos;
+    });
   }
 
-  viewSharedJobs() {
+  getDuplicates(arr: any[]): any[] {
+    let uniq = arr.map((item) => {
+      return {
+        count: 1,
+        item: item
+      }
+    })
+      .reduce((a, b) => {
+        a[b.item.jid] = (a[b.item.jid] || 0) + b.count;
+        return a;
+      }, {});
+
+    return Object.keys(uniq).filter((a) => uniq[a] > 1)
   }
 
-  viewViewedJobs() {
-  }
-
-  viewRaters() {
+  mapJobs(jobs: any[]): any[] {
+    let mappedJobs = [];
+    jobs.forEach(j => {
+      this.jobs.forEach(job => {
+        if (job.jid === j.jid) {
+          mappedJobs.push(Object.assign(job, { user: j }));
+        }
+      });
+    });
+    return mappedJobs;
   }
 
   viewProfile() {
