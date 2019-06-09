@@ -3,18 +3,9 @@ page-appointments {
 		background-color: $light-grey !important;
 	}
 	ion-segment-button {
-		color: $white !important;
+		color: $secondary !important;
 	}
 
-	.segment-ios {
-		.segment-button {
-			border-color: $white !important;
-			color: #fff;
-			&.segment-activated {
-				background-color: #c03633 !important;
-			}
-		}
-	}
 	.list-ios, .list-md {
 		margin: 0;
 	}
@@ -23,7 +14,7 @@ page-appointments {
 		margin-right: 5px !important;
 	}
 	h2 {
-		font-weight: bold !important;
+		font-weight: normal !important;
 		color: $dark;
 	}
 

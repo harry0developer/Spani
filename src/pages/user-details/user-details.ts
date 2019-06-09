@@ -16,8 +16,6 @@ import { MyJobsPage } from '../my-jobs/my-jobs';
   templateUrl: 'user-details.html',
 })
 export class UserDetailsPage {
-
-
   profile: User;
   viewedJobs: ViewedJob[] = [];
   appliedJobs: AppliedJob[] = [];
@@ -47,7 +45,7 @@ export class UserDetailsPage {
   ionViewDidLoad() {
     this.user = this.navParams.get('user');
     this.profile = this.authProvider.getStoredUser();
-
+    console.log(this.user);
   }
 
   isUserInAppointment() {

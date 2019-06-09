@@ -8,6 +8,7 @@ import { DataProvider } from '../../providers/data/data';
 import { UserDetailsPage } from '../user-details/user-details';
 import { Job } from '../../models/job';
 import { STATUS, COLLECTION } from '../../utils/const';
+import { FeedbackProvider } from '../../providers/feedback/feedback';
 
 @IonicPage()
 @Component({
@@ -23,18 +24,20 @@ export class AppointmentsPage {
   completedAppointments: User[] = [];
   users: User[] = [];
 
-
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private authProvider: AuthProvider,
     private dataProvider: DataProvider,
+    private feedbackProvider: FeedbackProvider,
     private viewCtrl: ViewController,
   ) { }
 
   ionViewDidLoad() {
+    this.feedbackProvider.presentLoading();
     this.profile = this.authProvider.getStoredUser();
     this.appointments = this.navParams.get('appointments');
     this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+      this.feedbackProvider.dismissLoading();
       this.users = users;
       this.appointments.map(app => {
         this.users.map(u => {
@@ -45,11 +48,10 @@ export class AppointmentsPage {
               this.completedAppointments.push(Object.assign(u, { appointment: app }));
             }
           }
-        })
-      })
-      console.log(this.inProgressAppointments);
-      console.log(this.completedAppointments);
-
+        });
+      });
+    }, err => {
+      this.feedbackProvider.dismissLoading();
     })
   }
 
