@@ -30,5 +30,9 @@ export const ERRORS = {
 export const NETWORK = {
     error: 'error',
     connected: 'connected',
+}
 
+export const STATUS = {
+    inProgress: 'inprogress',
+    complete: 'complete'
 }

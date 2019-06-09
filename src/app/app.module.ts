@@ -42,6 +42,7 @@ import { ErrorPage } from '../pages/error/error';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
 import { JobsListPage } from '../pages/jobs-list/jobs-list';
+import { UserDetailsPage } from '../pages/user-details/user-details';
 
 @NgModule({
   declarations: [
@@ -58,7 +59,8 @@ import { JobsListPage } from '../pages/jobs-list/jobs-list';
     PlacesPage,
     ProfilePage,
     ErrorPage,
-    JobsListPage
+    JobsListPage,
+    UserDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -86,7 +88,8 @@ import { JobsListPage } from '../pages/jobs-list/jobs-list';
     PlacesPage,
     ProfilePage,
     ErrorPage,
-    JobsListPage
+    JobsListPage,
+    UserDetailsPage
   ],
   providers: [
     StatusBar,

@@ -57,15 +57,13 @@ export class DashboardPage {
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
       this.postedJobs = jobs;
+      console.log(jobs);
+
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
       this.duplicateAppliedJobs = this.getMyJobs(jobs);
       this.appliedJobs = this.dataProvider.removeDuplicates(this.duplicateAppliedJobs, 'jid');
-      console.log(jobs);
-      console.log(this.duplicateAppliedJobs);
-      console.log(this.appliedJobs);
-
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
@@ -73,9 +71,9 @@ export class DashboardPage {
       this.viewedJobs = this.dataProvider.removeDuplicates(this.duplicateViewedJobs, 'jid');
     });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.sharedJobs, 'rid', this.profile.uid).subscribe(jobs => {
-      this.sharedJobs = jobs;
-      // console.log(jobs);
+    this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
+      this.duplicateSharedJobs = this.getMyJobs(jobs);
+      this.sharedJobs = this.dataProvider.removeDuplicates(this.duplicateSharedJobs, 'jid');
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(ratings => {
@@ -131,14 +129,14 @@ export class DashboardPage {
   }
 
 
-  addToApplied() {
+  addSharedJobs() {
     const job = {
       jid: 'wQPrEsBTWvPr7ji1559071534354',
-      uid: 'JFXFvIaF5kPJXUgbcYXaMQXpPBo2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
+      uid: 'bxvezgEa2OcitrM8r5zjshNpnkb2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
       rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
       date: this.dataProvider.getDateTime()
     };
-    this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, job);
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.sharedJobs, job);
   }
 
   viewPostedJobs() {

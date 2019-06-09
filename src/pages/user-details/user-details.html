@@ -1,0 +1,110 @@
+<ion-header no-shadow no-border>
+  <ion-navbar color="dark">
+    <ion-title>User Profile</ion-title> 
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div class="top" *ngIf="user">
+    <div class="status-info animated slideInDown" *ngIf="hasAppointments()">
+      <i class="fa fa-info-circle"></i>
+    </div> 
+    <div class="profile-image">
+      <div class="imagex">
+        <img class="image animated slideInLeft" [src]="profilePicture(user)" (error)="img.src = getDefaultProfilePic(user)" #img alt="profile">
+        <span class="ratings animated slideInRight">
+         <i class="fa fa-star"></i> 
+         <br>
+         {{ rating }}
+        </span>
+      </div>
+    </div>
+
+    <h2 class="animated slideInRight">{{user.firstname}} {{user.lastname}} </h2>
+    <p class="animated slideInLeft">{{user.title || user.type}}</p> 
+
+    <div class="row summary">
+      <div class="col animated slideInDown col-4" *ngIf="isRecruiter(user)">
+        <h2>{{postedJobs?.length || 0}}</h2>
+        <p>Jobs Posted</p>
+      </div>
+      <div class="col animated slideInDown col-4" *ngIf="!isRecruiter(user)">
+        <h2>{{appliedJobs?.length || 0}}</h2>
+        <p *ngIf="appliedJobs?.length != 1">Jobs Applied</p>
+        <p *ngIf="appliedJobs?.length == 1">Job Applied</p>
+      </div>
+      <div class="col animated slideInDown col-4">
+        <h2>{{viewedJobs?.length || 0}}</h2>
+        <p *ngIf="viewedJobs?.length != 1">Jobs Viewed</p>
+        <p *ngIf="viewedJobs?.length == 1">Job Viewed</p>
+      </div>
+      <div class="col animated slideInDown col-4">
+        <h2>{{appointmentsInProgress?.length || 0}}</h2>
+        <p *ngIf="appointments?.length != 1">Appointments</p>
+        <p *ngIf="appointments?.length == 1">Appointment</p>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="user" class="info">
+    <ion-grid>
+      <ion-row>
+        <ion-col col-6 class="animated zoomIn">
+          <h2>
+            <i [ngClass]="user.gender === 'male' ? 'fa fa-male enlarge' : 'fa fa-female enlarge'" item-start></i>
+          </h2>
+          <p>{{user.gender}}</p>
+        </ion-col>
+        <ion-col col-6 class="animated zoomIn">
+          <h2>
+            <i class="fa fa-calendar" item-start></i>
+          </h2>
+          <p *ngIf="user.settings.hide_dob">[hidden]</p>
+          <p *ngIf="!user.settings.hide_dob">{{user.dob}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col col-6 class="animated zoomIn" [hidden]="!user.race">
+          <h2>
+            <i class="fa fa-users" item-start></i>
+          </h2>
+          <p>{{user.race}}</p>
+        </ion-col>
+        <ion-col col-6 class="animated zoomIn" [hidden]="!user.nationality">
+          <h2>
+            <i class="fa fa-flag" item-start></i>
+          </h2>
+          <p>{{user.nationality}}</p>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col col-6 class="animated zoomIn" [hidden]="!user.phone">
+          <h2>
+            <i class="fa fa-phone enlarge" item-start></i>
+          </h2>
+          <p *ngIf="user.settings.hide_phone">[hidden]</p>
+          <p *ngIf="!user.settings.hide_phone">{{user.phone}}</p>
+        </ion-col>
+        <ion-col col-6 class="animated zoomIn" [hidden]="!user.email">
+          <h2>
+            <i class="fa fa-envelope" item-start></i>
+          </h2>
+          <p *ngIf="user.settings.hide_email">[hidden]</p>
+          <p *ngIf="!user.settings.hide_email">{{user.email}}</p>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+  </div>
+
+  <div *ngIf="isRecruiter(profile)">
+    <div padding [hidden]="hired">
+      <button ion-button color="light" class="dark" block (click)="createAppointment()">Make Appointment</button>
+    </div>
+    <div padding [hidden]="!hired">
+      <button ion-button color="light" class="dark" block (click)="completeAppointmentActionSheet()">Complete Appointment</button>
+    </div>
+  </div>
+
+</ion-content>

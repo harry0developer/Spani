@@ -1,5 +1,8 @@
 export interface Appointment {
+    id?: string;
     uid: string;
     rid: string;
-    date: string;
+    status: string;
+    dateCreated: string;
+    dateCompleted: string;
 }
