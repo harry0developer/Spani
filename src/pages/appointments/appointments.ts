@@ -6,6 +6,8 @@ import { User } from '../../models/user';
 import { Appointment } from '../../models/appointment';
 import { DataProvider } from '../../providers/data/data';
 import { UserDetailsPage } from '../user-details/user-details';
+import { Job } from '../../models/job';
+import { STATUS, COLLECTION } from '../../utils/const';
 
 @IonicPage()
 @Component({
@@ -17,8 +19,9 @@ export class AppointmentsPage {
   appointment_type: string = 'inProgress';
   profile: any;
   appointments: Appointment[] = []
-  inProgressAppointments: User[];
-  completedAppointments: User[];
+  inProgressAppointments: User[] = [];
+  completedAppointments: User[] = [];
+  users: User[] = [];
 
 
   constructor(public navCtrl: NavController,
@@ -30,6 +33,24 @@ export class AppointmentsPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
+    this.appointments = this.navParams.get('appointments');
+    this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+      this.users = users;
+      this.appointments.map(app => {
+        this.users.map(u => {
+          if (app.uid === u.uid) {
+            if (app.status === STATUS.inProgress) {
+              this.inProgressAppointments.push(Object.assign(u, { appointment: app }))
+            } else {
+              this.completedAppointments.push(Object.assign(u, { appointment: app }));
+            }
+          }
+        })
+      })
+      console.log(this.inProgressAppointments);
+      console.log(this.completedAppointments);
+
+    })
   }
 
   profilePicture(user): string {

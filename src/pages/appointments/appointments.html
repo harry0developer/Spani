@@ -9,7 +9,7 @@
   </ion-navbar>
 
   <ion-toolbar color="light">
-    <ion-segment color="dark" [(ngModel)]="appointment_type">
+    <ion-segment mode="md" color="dark" [(ngModel)]="appointment_type">
       <ion-segment-button value="inProgress">
         In Progress
       </ion-segment-button>
@@ -35,7 +35,7 @@
               <h2>{{user.firstname}} {{user.lastname}}</h2>
               <p>
                 <i class="fa fa-calendar" item-start></i>
-                <b>Scheduled </b> {{getDateScheduled(user)}}
+                <b>Scheduled </b> {{getDateScheduled(user.appointment?.dateCreated)}}
               </p>
               <i class="fa fa-chevron-right" item-end></i>
             </ion-item>
@@ -60,7 +60,7 @@
               <h2>{{user.firstname}} {{user.lastname}}</h2>
               <p>
                 <i class="fa fa-calendar" item-start></i>
-                <b>Completed </b> {{getDateCompleted(user)}}
+                <b>Completed </b> {{getDateCompleted(user.appointment?.dateCompleted)}}
               </p>
               <i class="fa fa-chevron-right" item-end></i>
             </ion-item>

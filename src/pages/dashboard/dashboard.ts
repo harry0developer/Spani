@@ -6,7 +6,7 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
 import { Job, AppliedJob, SharedJob, ViewedJob } from '../../models/job';
-import { COLLECTION } from '../../utils/const';
+import { COLLECTION, STATUS } from '../../utils/const';
 import { Rating } from 'ngx-rating';
 import { Appointment } from '../../models/appointment';
 import { Message } from '../../models/message';
@@ -139,6 +139,22 @@ export class DashboardPage {
     this.dataProvider.addUserActionToJobCollection(COLLECTION.sharedJobs, job);
   }
 
+  addAppointment() {
+    const app: Appointment = {
+      uid: 'ZTrFYN4arQao1yuAW7SmNDd21f93',
+      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
+      status: STATUS.complete,
+      dateCreated: this.dataProvider.getDateTime(),
+      dateCompleted: '',
+    }
+    this.dataProvider.addNewItem(COLLECTION.appointments, app).then(() => {
+      console.log('Appointment made');
+    }).catch(err => {
+      console.log;
+
+    })
+  }
+
   viewPostedJobs() {
     this.navCtrl.push(JobsListPage, { jobs: this.postedJobs });
   }
@@ -160,7 +176,7 @@ export class DashboardPage {
   }
 
   viewAppointments() {
-    this.feedbackProvider.presentModal(AppointmentsPage);
+    this.feedbackProvider.presentModal(AppointmentsPage, { appointments: this.appointments });
   }
 
   getItemById(jid): any {
