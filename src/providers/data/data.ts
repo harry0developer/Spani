@@ -62,6 +62,50 @@ export class DataProvider {
     );
   }
 
+  // ========== master add document array ==============
+
+  addUserActionToJobCollection(collection: string, newJob: any) {
+    const key = new Date().getTime().toString();
+    this.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
+      if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
+        const jobsArray = this.getArrayFromObjectList(jobs);
+        console.log(jobsArray);
+
+        if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
+          const newJobs = { ...jobs, [key]: newJob };
+          this.updateCollection(collection, newJobs, newJob.jid);
+        } else { //check if user has 
+          console.log('do nothing');
+        }
+      } else { //Job is NOT root document eg /viewed-jobs/otherjobIdNotThisOne
+        const newJobs = { [key]: newJob };
+        this.updateCollection(collection, newJobs, newJob.jid);
+      }
+
+    });
+  }
+
+
+  getArrayFromObjectList(obj): any[] {
+    return Object.keys(obj).map((k) => obj[k]);
+  }
+
+  isUserInJobDocumentArray(jobs: any[], job): any[] {
+    return jobs.find(res => {
+      return res.uid === job.uid && res.jid === job.jid;
+    });
+  }
+
+  updateCollection(collection, newJobs, id) {
+    this.addNewItemWithId(collection, newJobs, id).then(res => {
+      console.log('added', res);
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  // ========== master add document array ==============
+
   getItemById(collectionName: string, id: string) {
     return this.angularFireStore.collection(collectionName).doc<any>(id).valueChanges();
   }
@@ -135,14 +179,40 @@ export class DataProvider {
   }
 
 
+  // ===== HELPERS ======
+
+  mapJobs(allJobs: any[], jobsToBeMapped: any[]): any[] {
+    let mappedJobs = [];
+    jobsToBeMapped.forEach(j => {
+
+      allJobs.forEach(job => {
+        if (job.jid === j.jid) {
+          mappedJobs.push(Object.assign(job, { users: [...j.users] }));
+        }
+      });
+    });
+    return mappedJobs;
+  }
+
+
+  countJobOccurrence(array, id): any[] {
+    return array.filter(j => j.jid === id);
+  }
+
+  removeDuplicates(array, key: string) {
+    return array.filter((obj, pos, arr) => {
+      return arr.map(mapObj => mapObj[key]).indexOf(obj[key]) === pos;
+    });
+  }
+
   applyHaversine(jobs, lat, lng) {
+    console.log(jobs);
+
     if (jobs && lat && lng) {
       let usersLocation = {
         lat: lat,
         lng: lng
       };
-      console.log(jobs);
-
       jobs.map(job => {
         let placeLocation = {
           lat: job.location.geo.latitude,

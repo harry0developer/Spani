@@ -25,6 +25,12 @@ export class DashboardPage {
   appliedJobs: AppliedJob[] = [];
   sharedJobs: SharedJob[] = [];
   viewedJobs: ViewedJob[] = [];
+
+  dubplicateAppliedJobs: AppliedJob[] = [];
+  dubplicateSharedJobs: SharedJob[] = [];
+  dubplicateViewedJobs: ViewedJob[] = [];
+
+
   ratings: Rating[] = [];
   appointments: Appointment[] = [];
   chats: Message[] = [];
@@ -58,9 +64,17 @@ export class DashboardPage {
       // console.log(jobs);
     });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'rid', this.profile.uid).subscribe(jobs => {
-      this.viewedJobs = jobs;
-      // console.log(jobs);
+    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
+      this.dubplicateViewedJobs = this.getMyViewedJobs(jobs);
+      this.viewedJobs = this.dataProvider.removeDuplicates(this.dubplicateViewedJobs, 'jid');
+      // console.log(this.dubplicateViewedJobs);
+
+      // const jobsWithViewers = [];
+      // this.viewedJobs.map(j => {
+      //   jobsWithViewers.push(Object.assign(j, { viewers: this.dataProvider.countJobOccurrence(this.viewedJobs, j.jid) }));
+      // });
+      // console.log(jobsWithViewers);
+
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.sharedJobs, 'rid', this.profile.uid).subscribe(jobs => {
@@ -90,6 +104,20 @@ export class DashboardPage {
 
   }
 
+  getMyViewedJobs(jobs) {
+    let myJobs = [];
+    jobs.map(job => {
+      const j = this.dataProvider.getArrayFromObjectList(job);
+      for (let i = 1; i < j.length; i++) {
+        if (j[i].rid === this.profile.uid) {
+          myJobs.push(j[i]);
+        }
+      }
+    });
+    return myJobs;
+  }
+
+
   profilePicture(): string {
     return this.dataProvider.getProfilePicture(this.profile);
   }
@@ -114,78 +142,26 @@ export class DashboardPage {
       rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
       date: this.dataProvider.getDateTime()
     };
-    this.addUserActionToJobCollection(COLLECTION.viewedJobs, job)
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, job)
   }
-
-  addUserActionToJobCollection(collection: string, newJob: any) {
-    const key = new Date().getTime().toString();
-    this.dataProvider.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
-      if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
-        const jobsArray = this.getArrayFromObjectList(jobs);
-        console.log(jobsArray);
-
-        if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
-          const newJobs = { ...jobs, [key]: newJob };
-          this.updateCollection(collection, newJobs, newJob.jid);
-        } else { //check if user has 
-          console.log('do nothing');
-        }
-      } else { //Job is NOT root document eg /viewed-jobs/otherjobIdNotThisOne
-        const newJobs = { [key]: newJob };
-        this.updateCollection(collection, newJobs, newJob.jid);
-      }
-
-    });
-  }
-
-  doesCollectionHaveDocument(collection: string, docId: string) {
-    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-      console.log(jobs);
-
-    })
-  }
-
-
-  getArrayFromObjectList(obj): any[] {
-    return Object.keys(obj).map((k) => obj[k]);
-  }
-
-  isUserInJobDocumentArray(jobs: any[], job): any[] {
-    return jobs.find(res => {
-      return res.uid === job.uid && res.jid === job.jid;
-    });
-  }
-
-  updateCollection(collection, newJobs, id) {
-    this.dataProvider.addNewItemWithId(collection, newJobs, id).then(res => {
-      console.log('added', res);
-    }).catch(err => {
-      console.log(err);
-    })
-  }
-
 
   viewPostedJobs() {
     this.navCtrl.push(JobsListPage, { jobs: this.postedJobs });
   }
 
   viewAppliedJobs() {
-    const mappedJobs = this.mapJobs(this.appliedJobs);
+    const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.appliedJobs);
     this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
   }
 
   viewSharedJobs() {
-    const mappedJobs = this.mapJobs(this.sharedJobs);
+    const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.sharedJobs);
     this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
   }
 
   viewViewedJobs() {
-    const mappedJobs = this.mapJobs(this.viewedJobs);
-    // const d = this.getDuplicates(mappedJobs);
-    // console.log(d);
-    // console.log(this.getItemById(d));
-
-    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+    // const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.viewedJobs);
+    this.navCtrl.push(JobsListPage, { jobs: this.viewedJobs, allJobs: this.dubplicateViewedJobs, tag: 'viewers' });
   }
 
   viewRaters() {
@@ -199,39 +175,6 @@ export class DashboardPage {
     this.jobs.find(j => {
       return j.jid === jid;
     });
-  }
-
-  removeDuplicates(array, key: string) {
-    return array.filter((obj, pos, arr) => {
-      return arr.map(mapObj => mapObj[key]).indexOf(obj[key]) === pos;
-    });
-  }
-
-  getDuplicates(arr: any[]): any[] {
-    let uniq = arr.map((item) => {
-      return {
-        count: 1,
-        item: item
-      }
-    })
-      .reduce((a, b) => {
-        a[b.item.jid] = (a[b.item.jid] || 0) + b.count;
-        return a;
-      }, {});
-
-    return Object.keys(uniq).filter((a) => uniq[a] > 1)
-  }
-
-  mapJobs(jobs: any[]): any[] {
-    let mappedJobs = [];
-    jobs.forEach(j => {
-      this.jobs.forEach(job => {
-        if (job.jid === j.jid) {
-          mappedJobs.push(Object.assign(job, { user: j }));
-        }
-      });
-    });
-    return mappedJobs;
   }
 
   viewProfile() {

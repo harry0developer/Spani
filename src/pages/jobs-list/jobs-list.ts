@@ -19,6 +19,9 @@ export class JobsListPage {
 
   profile: User;
   jobs: Job[] = [];
+  page = {
+    tag: ''
+  }
 
   constructor(
     public navCtrl: NavController,
@@ -30,16 +33,36 @@ export class JobsListPage {
   ) { }
 
   ionViewDidLoad() {
-    const jobs = this.navParams.get('jobs');
+    const jobsToBeMapped = this.navParams.get('jobs');
+    const allJobs = this.navParams.get('allJobs');
+    this.page.tag = this.navParams.get('tag');
     const loc = {
       lat: -26.121747,
       lng: 28.173450
     }
-    this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
+    this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
+
+      let jobsToBeMapedWithUser = [];
+      jobsToBeMapped.map(j => {
+        jobsToBeMapedWithUser.push(Object.assign(j, { users: this.dataProvider.countJobOccurrence(allJobs, j.jid) }));
+      });
+      const mappedJobs = this.dataProvider.mapJobs(jobs, jobsToBeMapedWithUser);
+      this.jobs = this.dataProvider.applyHaversine(mappedJobs, loc.lat, loc.lng);
+    });
   }
 
-  getDateFromNow(date: string) {
-    return this.dataProvider.getDateTimeMoment(date);
+  getDateFromNow(job): string {
+    if (job && job.users && job.users.length > 0) {
+      const sortedUsers = this.sortArrayByDate(job.users);
+      return this.dataProvider.getDateTimeMoment(sortedUsers[0].date);
+    }
+    return this.dataProvider.getDateTimeMoment(job.date);
+  }
+
+  sortArrayByDate(array: any[]): any[] {
+    return array.sort((a, b) => {
+      return a.date - b.date;
+    });
   }
 
   viewJobDetails(job) {
