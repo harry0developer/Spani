@@ -19,9 +19,7 @@ export class JobsListPage {
 
   profile: User;
   jobs: Job[] = [];
-  page = {
-    tag: ''
-  }
+  tag: '';
 
   constructor(
     public navCtrl: NavController,
@@ -33,9 +31,9 @@ export class JobsListPage {
   ) { }
 
   ionViewDidLoad() {
+    this.tag = this.navParams.get('tag');
     const jobsToBeMapped = this.navParams.get('jobs');
     const allJobs = this.navParams.get('allJobs');
-    this.page.tag = this.navParams.get('tag');
     const loc = {
       lat: -26.121747,
       lng: 28.173450

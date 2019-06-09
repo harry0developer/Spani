@@ -50,6 +50,7 @@ export class DataProvider {
   getDocumentFromCollectionById(collectionName, id) {
     return this.angularFireStore.collection<any>(collectionName).doc(id).valueChanges();
   }
+
   getCollectionByKeyValuePair(collectionName: string, key: string, value: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName, ref => ref.where(key, '==', value)).snapshotChanges().pipe(
       map(actions => {
@@ -69,8 +70,6 @@ export class DataProvider {
     this.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
       if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
         const jobsArray = this.getArrayFromObjectList(jobs);
-        console.log(jobsArray);
-
         if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
           const newJobs = { ...jobs, [key]: newJob };
           this.updateCollection(collection, newJobs, newJob.jid);
@@ -97,8 +96,8 @@ export class DataProvider {
   }
 
   updateCollection(collection, newJobs, id) {
-    this.addNewItemWithId(collection, newJobs, id).then(res => {
-      console.log('added', res);
+    this.addNewItemWithId(collection, newJobs, id).then(() => {
+      console.log('item added');
     }).catch(err => {
       console.log(err);
     })

@@ -26,9 +26,9 @@ export class DashboardPage {
   sharedJobs: SharedJob[] = [];
   viewedJobs: ViewedJob[] = [];
 
-  dubplicateAppliedJobs: AppliedJob[] = [];
-  dubplicateSharedJobs: SharedJob[] = [];
-  dubplicateViewedJobs: ViewedJob[] = [];
+  duplicateAppliedJobs: AppliedJob[] = [];
+  duplicateSharedJobs: SharedJob[] = [];
+  duplicateViewedJobs: ViewedJob[] = [];
 
 
   ratings: Rating[] = [];
@@ -59,22 +59,18 @@ export class DashboardPage {
       this.postedJobs = jobs;
     });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'rid', this.profile.uid).subscribe(jobs => {
-      this.appliedJobs = jobs;
-      // console.log(jobs);
+    this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
+      this.duplicateAppliedJobs = this.getMyJobs(jobs);
+      this.appliedJobs = this.dataProvider.removeDuplicates(this.duplicateAppliedJobs, 'jid');
+      console.log(jobs);
+      console.log(this.duplicateAppliedJobs);
+      console.log(this.appliedJobs);
+
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-      this.dubplicateViewedJobs = this.getMyViewedJobs(jobs);
-      this.viewedJobs = this.dataProvider.removeDuplicates(this.dubplicateViewedJobs, 'jid');
-      // console.log(this.dubplicateViewedJobs);
-
-      // const jobsWithViewers = [];
-      // this.viewedJobs.map(j => {
-      //   jobsWithViewers.push(Object.assign(j, { viewers: this.dataProvider.countJobOccurrence(this.viewedJobs, j.jid) }));
-      // });
-      // console.log(jobsWithViewers);
-
+      this.duplicateViewedJobs = this.getMyJobs(jobs);
+      this.viewedJobs = this.dataProvider.removeDuplicates(this.duplicateViewedJobs, 'jid');
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.sharedJobs, 'rid', this.profile.uid).subscribe(jobs => {
@@ -104,7 +100,7 @@ export class DashboardPage {
 
   }
 
-  getMyViewedJobs(jobs) {
+  getMyJobs(jobs) {
     let myJobs = [];
     jobs.map(job => {
       const j = this.dataProvider.getArrayFromObjectList(job);
@@ -135,14 +131,14 @@ export class DashboardPage {
   }
 
 
-  add() {
+  addToApplied() {
     const job = {
-      jid: 'IBJbPY3Uxq8ZHiI1559071115675',
-      uid: 'qpsLMVTKL7ftvJQkJ10qLlCyQDl2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
+      jid: 'wQPrEsBTWvPr7ji1559071534354',
+      uid: 'JFXFvIaF5kPJXUgbcYXaMQXpPBo2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
       rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
       date: this.dataProvider.getDateTime()
     };
-    this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, job)
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, job);
   }
 
   viewPostedJobs() {
@@ -150,8 +146,7 @@ export class DashboardPage {
   }
 
   viewAppliedJobs() {
-    const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.appliedJobs);
-    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+    this.navCtrl.push(JobsListPage, { jobs: this.appliedJobs, allJobs: this.duplicateAppliedJobs, tag: 'applied' });
   }
 
   viewSharedJobs() {
@@ -160,8 +155,7 @@ export class DashboardPage {
   }
 
   viewViewedJobs() {
-    // const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.viewedJobs);
-    this.navCtrl.push(JobsListPage, { jobs: this.viewedJobs, allJobs: this.dubplicateViewedJobs, tag: 'viewers' });
+    this.navCtrl.push(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: 'viewers' });
   }
 
   viewRaters() {
