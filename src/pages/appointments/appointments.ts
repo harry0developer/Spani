@@ -50,9 +50,13 @@ export class AppointmentsPage {
           }
         });
       });
+      console.log(this.completedAppointments);
+
     }, err => {
       this.feedbackProvider.dismissLoading();
-    })
+    });
+
+
   }
 
   profilePicture(user): string {
@@ -68,6 +72,8 @@ export class AppointmentsPage {
   }
 
   viewUserDetails(user: User) {
+    console.log(user);
+
     this.navCtrl.push(UserDetailsPage, { user });
   }
 

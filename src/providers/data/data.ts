@@ -205,8 +205,6 @@ export class DataProvider {
   }
 
   applyHaversine(jobs, lat, lng) {
-    console.log(jobs);
-
     if (jobs && lat && lng) {
       let usersLocation = {
         lat: lat,

@@ -15,7 +15,7 @@
         <span class="ratings animated slideInRight">
          <i class="fa fa-star"></i> 
          <br>
-         {{ rating }}
+         {{ rating || '0.0'}}
         </span>
       </div>
     </div>
@@ -59,39 +59,39 @@
           <h2>
             <i class="fa fa-calendar" item-start></i>
           </h2>
-          <p *ngIf="user.settings.hide_dob">[hidden]</p>
-          <p *ngIf="!user.settings.hide_dob">{{user.dob}}</p>
-        </ion-col>
-      </ion-row>
-
-      <ion-row>
-        <ion-col col-6 class="animated zoomIn" [hidden]="!user.race">
+          <p *ngIf="user.dob && user.settings.hide_dob">[hidden]</p>
+          <p *ngIf="user.dob &&!user.settings.hide_dob">{{user.dob}}</p>
+          <p *ngIf="!user.dob">Not provided</p>
+        </ion-col> 
+        <ion-col col-6 class="animated zoomIn">
           <h2>
             <i class="fa fa-users" item-start></i>
           </h2>
-          <p>{{user.race}}</p>
+          <p *ngIf="user.race">{{user.race}}</p>
+          <p *ngIf="!user.race">Not provided</p>
         </ion-col>
-        <ion-col col-6 class="animated zoomIn" [hidden]="!user.nationality">
+        <ion-col col-6 class="animated zoomIn">
           <h2>
             <i class="fa fa-flag" item-start></i>
           </h2>
-          <p>{{user.nationality}}</p>
-        </ion-col>
-      </ion-row>
-      <ion-row>
-        <ion-col col-6 class="animated zoomIn" [hidden]="!user.phone">
+          <p *ngIf="user.nationality">{{user.nationality}}</p>
+          <p *ngIf="!user.nationality">Not provided</p>
+        </ion-col> 
+        <ion-col col-6 class="animated zoomIn">
           <h2>
             <i class="fa fa-phone enlarge" item-start></i>
           </h2>
-          <p *ngIf="user.settings.hide_phone">[hidden]</p>
-          <p *ngIf="!user.settings.hide_phone">{{user.phone}}</p>
+          <p *ngIf="user.phonenumber && user.settings.hide_phone">[hidden]</p>
+          <p *ngIf="user.phonenumber && !user.settings.hide_phone">{{user.phonenumber}}</p>
+          <p *ngIf="!user.phonenumber">Not provided</p>
         </ion-col>
         <ion-col col-6 class="animated zoomIn" [hidden]="!user.email">
           <h2>
             <i class="fa fa-envelope" item-start></i>
           </h2>
-          <p *ngIf="user.settings.hide_email">[hidden]</p>
-          <p *ngIf="!user.settings.hide_email">{{user.email}}</p>
+          <p *ngIf="user.email && user.settings.hide_email">[hidden]</p>
+          <p *ngIf="user.email && !user.settings.hide_email">{{user.email}}</p>
+          <p *ngIf="!user.email">Not provided</p>
         </ion-col>
       </ion-row>
 
