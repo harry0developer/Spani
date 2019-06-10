@@ -43,7 +43,6 @@ export class ProfilePage {
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
       this.myRating = this.dataProvider.getUserRating(usersRatedMe)
     });
-
   }
 
 

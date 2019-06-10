@@ -25,7 +25,7 @@ import { TestUiPage } from '../pages/test-ui/test-ui';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = TestUiPage;
+  rootPage: any = MultiLoginPage;
 
   pages: any;
   profile: User;

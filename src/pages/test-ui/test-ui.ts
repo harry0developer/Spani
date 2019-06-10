@@ -47,7 +47,8 @@ export class TestUiPage {
         hide_dob: false,
         hide_email: false,
         hide_phone: false,
-      }
+      },
+      skills: null
     }
     this.skills = ['plumbing', 'cutting', 'welding', 'painting']
 

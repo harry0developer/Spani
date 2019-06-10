@@ -39,6 +39,7 @@ export class DashboardPage {
   chats: Message[] = [];
 
   jobs: Job[] = [];
+  users: User[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -54,6 +55,10 @@ export class DashboardPage {
     this.profile = this.authProvider.getStoredUser();
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       this.jobs = jobs;
+    });
+
+    this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+      this.users = users;
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
@@ -136,6 +141,26 @@ export class DashboardPage {
   }
 
 
+  updateSkills() {
+    const skills = [
+      {
+        name: 'Hair dresser',
+        category: 'Beauty-Therapy',
+        experience: '2-3 years'
+      },
+      {
+        name: 'Make-up artist',
+        category: 'Beauty-Theray',
+        experience: '3-5 years'
+      }
+    ];
+    this.users[4].skills = skills;
+    this.dataProvider.updateItem(COLLECTION.users, this.users[4], this.users[4].uid).then(() => {
+      console.log('User updated');
+    }).catch(err => {
+      console.log(err);
+    })
+  }
   rateUser() {
     const rate: Rating = {
       rating: 3.5,

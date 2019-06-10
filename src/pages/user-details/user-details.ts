@@ -43,7 +43,8 @@ export class UserDetailsPage {
 
   ionViewDidLoad() {
     this.user = this.navParams.get('user');
-    this.skills = ['plumbing', 'cutting', 'welding', 'painting']
+    console.log(this.user);
+
     this.profile = this.authProvider.getStoredUser();
     if (this.authProvider.isRecruiter(this.user)) {
       this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.user.uid).subscribe(raters => {

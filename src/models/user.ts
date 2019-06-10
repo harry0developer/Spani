@@ -13,7 +13,14 @@ export interface User {
     phonenumber?: string;
     location?: Location;
     date: string;
-    settings: Settings
+    settings: Settings,
+    skills: Skills[]
+}
+
+export interface Skills {
+    name: string;
+    category: string;
+    experience: string;
 }
 
 export interface Location {
