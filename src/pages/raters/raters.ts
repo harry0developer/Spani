@@ -14,8 +14,6 @@ import { bounceIn } from '../../utils/animations';
   selector: 'page-raters',
   templateUrl: 'raters.html',
   animations: [bounceIn]
-
-
 })
 export class RatersPage {
   usersIRated: User[] = [];

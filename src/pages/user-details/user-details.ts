@@ -25,10 +25,11 @@ export class UserDetailsPage {
   appointments: Appointment[] = [];
   appointment: Appointment;
   appointmentsInProgress: Appointment[] = [];
-  rating: string;
+  userRating: string;
 
   user: User;
   hired: boolean = false;
+  skills: any[] = [];
 
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
@@ -37,14 +38,22 @@ export class UserDetailsPage {
     private authProvider: AuthProvider,
     private actionSheetCtrl: ActionSheetController,
     private ionEvent: Events,
-  ) {
-
-  }
+  ) { }
 
 
   ionViewDidLoad() {
     this.user = this.navParams.get('user');
+    this.skills = ['plumbing', 'cutting', 'welding', 'painting']
     this.profile = this.authProvider.getStoredUser();
+    if (this.authProvider.isRecruiter(this.user)) {
+      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.user.uid).subscribe(raters => {
+        this.userRating = this.dataProvider.getUserRating(raters);
+      });
+    } else {
+      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.user.uid).subscribe(raters => {
+        this.userRating = this.dataProvider.getUserRating(raters);
+      });
+    }
     console.log(this.user);
   }
 

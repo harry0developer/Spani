@@ -31,9 +31,10 @@ export class DashboardPage {
   duplicateSharedJobs: SharedJob[] = [];
   duplicateViewedJobs: ViewedJob[] = [];
 
-
+  myRating: string;
   allRatings: Rating[] = [];
-  ratings: Rating[] = [];
+  usersIRated: Rating[] = [];
+  usersRatedMe: Rating[] = [];
   appointments: Appointment[] = [];
   chats: Message[] = [];
 
@@ -74,9 +75,15 @@ export class DashboardPage {
       this.sharedJobs = this.dataProvider.removeDuplicates(this.duplicateSharedJobs, 'jid');
     });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(ratings => {
-      this.ratings = ratings;
-      console.log(ratings);
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
+      this.usersIRated = usersIRated;
+      console.log(usersIRated);
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
+      this.usersRatedMe = usersRatedMe;
+      this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
+      console.log(usersRatedMe);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
@@ -89,12 +96,10 @@ export class DashboardPage {
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.messages).subscribe(chats => {
-
       // console.log(chats);
     });
 
     this.dataProvider.getMyChats(COLLECTION.messages, this.profile.uid).subscribe(chats => {
-
       // console.log(chats);
     });
 
@@ -190,7 +195,7 @@ export class DashboardPage {
   }
 
   viewRaters() {
-    this.feedbackProvider.presentModal(RatersPage, { ratings: this.ratings });
+    this.feedbackProvider.presentModal(RatersPage);
   }
 
   viewAppointments() {
@@ -206,6 +211,7 @@ export class DashboardPage {
   viewProfile() {
     this.navCtrl.push(ProfilePage);
   }
+
   editProfile() {
     // let modal = this.modalCtrl.create(SettingsPage);
     // modal.onDidDismiss(data => {

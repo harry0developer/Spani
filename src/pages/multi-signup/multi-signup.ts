@@ -117,7 +117,7 @@ export class MultiSignupPage {
     const data: User = {
       ...this.data,
       uid: null,
-      settings: { hide_dob: false, hide_phone: false },
+      settings: { hide_dob: false, hide_phone: false, hide_email: false },
       date: this.dataProvider.getDateTime()
     }
     this.authProvider.signUpWithEmailAndPassword(data).then(() => {

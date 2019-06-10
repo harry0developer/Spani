@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
 import { Message } from '../../models/message';
 import { User } from '../../models/user';
 import { COLLECTION } from '../../utils/const';
+import { Rating } from '../../models/rating';
 
 @Injectable()
 export class DataProvider {
@@ -179,6 +180,15 @@ export class DataProvider {
 
 
   // ===== HELPERS ======
+
+  getUserRating(ratings: Rating[]): string {
+    let myRating: number = 0.0;
+    ratings.map(r => {
+      myRating += r.rating;
+    });
+    const rating = myRating / ratings.length;
+    return (Math.round(rating * 100) / 100).toFixed(1);
+  }
 
   alreadyRated(allRatings, rating) {
     const res = allRatings.filter(r => r.uid === rating.uid && r.rid === rating.rid);

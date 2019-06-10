@@ -6,6 +6,7 @@ page-appointments {
 	ion-segment-button {
 		color: $secondary !important;
 	}
+
 	.toolbar-ios .segment-button {
         max-width: 100% !important;
 	}
@@ -14,13 +15,13 @@ page-appointments {
 		margin: 0;
 	}
 
-	i {
-		margin-right: 5px !important;
-		color: $primary;
-	}
 	p {
 		color: $primary !important;
+		i {
+			margin: 10px 4px 10px 0 !important;
+		}
 	}
+	
 	h2 {
 		font-weight: normal !important;
 		color: $dark;

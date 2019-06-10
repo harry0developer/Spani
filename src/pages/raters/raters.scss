@@ -12,6 +12,9 @@ page-raters {
 
     p {
 		color: $primary !important;
+		i {
+			margin: 10px 4px 10px 0 !important;
+		}
     }
     
 	.list-ios, .list-md {
