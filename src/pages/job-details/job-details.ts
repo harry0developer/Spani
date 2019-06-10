@@ -42,22 +42,20 @@ export class JobDetailsPage {
 
     this.getJobPoster();
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'jid', this.job.jid).subscribe(viewedJobs => {
-      this.viewedUsers = viewedJobs || [];
-      if (!this.hasViewedJob()) {
-        console.log('not viewed');
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.viewedJobs, 'jid', this.job.jid).subscribe(viewedJobs => {
+    //   this.viewedUsers = viewedJobs || [];
+    //   if (!this.hasViewedJob()) {
+    //     console.log('not viewed');
+    //     this.addToViewedJobs();
+    //   } else {
+    //     console.log('viewed');
+    //   }
+    // });
 
-        this.addToViewedJobs();
-      } else {
-
-        console.log('viewed');
-      }
-    });
-
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'jid', this.job.jid).subscribe(appliedJobs => {
-      this.appliedUsers = appliedJobs || [];
-      this.hasApplied = this.hasUserApplied();
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'jid', this.job.jid).subscribe(appliedJobs => {
+    //   this.appliedUsers = appliedJobs || [];
+    //   this.hasApplied = this.hasUserApplied();
+    // });
   }
 
   getJobPoster() {

@@ -180,6 +180,11 @@ export class DataProvider {
 
   // ===== HELPERS ======
 
+  alreadyRated(allRatings, rating) {
+    const res = allRatings.filter(r => r.uid === rating.uid && r.rid === rating.rid);
+    return res.length > 0;
+  }
+
   mapJobs(allJobs: any[], jobsToBeMapped: any[]): any[] {
     let mappedJobs = [];
     jobsToBeMapped.forEach(j => {

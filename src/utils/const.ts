@@ -36,3 +36,10 @@ export const STATUS = {
     inProgress: 'inprogress',
     complete: 'complete'
 }
+
+export const JOBS_TYPE = {
+    posted: 'Posted',
+    applied: 'Applied',
+    shared: 'Shared',
+    viewed: 'Viewed',
+}

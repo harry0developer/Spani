@@ -23,7 +23,7 @@
     <h2 class="animated slideInRight">{{user.firstname}} {{user.lastname}} </h2>
     <p class="animated slideInLeft">{{user.title || user.type}}</p> 
 
-    <div class="row summary">
+    <!-- <div class="row summary">
       <div class="col animated slideInDown col-4" *ngIf="isRecruiter(user)">
         <h2>{{postedJobs?.length || 0}}</h2>
         <p>Jobs Posted</p>
@@ -43,7 +43,7 @@
         <p *ngIf="appointments?.length != 1">Appointments</p>
         <p *ngIf="appointments?.length == 1">Appointment</p>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div *ngIf="user" class="info">

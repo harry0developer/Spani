@@ -2,16 +2,24 @@ page-appointments {
 	.content {
 		background-color: $light-grey !important;
 	}
+
 	ion-segment-button {
 		color: $secondary !important;
 	}
-
+	.toolbar-ios .segment-button {
+        max-width: 100% !important;
+	}
+	
 	.list-ios, .list-md {
 		margin: 0;
 	}
 
 	i {
 		margin-right: 5px !important;
+		color: $primary;
+	}
+	p {
+		color: $primary !important;
 	}
 	h2 {
 		font-weight: normal !important;
@@ -21,6 +29,7 @@ page-appointments {
 	ion-list {
 		margin: 0 !important;
 	}
+
 	ion-item {
 		background-color: $white;
 		color: $primary;

@@ -1,0 +1,20 @@
+page-raters {
+	.content {
+		background-color: $light-grey !important;
+    }
+    
+	ion-segment-button {
+		color: $secondary !important;
+	}
+	.toolbar-ios .segment-button {
+        max-width: 100% !important;
+	}
+
+    p {
+		color: $primary !important;
+    }
+    
+	.list-ios, .list-md {
+		margin: 0;
+	}
+}

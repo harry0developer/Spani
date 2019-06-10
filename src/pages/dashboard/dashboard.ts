@@ -6,12 +6,13 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
 import { Job, AppliedJob, SharedJob, ViewedJob } from '../../models/job';
-import { COLLECTION, STATUS } from '../../utils/const';
-import { Rating } from 'ngx-rating';
+import { COLLECTION, STATUS, JOBS_TYPE, USER_TYPE } from '../../utils/const';
 import { Appointment } from '../../models/appointment';
 import { Message } from '../../models/message';
 import { ProfilePage } from '../profile/profile';
 import { JobsListPage } from '../jobs-list/jobs-list';
+import { Rating } from '../../models/rating';
+import { RatersPage } from '../raters/raters';
 
 @IonicPage()
 @Component({
@@ -31,6 +32,7 @@ export class DashboardPage {
   duplicateViewedJobs: ViewedJob[] = [];
 
 
+  allRatings: Rating[] = [];
   ratings: Rating[] = [];
   appointments: Appointment[] = [];
   chats: Message[] = [];
@@ -49,16 +51,12 @@ export class DashboardPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
-    console.log(this.profile);
-
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       this.jobs = jobs;
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
       this.postedJobs = jobs;
-      console.log(jobs);
-
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
@@ -78,12 +76,16 @@ export class DashboardPage {
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(ratings => {
       this.ratings = ratings;
-      // console.log(ratings);
+      console.log(ratings);
+    });
+
+    this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
+      this.allRatings = ratings;
+      console.log(ratings);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
       this.appointments = appointments;
-      // console.log(appointments);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.messages).subscribe(chats => {
@@ -129,6 +131,22 @@ export class DashboardPage {
   }
 
 
+  rateUser() {
+    const rate: Rating = {
+      rating: 3.5,
+      uid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
+      rid: '7ibVJ1zwZbhj8K3y6jIqBgxTFEm1', //yuoVVtSUNHSo5hgJqCe1Ufz99JT2
+      date: this.dataProvider.getDateTime()
+    };
+
+    if (!this.dataProvider.alreadyRated(this.allRatings, rate)) {
+      this.dataProvider.addNewItem(COLLECTION.ratings, rate);
+    } else {
+      console.log('already rated');
+
+    }
+  }
+
   addSharedJobs() {
     const job = {
       jid: 'wQPrEsBTWvPr7ji1559071534354',
@@ -156,23 +174,23 @@ export class DashboardPage {
   }
 
   viewPostedJobs() {
-    this.navCtrl.push(JobsListPage, { jobs: this.postedJobs });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.postedJobs, allJobs: this.postedJobs, tag: JOBS_TYPE.posted });
   }
 
   viewAppliedJobs() {
-    this.navCtrl.push(JobsListPage, { jobs: this.appliedJobs, allJobs: this.duplicateAppliedJobs, tag: 'applied' });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.appliedJobs, allJobs: this.duplicateAppliedJobs, tag: JOBS_TYPE.applied });
   }
 
   viewSharedJobs() {
-    const mappedJobs = this.dataProvider.mapJobs(this.jobs, this.sharedJobs);
-    this.navCtrl.push(JobsListPage, { jobs: mappedJobs });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: JOBS_TYPE.shared });
   }
 
   viewViewedJobs() {
-    this.navCtrl.push(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: 'viewers' });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: JOBS_TYPE.viewed });
   }
 
   viewRaters() {
+    this.feedbackProvider.presentModal(RatersPage, { ratings: this.ratings });
   }
 
   viewAppointments() {

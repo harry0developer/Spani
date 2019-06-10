@@ -26,5 +26,6 @@ export interface Location {
 
 export interface Settings {
     hide_dob: boolean,
-    hide_phone: boolean
+    hide_email: boolean,
+    hide_phone: boolean,
 }

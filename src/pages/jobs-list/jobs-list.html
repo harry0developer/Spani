@@ -1,15 +1,12 @@
-<ion-header >
+<ion-header>
   <ion-navbar color="dark">
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
-    <ion-title>Jobs</ion-title>
+    <ion-title> {{tag}} Jobs</ion-title>
     <ion-buttons end>
-      <button ion-button icon-only (click)="filterJobs()">
-        <ion-icon name="funnel"></ion-icon>
+      <button ion-button (click)="dismissModal()">
+        Done
       </button>
     </ion-buttons>
-  </ion-navbar> 
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
@@ -43,15 +40,15 @@
                 </div>
               </div>
               <div [hidden]="!job.distance" class="col col-6 info-bar ">
-                <div class="distance" *ngIf="tag === 'viewers'" item-end>
+                <div class="distance" *ngIf="tag === 'Viewed'" item-end>
                   <i class="fa fa-eye" item-start></i>
                   <span >{{job.users?.length}} {{tag}}</span>
                 </div>
-                <div class="distance" *ngIf="tag === 'applied'" item-end>
+                <div class="distance" *ngIf="tag === 'Applied'" item-end>
                   <i class="fa fa-clipboard" item-start></i>
                   <span >{{job.users?.length}} {{tag}}</span>
                 </div>
-                <div class="distance" *ngIf="tag === 'shared'" item-end>
+                <div class="distance" *ngIf="tag === 'Shared'" item-end>
                   <i class="fa fa-share" item-start></i>
                   <span >{{job.users?.length}} {{tag}}</span>
                 </div>

@@ -1,7 +1,7 @@
 
 page-user-details {
     .content {
-        background: $light-grey;
+        background: $light-grey !important;
     }
     .top {
         background-color: $white;
@@ -33,7 +33,7 @@ page-user-details {
         text-align: center;
         background-color: $primary !important;
         color: $white;
-        margin-bottom: 30px;
+        padding-bottom: 30px;
         border-bottom: 2px solid $white;
         p{
             padding: 0 !important;

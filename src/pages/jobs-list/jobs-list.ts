@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events, ViewController } from 'ionic-angular';
 import { Job } from '../../models/job';
 import { JobDetailsPage } from '../job-details/job-details';
 import { User } from '../../models/user';
@@ -28,6 +28,7 @@ export class JobsListPage {
     private dataProvider: DataProvider,
     private authProvider: AuthProvider,
     private feedbackProvider: FeedbackProvider,
+    private viewCtrl: ViewController
   ) { }
 
   ionViewDidLoad() {
@@ -65,6 +66,10 @@ export class JobsListPage {
 
   viewJobDetails(job) {
     this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
+  }
+
+  dismissModal() {
+    this.viewCtrl.dismiss();
   }
 
 
