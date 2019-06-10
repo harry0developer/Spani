@@ -44,6 +44,7 @@ import { NetworkProvider } from '../providers/network/network';
 import { JobsListPage } from '../pages/jobs-list/jobs-list';
 import { UserDetailsPage } from '../pages/user-details/user-details';
 import { RatersPage } from '../pages/raters/raters';
+import { TestUiPage } from '../pages/test-ui/test-ui';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { RatersPage } from '../pages/raters/raters';
     ErrorPage,
     JobsListPage,
     UserDetailsPage,
-    RatersPage
+    RatersPage,
+    TestUiPage
   ],
   imports: [
     BrowserModule,
@@ -92,7 +94,8 @@ import { RatersPage } from '../pages/raters/raters';
     ErrorPage,
     JobsListPage,
     UserDetailsPage,
-    RatersPage
+    RatersPage,
+    TestUiPage
   ],
   providers: [
     StatusBar,

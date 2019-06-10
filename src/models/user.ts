@@ -8,6 +8,7 @@ export interface User {
     lastname: string;
     dob: string;
     gender: string;
+    race: string;
     nationality: string;
     phonenumber?: string;
     location?: Location;

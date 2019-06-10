@@ -40,12 +40,18 @@ export class ProfilePage {
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
     this.defaultImg = this.profilePicture();
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
+      this.myRating = this.dataProvider.getUserRating(usersRatedMe)
+    });
+
   }
 
 
   profilePicture(): string {
     return this.dataProvider.getProfilePicture(this.profile);
   }
+
+
 
   getSettings(): any {
 

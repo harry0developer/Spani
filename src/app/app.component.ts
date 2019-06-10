@@ -16,6 +16,7 @@ import { Network } from '@ionic-native/network';
 import { FeedbackProvider } from '../providers/feedback/feedback';
 import { ErrorPage } from '../pages/error/error';
 import { ERRORS, NETWORK } from '../utils/const';
+import { TestUiPage } from '../pages/test-ui/test-ui';
 
 
 @Component({
@@ -24,7 +25,7 @@ import { ERRORS, NETWORK } from '../utils/const';
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = MultiLoginPage;
+  rootPage: any = TestUiPage;
 
   pages: any;
   profile: User;
