@@ -43,8 +43,6 @@ export class UserDetailsPage {
 
   ionViewDidLoad() {
     this.user = this.navParams.get('user');
-    console.log(this.user);
-
     this.profile = this.authProvider.getStoredUser();
     if (this.authProvider.isRecruiter(this.user)) {
       this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.user.uid).subscribe(raters => {
@@ -55,7 +53,6 @@ export class UserDetailsPage {
         this.userRating = this.dataProvider.getUserRating(raters);
       });
     }
-    console.log(this.user);
   }
 
   isUserInAppointment() {

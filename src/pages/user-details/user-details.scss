@@ -18,26 +18,65 @@ page-user-details {
     }
  
     .top{
-        text-align: center;
-        color: $primary;
-        border-top: 2px solid #c9b177;
+        // text-align: center;
+        // color: $primary;
+        // border-top: 2px solid #c9b177;
         padding-top: 10px;
-        // margin: 20px 10px;
+        margin: 20px 10px;
         .card {
             padding-top: 20px;
             padding-left: 10px;
+           
         }
-        p{
-            margin: 0 !important;
-            font-size: .8em;
-            padding-bottom: 10px !important;
-            color: $dark;
+        .user-details {
+            margin-bottom: 30px;
+            .name-title {
+                text-align: right;
+                padding-right: 20px;
+                h2 {
+                    font-weight: bold;
+                    font-size: 16px;
+                }
+                p {
+                    font-size: 12px;
+                }
+            }
         }
-        h2{
-            margin: 0;
-            font-size: 1.4em;
-            font-weight: bold;
-        }
+        .rating-contacts {
+            margin-bottom: 20px;
+            .rating {
+                .star-icon {
+                    font-size: 1em !important;
+                    color: $primary !important;
+                }
+                .star-icon:before {
+                    color: $primary !important;
+                }
+            }
+            ion-badge {
+                margin-left: 10px;
+                padding: 4px;
+            }
+            .contacts {
+                text-align: right;
+                padding-right: 20px;
+                font-size: 12px;
+                .item-top {
+                    margin-bottom: 4px;
+                }
+
+                // p, h2, i {
+                //     text-align: right;
+                //     padding-right: 20px;
+                // }
+                i {
+                    color: $primary;
+                    padding-right: 4px;
+                }
+            }
+
+        } 
+       
         img{
             border: 2px solid $primary;
             padding: 2px;
@@ -49,7 +88,7 @@ page-user-details {
         }
         .col {
             padding: 0;
-        }
+        } 
         .summary{
             color: $secondary;
             padding: 0.5em 0.6em;
@@ -66,38 +105,7 @@ page-user-details {
             }
         }
 
-        .rating {
-            float: right;
-            .star-icon {
-                font-size: 1em !important;
-                color: $primary !important;
-            }
-            .star-icon:before {
-                color: $primary !important;
-            }
-        }
-
-        .contacts {
-            color: $dark;
-            // border-top: 1px solid #c4a969;
-            padding: 14px 0;
-            i {
-                font-size: 14px;
-                color: $primary;
-                padding-right: 4px;
-            }
-            span {
-                font-size: 14px;
-            }
-            .left {
-                text-align: left;
-                padding-left: 20px;
-            }
-            .right {
-                text-align: right;
-                padding-right: 20px;
-            }
-        }
+        
     }
 
     .item.item-divider{
@@ -155,5 +163,9 @@ page-user-details {
     }
     .address p{
         font-weight: normal !important;
+    }
+
+    .button-footer {
+        
     }
 }

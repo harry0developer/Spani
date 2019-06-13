@@ -3,8 +3,10 @@
     <ion-title>
       Job Details
     </ion-title>
-    <ion-buttons *ngIf="job" [hidden]="isRecruiter()" end>
-      <button ion-button icon-left (click)="presentShareJobActionSheet(job)"><ion-icon name="share-alt"></ion-icon>Share</button>
+    <ion-buttons *ngIf="job" [hidden]="isRecruiter()" start>
+      <button ion-button icon-left (click)="presentShareJobActionSheet(job)">
+        <ion-icon name="share-alt"></ion-icon>Share
+      </button>
     </ion-buttons>
     <ion-buttons *ngIf="job" [hidden]="!isRecruiter()" end>
       <button ion-button icon-left (click)="manageJob(job)">
@@ -42,7 +44,6 @@
 
   <ion-list *ngIf="job" >
     <div class="job-summary">
-
       <ion-card class="center">
         <ion-item text-wrap>
           <i class="animated slideInLeft fa fa-briefcase icon" item-start></i>

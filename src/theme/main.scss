@@ -14,44 +14,44 @@ $dark: #2a2a2a;
     padding: 2px;
 }
 
-.button {
-    color: $white;
-    padding: 20px;
-    margin: 5px 0;
-    text-transform: uppercase;
-    border-radius: 20px;
-}
+// .button {
+//     color: $white;
+//     padding: 20px;
+//     margin: 5px 0;
+//     text-transform: uppercase;
+//     border-radius: 20px;
+// }
 
-.button.light {
-    background-color: $secondary !important;
-    color: $white;
-}
+// .button.light {
+//     background-color: $secondary !important;
+//     color: $white;
+// }
 
-.button.primary {
-    background-color: $primary !important;
-    color: $white;
-}
+// .button.primary {
+//     background-color: $primary !important;
+//     color: $white;
+// }
 
-.button.dark {
-    background-color: $primary !important;
-    color: $white;
-}
-.button.dark.border {
-    border: 1px solid $white !important;
-}
+// .button.dark {
+//     background-color: $primary !important;
+//     color: $white;
+// }
+// .button.dark.border {
+//     border: 1px solid $white !important;
+// }
 
-.button.clear {
-    color: $white !important;
-}
+// .button.clear {
+//     color: $white !important;
+// }
 
-.button.danger {
-    color: $white !important;
-    background-color: $danger;
-}
-.button.green {
-    color: $white !important;
-    background-color: $green;
-}
+// .button.danger {
+//     color: $white !important;
+//     background-color: $danger;
+// }
+// .button.green {
+//     color: $white !important;
+//     background-color: $green;
+// }
 
 .action-sheet-title {
     color: $dark !important;

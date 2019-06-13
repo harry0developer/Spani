@@ -82,18 +82,18 @@ export class DashboardPage {
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
       this.usersIRated = usersIRated;
-      console.log(usersIRated);
+      // console.log(usersIRated);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
       this.usersRatedMe = usersRatedMe;
       this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
-      console.log(usersRatedMe);
+      // console.log(usersRatedMe);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
       this.allRatings = ratings;
-      console.log(ratings);
+      // console.log(ratings);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
@@ -144,18 +144,18 @@ export class DashboardPage {
   updateSkills() {
     const skills = [
       {
-        name: 'Hair dresser',
-        category: 'Beauty-Therapy',
-        experience: '2-3 years'
+        name: 'Cooking, Laundry and Cleaning',
+        category: 'Cleaning',
+        experience: '1-2 years'
       },
       {
-        name: 'Make-up artist',
-        category: 'Beauty-Theray',
-        experience: '3-5 years'
+        name: 'Baby Sitting',
+        category: 'Nanny',
+        experience: '2-3 years'
       }
     ];
-    this.users[4].skills = skills;
-    this.dataProvider.updateItem(COLLECTION.users, this.users[4], this.users[4].uid).then(() => {
+    this.users[9].skills = skills;
+    this.dataProvider.updateItem(COLLECTION.users, this.users[9], this.users[9].uid).then(() => {
       console.log('User updated');
     }).catch(err => {
       console.log(err);

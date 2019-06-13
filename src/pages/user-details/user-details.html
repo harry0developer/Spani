@@ -1,109 +1,133 @@
 <ion-header no-shadow no-border>
-    <ion-navbar color="dark">
-      <ion-title>User Profile</ion-title> 
-    </ion-navbar>
-  </ion-header>
+  <ion-navbar color="dark">
+    <ion-title>User Profile</ion-title> 
+  </ion-navbar>
+</ion-header>
   
-  <ion-content>
-    <ion-card class="top" *ngIf="user"> 
-      <ion-grid>
-        <ion-row>
-          <ion-col col-4>
-            <img src="{{ profilePicture(user) }}" alt="profile" [src]="profilePicture(user)" class="animated zoomIn"
-              (error)="img.src = defaultImg" #img (click)="presentActionSheet()">
-          </ion-col>
-          <ion-col col-8>
-            <ion-row>
-              <ion-col col-4 class="animated slideInDown" *ngIf="isRecruiter()">
-                <h2>{{postedJobs?.length || 0}}</h2>
-                <p>Posted</p>
-              </ion-col>
-              <ion-col col-4 class="animated slideInDown">
-                <h2>{{viewedJobs?.length || 0}}</h2>
-                <p>Viewed</p>
-              </ion-col>
-              <ion-col col-4 class="animated slideInDown" *ngIf="!isRecruiter()">
-                <h2>{{appliedJobs?.length || 0}}</h2>
-                <p>Applied</p>
-              </ion-col>
-              <ion-col col-4 class="animated slideInDown">
-                <h2>{{appointments?.length || 0}}</h2>
-                <p>Appointments</p>
-              </ion-col>
-            </ion-row>
-          </ion-col>
-        </ion-row>
-        <ion-row class="profile" padding>
-          <ion-col col-8>
-            <h2 class="animated slideInLeft">{{user.firstname}} {{user.lastname}} </h2>
-            <p class="animated slideInRight">{{user.title || user.type}}</p>
-          </ion-col>
-          <ion-col col-4 class="animated slideInRight" >
-            <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
-          </ion-col>
-        </ion-row>
-  
-        <ion-row class="contacts">
-          <ion-col col-6 class="left">
+<ion-content>
+  <ion-card class="top" *ngIf="user"> 
+    <ion-grid>
+
+      <ion-row class="user-details"> 
+        <ion-col col-4>
+          <img src="{{ profilePicture(user) }}" alt="profile" [src]="profilePicture(user)" class="animated zoomIn"
+            (error)="img.src = defaultImg" #img (click)="presentActionSheet()">
+        </ion-col>
+        <ion-col col-8 class="name-title">
+          <h2 class="animated slideInLeft">{{user.firstname}} {{user.lastname}} </h2>
+          <p class="animated slideInRight">{{user.title || user.type}}</p>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="rating-contacts">
+        <ion-col col-5 class="ratings">
+          <ion-badge primary>{{userRating}}</ion-badge> 
+          <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
+        </ion-col>
+        <ion-col col-7 class="contacts">
+          <div class="item-top animated slideInRight" *ngIf="user.email">
             <i class="fa fa-envelope" item-start></i>
-            <span item-start *ngIf="user.email">{{user.email}} </span>
-            <span item-start *ngIf="!user.email">Not provided</span>
-          </ion-col>
-          <ion-col col-6 class="right">
+            <span item-start >{{user.email}} </span>
+          </div>
+          <div class="item-bottom animated slideInRight" >
             <i class="fa fa-phone" item-start></i>
-            <span item-start *ngIf="user.phonenumber">{{user.phonenumber}} </span>
-            <span item-start *ngIf="!user.phonenumber">Not provided</span>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card>
-  
-  
-    <ion-card class="animated zoomIn" *ngIf="user">
-      <ion-item-divider color="light">
-        <i class="animated slideInLeft fa fa-user icon" item-end></i>
-        Personal Details
-      </ion-item-divider>
-  
-      <ion-list>
-        <ion-item class="profile" [hidden]="!user.gender">
-          <i class="fa fa-transgender" item-start></i>
-          <span class="info">Gender</span>
-          <span item-end>{{user.gender}} </span>
-        </ion-item>
-        <ion-item class="profile" [hidden]="!user.dob">
-          <i class="fa fa-calendar" item-start></i>
-          <span class="info">Date of birth</span>
-          <span item-end>{{user.dob}} </span>
-        </ion-item>
-        <ion-item class="profile" [hidden]="!user.race">
-          <i class="fa fa-users" item-start></i>
-          <span class="info">Race</span>
-          <span item-end>{{user.race}} </span>
-        </ion-item>
-        <ion-item class="profile" [hidden]="!user.nationality">
-          <i class="fa fa-flag" item-start></i>
-          <span class="info">Nationality</span>
-          <span item-end>{{user.nationality}} </span>
-        </ion-item>
-  
-      </ion-list>
-    </ion-card>
-  
-  
-    <ion-card class="animated zoomIn" *ngIf="user && user.skills">
-        <ion-item-divider color="light">
-          <i class="animated slideInLeft fa fa-award icon" item-end></i>
-          Experties
-        </ion-item-divider>
-    
-        <ion-item class="skills" *ngFor="let skill of user.skills">
-          <img src="assets/imgs/category/{{skill.category}}.svg" item-start>
-          <h2>{{skill.name}}</h2>
-          <p>{{skill.category}}</p>
-          <ion-badge item-end>{{skill.experience}}</ion-badge>
-        </ion-item> 
-      </ion-card>
-  
-  </ion-content>
+            <span item-start >{{user.phonenumber}} 082 123 3123</span>
+          </div>
+        </ion-col> 
+      </ion-row>
+<!-- 
+      <ion-row>
+       <ion-col col-8>
+          <ion-row>
+            <ion-col col-4 class="animated slideInDown" *ngIf="isRecruiter()">
+              <h2>{{postedJobs?.length || 0}}</h2>
+              <p>Posted</p>
+            </ion-col>
+            <ion-col col-4 class="animated slideInDown">
+              <h2>{{viewedJobs?.length || 0}}</h2>
+              <p>Viewed</p>
+            </ion-col>
+            <ion-col col-4 class="animated slideInDown" *ngIf="!isRecruiter()">
+              <h2>{{appliedJobs?.length || 0}}</h2>
+              <p>Applied</p>
+            </ion-col>
+            <ion-col col-4 class="animated slideInDown">
+              <h2>{{appointments?.length || 0}}</h2>
+              <p>Appointments</p>
+            </ion-col>
+          </ion-row>
+        </ion-col> 
+      </ion-row> 
+-->
+      <!-- <ion-row class="profile" padding>
+        <ion-col col-12>
+          <ion-badge primary>{{userRating}}</ion-badge> 
+          <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
+        </ion-col>
+   
+      </ion-row> -->
+
+      <!-- <ion-row class="contacts">
+        <ion-col col-6 class="left animated slideInLeft">
+          <i class="fa fa-envelope" item-start></i>
+          <span item-start *ngIf="user.email">{{user.email}} </span>
+          <span item-start *ngIf="!user.email">Not provided</span>
+        </ion-col>
+        <ion-col col-6 class="right animated slideInRight">
+          <i class="fa fa-phone" item-start></i>
+          <span item-start *ngIf="user.phonenumber">{{user.phonenumber}} </span>
+          <span item-start *ngIf="!user.phonenumber">Not provided</span>
+        </ion-col>
+      </ion-row> -->
+    </ion-grid>
+  </ion-card>
+
+  <ion-card class="animated zoomIn" *ngIf="user">
+    <ion-item-divider color="light">
+      <i class="animated slideInLeft fa fa-user icon" item-end></i>
+      Personal Details
+    </ion-item-divider>
+
+    <ion-list>
+      <ion-item class="profile" [hidden]="!user.gender">
+        <i class="fa fa-transgender" item-start></i>
+        <span class="info">Gender</span>
+        <span item-end>{{user.gender}} </span>
+      </ion-item>
+      <ion-item class="profile" [hidden]="!user.dob">
+        <i class="fa fa-calendar" item-start></i>
+        <span class="info">Date of birth</span>
+        <span item-end>{{user.dob}} </span>
+      </ion-item>
+      <ion-item class="profile" [hidden]="!user.race">
+        <i class="fa fa-users" item-start></i>
+        <span class="info">Race</span>
+        <span item-end>{{user.race}} </span>
+      </ion-item>
+      <ion-item class="profile" [hidden]="!user.nationality">
+        <i class="fa fa-flag" item-start></i>
+        <span class="info">Nationality</span>
+        <span item-end>{{user.nationality}} </span>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card class="animated zoomIn" *ngIf="user && user.skills">
+    <ion-item-divider color="light">
+      <i class="animated slideInLeft fa fa-award icon" item-end></i>
+      Experties
+    </ion-item-divider>
+
+    <ion-item class="skills" *ngFor="let skill of user.skills">
+      <img src="assets/imgs/category/{{skill.category}}.svg" item-start>
+      <h2>{{skill.name}}</h2>
+      <p>{{skill.category}}</p>
+      <ion-badge item-end>{{skill.experience}}</ion-badge>
+    </ion-item> 
+  </ion-card> 
+</ion-content>
+
+<ion-footer>
+  <button ion-button block (click)="createAppointment()">Make appointment</button>
+</ion-footer>
   

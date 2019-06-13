@@ -28,12 +28,14 @@ export class SignupPage {
     firstname: '',
     lastname: '',
     gender: '',
+    race: '',
     nationality: '',
     phonenumber: '',
     location: null,
     dob: '',
     date: '',
-    settings: null
+    settings: null,
+    skills: null
   }
 
   type = 'password';
@@ -66,7 +68,8 @@ export class SignupPage {
       ...this.data,
       uid: null,
       settings: { hide_dob: false, hide_phone: false, hide_email: false },
-      date: this.dataProvider.getDateTime()
+      date: this.dataProvider.getDateTime(),
+      skills: null
     }
     this.authProvider.signUpWithEmailAndPassword(data).then(() => {
       console.log('Success');

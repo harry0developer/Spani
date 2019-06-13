@@ -18,7 +18,7 @@
     </div>
     <h2 class="animated slideInLeft">{{profile.firstname}} {{profile.lastname}} </h2>
     <p class="animated slideInRight">{{profile.title || profile.type}}</p>
-    <button ion-button round small class="primary animated zoomIn" (click)="viewProfile()" color="primary">View Profile</button>
+    <button ion-button small class="primary animated zoomIn" (click)="viewProfile()" color="primary">View Profile</button>
   </div>
   <ion-grid class="contact-info" *ngIf="profile">
     <ion-row>
@@ -33,7 +33,7 @@
     </ion-row>
   </ion-grid>
 
-  <button ion-button (click)="updateSkills()">Add skill</button>
+  <!-- <button ion-button (click)="updateSkills()">Add skill</button> -->
 
   <ion-grid *ngIf="profile">
     <ion-row>

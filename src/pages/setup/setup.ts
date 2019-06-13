@@ -26,6 +26,7 @@ export class SetupPage {
     firstname: '',
     lastname: '',
     gender: '',
+    race: '',
     nationality: '',
     phonenumber: '',
     location: {
@@ -37,7 +38,8 @@ export class SetupPage {
     },
     dob: '',
     date: '',
-    settings: null
+    settings: null,
+    skills: null,
   }
   pickedAddress: string;
 

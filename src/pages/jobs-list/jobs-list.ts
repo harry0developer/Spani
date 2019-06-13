@@ -40,7 +40,6 @@ export class JobsListPage {
       lng: 28.173450
     }
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
-
       let jobsToBeMapedWithUser = [];
       jobsToBeMapped.map(j => {
         jobsToBeMapedWithUser.push(Object.assign(j, { users: this.dataProvider.countJobOccurrence(allJobs, j.jid) }));
