@@ -17,10 +17,7 @@ page-user-details {
         background-color: #f4f4f4;
     }
  
-    .top{
-        // text-align: center;
-        // color: $primary;
-        // border-top: 2px solid #c9b177;
+    .top {
         padding-top: 10px;
         margin: 20px 10px;
         .card {
@@ -64,11 +61,6 @@ page-user-details {
                 .item-top {
                     margin-bottom: 4px;
                 }
-
-                // p, h2, i {
-                //     text-align: right;
-                //     padding-right: 20px;
-                // }
                 i {
                     color: $primary;
                     padding-right: 4px;
@@ -76,14 +68,13 @@ page-user-details {
             }
 
         } 
-       
+      
         img{
             border: 2px solid $primary;
             padding: 2px;
             margin-left: 10px;
             width: 60px;
             height: 60px;
-            // margin: 40px 0 10px 0;
             border-radius: 100%;
         }
         .col {
@@ -112,28 +103,38 @@ page-user-details {
         color: $dark;
         font-weight: bold;
         background-color: $light-grey;
-        border-bottom: 2px solid $primary;
+        padding-top: 8px;
+        border-bottom: 1px solid $primary;
         i {
             font-size: 18px;
             padding-right: 10px;
         }
-    }
-    .profile {
-        font-size: 14px !important;
-        .item-inner {
-            border-bottom: 1px solid $light-grey !important;
+    } 
+
+
+    .group-item-info {
+        border-bottom: 1px solid $primary;
+        .list {
+            margin: 0 !important;
         }
-        img {
-            width: 30px !important;
+        .item-info {
+            font-size: 14px !important;
+            .item-inner {
+                border-bottom: 1px solid $light-grey !important;
+            }
+            img {
+                width: 30px !important;
+            }
+            ion-badge {
+                padding: 8px;
+            }
+            i {
+                color: $primary;
+                font-size: 18px;
+                width: 26px;
+            } 
+            
         }
-        ion-badge {
-            padding: 8px;
-        }
-        i {
-            color: $primary;
-            font-size: 18px;
-            width: 26px;
-        } 
     }
 
     .skills {
@@ -160,12 +161,9 @@ page-user-details {
                 
             }
         }
+        .address p{
+            font-weight: normal !important;
+        } 
     }
-    .address p{
-        font-weight: normal !important;
-    }
-
-    .button-footer {
-        
-    }
+    
 }

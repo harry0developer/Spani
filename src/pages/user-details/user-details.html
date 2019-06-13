@@ -29,90 +29,46 @@
             <i class="fa fa-envelope" item-start></i>
             <span item-start >{{user.email}} </span>
           </div>
-          <div class="item-bottom animated slideInRight" >
+          <div class="item-bottom animated slideInRight" *ngIf="user.phonenumber">
             <i class="fa fa-phone" item-start></i>
-            <span item-start >{{user.phonenumber}} 082 123 3123</span>
+            <span item-start >{{user.phonenumber}}</span>
           </div>
         </ion-col> 
       </ion-row>
-<!-- 
-      <ion-row>
-       <ion-col col-8>
-          <ion-row>
-            <ion-col col-4 class="animated slideInDown" *ngIf="isRecruiter()">
-              <h2>{{postedJobs?.length || 0}}</h2>
-              <p>Posted</p>
-            </ion-col>
-            <ion-col col-4 class="animated slideInDown">
-              <h2>{{viewedJobs?.length || 0}}</h2>
-              <p>Viewed</p>
-            </ion-col>
-            <ion-col col-4 class="animated slideInDown" *ngIf="!isRecruiter()">
-              <h2>{{appliedJobs?.length || 0}}</h2>
-              <p>Applied</p>
-            </ion-col>
-            <ion-col col-4 class="animated slideInDown">
-              <h2>{{appointments?.length || 0}}</h2>
-              <p>Appointments</p>
-            </ion-col>
-          </ion-row>
-        </ion-col> 
-      </ion-row> 
--->
-      <!-- <ion-row class="profile" padding>
-        <ion-col col-12>
-          <ion-badge primary>{{userRating}}</ion-badge> 
-          <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
-        </ion-col>
-   
-      </ion-row> -->
-
-      <!-- <ion-row class="contacts">
-        <ion-col col-6 class="left animated slideInLeft">
-          <i class="fa fa-envelope" item-start></i>
-          <span item-start *ngIf="user.email">{{user.email}} </span>
-          <span item-start *ngIf="!user.email">Not provided</span>
-        </ion-col>
-        <ion-col col-6 class="right animated slideInRight">
-          <i class="fa fa-phone" item-start></i>
-          <span item-start *ngIf="user.phonenumber">{{user.phonenumber}} </span>
-          <span item-start *ngIf="!user.phonenumber">Not provided</span>
-        </ion-col>
-      </ion-row> -->
     </ion-grid>
   </ion-card>
 
-  <ion-card class="animated zoomIn" *ngIf="user">
+  <div class="group-item-info animated zoomIn" *ngIf="user">
     <ion-item-divider color="light">
       <i class="animated slideInLeft fa fa-user icon" item-end></i>
       Personal Details
     </ion-item-divider>
 
     <ion-list>
-      <ion-item class="profile" [hidden]="!user.gender">
+      <ion-item class="item-info" [hidden]="!user.gender">
         <i class="fa fa-transgender" item-start></i>
         <span class="info">Gender</span>
         <span item-end>{{user.gender}} </span>
       </ion-item>
-      <ion-item class="profile" [hidden]="!user.dob">
+      <ion-item class="item-info" [hidden]="!user.dob">
         <i class="fa fa-calendar" item-start></i>
         <span class="info">Date of birth</span>
         <span item-end>{{user.dob}} </span>
       </ion-item>
-      <ion-item class="profile" [hidden]="!user.race">
+      <ion-item class="item-info" [hidden]="!user.race">
         <i class="fa fa-users" item-start></i>
         <span class="info">Race</span>
         <span item-end>{{user.race}} </span>
       </ion-item>
-      <ion-item class="profile" [hidden]="!user.nationality">
+      <ion-item class="item-info" [hidden]="!user.nationality">
         <i class="fa fa-flag" item-start></i>
         <span class="info">Nationality</span>
         <span item-end>{{user.nationality}} </span>
       </ion-item>
     </ion-list>
-  </ion-card>
+  </div>
 
-  <ion-card class="animated zoomIn" *ngIf="user && user.skills">
+  <div class="group-item-info animated zoomIn" *ngIf="user && user.skills">
     <ion-item-divider color="light">
       <i class="animated slideInLeft fa fa-award icon" item-end></i>
       Experties
@@ -124,7 +80,7 @@
       <p>{{skill.category}}</p>
       <ion-badge item-end>{{skill.experience}}</ion-badge>
     </ion-item> 
-  </ion-card> 
+  </div> 
 </ion-content>
 
 <ion-footer>
