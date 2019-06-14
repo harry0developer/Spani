@@ -17,12 +17,6 @@ import { MyJobsPage } from '../my-jobs/my-jobs';
 })
 export class UserDetailsPage {
   profile: User;
-  viewedJobs: ViewedJob[] = [];
-  appliedJobs: AppliedJob[] = [];
-  sharedJobs: SharedJob[] = [];
-
-  postedJobs: Job[] = [];
-  appointments: Appointment[] = [];
   appointment: Appointment;
   appointmentsInProgress: Appointment[] = [];
   userRating: string;
@@ -44,6 +38,13 @@ export class UserDetailsPage {
   ionViewDidLoad() {
     this.user = this.navParams.get('user');
     this.profile = this.authProvider.getStoredUser();
+
+    const key = this.user.type === USER_TYPE.candidate ? 'uid' : 'rid';
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, key, this.user.uid).subscribe(appointments => {
+      this.getMyAppointment(appointments);
+    });
+
+
     if (this.authProvider.isRecruiter(this.user)) {
       this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.user.uid).subscribe(raters => {
         this.userRating = this.dataProvider.getUserRating(raters);
@@ -55,15 +56,27 @@ export class UserDetailsPage {
     }
   }
 
-  isUserInAppointment() {
-    this.appointments.forEach(app => {
-      if (app.uid === this.user.uid) {
-        this.appointment = app;
-        if (app.status === STATUS.inProgress) {
-          this.hired = true;
+  getMyAppointment(appointments: Appointment[]): Appointment[] {
+    let appontmentz: Appointment[] = [];
+    if (this.user.type === USER_TYPE.candidate) {
+      appointments.map(a => {
+        if (a.rid === this.profile.uid) {
+          this.appointment = a;
         }
-      }
-    });
+      });
+    } else {
+      appointments.map(a => {
+        if (a.rid === this.profile.uid) {
+          this.appointment = a;
+        }
+      });
+    }
+
+    return appontmentz;
+  }
+
+  isUserInAppointment(): boolean {
+    return this.appointment && this.appointment.status === STATUS.inProgress;
   }
 
   isRecruiter(user): boolean {
@@ -74,13 +87,11 @@ export class UserDetailsPage {
     return `assets/imgs/users/${user.gender}.svg`;
   }
 
-  hasAppointments() {
-    return false;
-  }
-
-  updateAppointment(appointment) {
+  completeAppointment() {
     this.feedbackProvider.presentLoading();
-    this.dataProvider.updateItem(COLLECTION.appointments, appointment, appointment.id).then(() => {
+    this.appointment.status = STATUS.complete;
+    this.appointment.dateCompleted = this.dataProvider.getDateTime();
+    this.dataProvider.updateItem(COLLECTION.appointments, this.appointment, this.appointment.id).then(() => {
       this.hired = false;
       this.feedbackProvider.dismissLoading();
       this.feedbackProvider.presentToast('Appointment completed successfully');
@@ -91,20 +102,19 @@ export class UserDetailsPage {
     });
   }
 
-  makeAppointment() {
-    this.appointment.status = STATUS.complete;
-    this.appointment.dateCompleted = this.dataProvider.getDateTime();
-    this.updateAppointment(this.appointment);
-  }
-
   createAppointment() {
-    if (this.appointment && this.appointment.id) {
-      this.appointment.status = STATUS.inProgress;
-      this.appointment.dateCreated = this.dataProvider.getDateTime();
-      this.appointment.dateCompleted = '';
-      this.updateAppointment(this.appointment);
+    this.feedbackProvider.presentLoading();
+    if (!this.appointment) {
+      const appointment = {
+        uid: this.user.id,
+        rid: this.profile.uid,
+        status: STATUS.inProgress,
+        dateCreated: this.dataProvider.getDateTime(),
+        dateCompleted: ''
+      }
+      this.feedbackProvider.dismissLoading();
+      this.createNewAppointment(appointment);
     } else {
-      this.feedbackProvider.presentLoading();
       this.appointment = {
         uid: this.user.id,
         rid: this.profile.uid,
@@ -112,19 +122,22 @@ export class UserDetailsPage {
         dateCreated: this.dataProvider.getDateTime(),
         dateCompleted: ''
       }
-
-      this.dataProvider.addNewItem(COLLECTION.appointments, this.appointment).then(() => {
-        this.hired = true;
-        this.feedbackProvider.dismissLoading();
-        this.feedbackProvider.presentToast('Appointment made successfully');
-      }).catch(err => {
-        console.log(err);
-        this.feedbackProvider.dismissLoading();
-        this.feedbackProvider.presentErrorAlert('Making appointment', 'An error occured while making an appointment');
-      });
+      this.feedbackProvider.dismissLoading();
+      this.dataProvider.updateItem(COLLECTION.appointments, this.appointment, this.appointment.id);
     }
   }
 
+  createNewAppointment(appointment: Appointment) {
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.addNewItem(COLLECTION.appointments, appointment).then(() => {
+      this.feedbackProvider.dismissLoading();
+      this.feedbackProvider.presentToast('Appointment made successfully');
+    }).catch(err => {
+      console.log(err);
+      this.feedbackProvider.dismissLoading();
+      this.feedbackProvider.presentErrorAlert('Making appointment', 'An error occured while making an appointment');
+    });
+  }
 
   completeAppointmentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
@@ -134,7 +147,7 @@ export class UserDetailsPage {
           text: 'Complete appointment',
           role: 'destructive',
           handler: () => {
-            this.makeAppointment();
+            this.completeAppointment();
           }
         },
         {

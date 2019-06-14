@@ -83,6 +83,7 @@
 </ion-content>
 
 <ion-footer>
-  <button ion-button block (click)="createAppointment()">Make appointment</button>
+  <button ion-button block *ngIf="!isUserInAppointment()" (click)="createAppointment()">Make appointment</button>
+  <button ion-button block *ngIf="isUserInAppointment()" (click)="completeAppointmentActionSheet()">Complete appointment</button>
 </ion-footer>
   
