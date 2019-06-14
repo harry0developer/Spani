@@ -20,7 +20,7 @@
       </ion-row>
 
       <ion-row class="rating-contacts">
-        <ion-col col-5 class="ratings">
+        <ion-col col-5 class="ratings animated slideInLeft">
           <ion-badge primary>{{userRating}}</ion-badge> 
           <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
         </ion-col>
@@ -38,12 +38,11 @@
     </ion-grid>
   </ion-card>
 
-  <div class="group-item-info animated zoomIn" *ngIf="user">
+  <div class="group-item-info" *ngIf="user">
     <ion-item-divider color="light">
-      <i class="animated slideInLeft fa fa-user icon" item-end></i>
+      <i class="animated slideInRight fa fa-user icon" item-end></i>
       Personal Details
     </ion-item-divider>
-
     <ion-list>
       <ion-item class="item-info" [hidden]="!user.gender">
         <i class="fa fa-transgender" item-start></i>
@@ -68,9 +67,9 @@
     </ion-list>
   </div>
 
-  <div class="group-item-info animated zoomIn" *ngIf="user && user.skills">
+  <div class="group-item-info" *ngIf="user && user.skills">
     <ion-item-divider color="light">
-      <i class="animated slideInLeft fa fa-award icon" item-end></i>
+      <i class="animated slideInRight fa fa-award icon" item-end></i>
       Experties
     </ion-item-divider>
 
