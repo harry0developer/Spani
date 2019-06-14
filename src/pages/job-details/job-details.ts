@@ -6,8 +6,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { AppliedJob, SharedJob, ViewedJob } from '../../models/job';
 import { COLLECTION } from '../../utils/const';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { Observable, forkJoin } from 'rxjs';
-import { take, map, share } from 'rxjs/operators';
+import { Observable, forkJoin, combineLatest } from 'rxjs';
+import { take } from 'rxjs/operators';
 
 @IonicPage()
 @Component({
@@ -43,7 +43,7 @@ export class JobDetailsPage {
     this.profile = this.authProvider.getStoredUser();
     this.job = this.navParams.get('job');
 
-    forkJoin(
+    combineLatest(
       this.dataProvider.getDocumentFromCollection(COLLECTION.appliedJobs, this.job.jid),
       this.dataProvider.getDocumentFromCollection(COLLECTION.viewedJobs, this.job.jid),
       this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.job.jid)
@@ -56,42 +56,8 @@ export class JobDetailsPage {
       this.feedbackProvider.dismissLoading();
       this.feedbackProvider.presentToast('Oops, something went wrong :(');
     });
-
-    // this.getAllJobsFromBD(this.job.jid).subscribe(([applied, shared, viewed]) => {
-    //   console.log(applied, shared, viewed); 
-    //   applied.map(app => {
-    //     if (app.id === this.job.jid) {
-    //       this.appliedUsers.push(app);
-    //       console.log(this.appliedUsers);
-
-    //     }
-    //   });
-    //   viewed.map(v => {
-    //     if (v.id === this.job.jid) {
-    //       this.viewedUsers.push(v);
-    //       console.log(this.viewedUsers);
-
-    //     }
-    //   });
-    //   shared.map(s => {
-    //     if (s.id === this.job.jid) {
-    //       this.sharedUsers.push(s);
-    //       console.log(this.sharedUsers);
-
-    //     }
-    //   });
-    // }); 
   }
 
-
-
-  getAllJobsFromBD(id: string): Observable<any> {
-    return forkJoin(
-      this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).pipe(take(1)),
-      this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).pipe(take(1)),
-      this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).pipe(take(1)),
-    );
-  }
 
 
   getJobPoster() {

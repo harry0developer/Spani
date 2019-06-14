@@ -104,6 +104,8 @@ export class UserDetailsPage {
 
   createAppointment() {
     this.feedbackProvider.presentLoading();
+    console.log(this.appointment);
+
     if (!this.appointment) {
       const appointment = {
         uid: this.user.id,
@@ -115,13 +117,11 @@ export class UserDetailsPage {
       this.feedbackProvider.dismissLoading();
       this.createNewAppointment(appointment);
     } else {
-      this.appointment = {
-        uid: this.user.id,
-        rid: this.profile.uid,
-        status: STATUS.inProgress,
-        dateCreated: this.dataProvider.getDateTime(),
-        dateCompleted: ''
-      }
+
+      this.appointment.dateCompleted = '';
+      this.appointment.dateCreated = this.dataProvider.getDateTime();
+      this.appointment.status = STATUS.inProgress;
+      console.log(this.appointment);
       this.feedbackProvider.dismissLoading();
       this.dataProvider.updateItem(COLLECTION.appointments, this.appointment, this.appointment.id);
     }

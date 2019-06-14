@@ -9,6 +9,7 @@ import { UserDetailsPage } from '../user-details/user-details';
 import { Job } from '../../models/job';
 import { STATUS, COLLECTION } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { combineLatest } from 'rxjs';
 
 @IonicPage()
 @Component({
@@ -19,10 +20,8 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 export class AppointmentsPage {
   appointment_type: string = 'inProgress';
   profile: any;
-  appointments: Appointment[] = []
   inProgressAppointments: User[] = [];
   completedAppointments: User[] = [];
-  users: User[] = [];
 
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -35,12 +34,17 @@ export class AppointmentsPage {
   ionViewDidLoad() {
     this.feedbackProvider.presentLoading();
     this.profile = this.authProvider.getStoredUser();
-    this.appointments = this.navParams.get('appointments');
-    this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+    const key = this.dataProvider.getKey(this.profile);
+
+    combineLatest(
+      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, key, this.profile.uid),
+      this.dataProvider.getAllFromCollection(COLLECTION.users)
+    ).subscribe(([appointments, users]) => {
       this.feedbackProvider.dismissLoading();
-      this.users = users;
-      this.appointments.map(app => {
-        this.users.map(u => {
+      this.inProgressAppointments = [];
+      this.completedAppointments = [];
+      appointments.map(app => {
+        users.map(u => {
           if (app.uid === u.uid) {
             if (app.status === STATUS.inProgress) {
               this.inProgressAppointments.push(Object.assign(u, { appointment: app }))
@@ -50,11 +54,32 @@ export class AppointmentsPage {
           }
         });
       });
-      console.log(this.completedAppointments);
-
     }, err => {
       this.feedbackProvider.dismissLoading();
-    });
+      this.feedbackProvider.presentToast('Oops, something went wrong fetching appointments :(');
+    })
+
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, key, this.profile.uid).subscribe(appointments => {
+    //   this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+    //     this.feedbackProvider.dismissLoading();
+    //     this.users = users;
+    //     appointments.map(app => {
+    //       this.users.map(u => {
+    //         if (app.uid === u.uid) {
+    //           if (app.status === STATUS.inProgress) {
+    //             this.inProgressAppointments.push(Object.assign(u, { appointment: app }))
+    //           } else {
+    //             this.completedAppointments.push(Object.assign(u, { appointment: app }));
+    //           }
+    //         }
+    //       });
+    //     });
+    //     console.log(this.completedAppointments);
+
+    //   }, err => {
+    //     this.feedbackProvider.dismissLoading();
+    //   });
+    // })
 
 
   }

@@ -8,7 +8,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
 import { Message } from '../../models/message';
 import { User } from '../../models/user';
-import { COLLECTION } from '../../utils/const';
+import { COLLECTION, USER_TYPE } from '../../utils/const';
 import { Rating } from '../../models/rating';
 
 @Injectable()
@@ -196,6 +196,10 @@ export class DataProvider {
 
 
   // ===== HELPERS ======
+
+  getKey(user: User): string {
+    return user.type === USER_TYPE.candidate ? 'uid' : 'rid';
+  }
 
   getUserRating(ratings: Rating[]): string {
     let myRating: number = 0.0;
