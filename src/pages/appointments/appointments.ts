@@ -3,10 +3,8 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { bounceIn } from '../../utils/animations';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
-import { Appointment } from '../../models/appointment';
 import { DataProvider } from '../../providers/data/data';
 import { UserDetailsPage } from '../user-details/user-details';
-import { Job } from '../../models/job';
 import { STATUS, COLLECTION } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { combineLatest } from 'rxjs';

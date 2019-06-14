@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import * as moment from 'moment';
-
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { HttpClient } from '@angular/common/http';
@@ -38,18 +37,6 @@ export class DataProvider {
 
   getDocumentFromCollection(collectionName: string, docId: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName).doc(docId).get();
-
-
-    // docRef.get().then(function(doc) {
-    //     if (doc.exists) {
-    //         console.log("Document data:", doc.data());
-    //     } else {
-    //         // doc.data() will be undefined in this case
-    //         console.log("No such document!");
-    //     }
-    // }).catch(function(error) {
-    //     console.log("Error getting document:", error);
-    // });
   }
 
   getCollectionById(collectionName: string, uid: string): Observable<any> {

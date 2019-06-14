@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, ModalController } from 'ionic-angular';
+import { IonicPage } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { slideIn, listSlideUp } from '../../utils/animations';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
-import { COLLECTION, USER_TYPE } from '../../utils/const';
+import { COLLECTION } from '../../utils/const';
 import { Appointment } from '../../models/appointment';
-import { LoginPage } from '../login/login';
 import { AppliedJob, Job, ViewedJob, SharedJob } from '../../models/job';
 
 declare var cordova: any;
@@ -30,17 +29,19 @@ export class ProfilePage {
   appliedJobs: AppliedJob[] = [];
 
   defaultImg: string;
+  userKey: string = '';
+
   constructor(
     private feedbackProvider: FeedbackProvider,
     private authProvider: AuthProvider,
-    private dataProvider: DataProvider,
-    private modalCtrl: ModalController
+    private dataProvider: DataProvider
   ) { }
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
+    this.userKey = this.dataProvider.getKey(this.profile);
     this.defaultImg = this.profilePicture();
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, this.userKey, this.profile.uid).subscribe(usersRatedMe => {
       this.myRating = this.dataProvider.getUserRating(usersRatedMe)
     });
   }
@@ -48,28 +49,6 @@ export class ProfilePage {
 
   profilePicture(): string {
     return this.dataProvider.getProfilePicture(this.profile);
-  }
-
-
-
-  getSettings(): any {
-
-  }
-
-  getAppliedJobs() {
-
-  }
-
-  getAppointments() {
-
-  }
-
-  getViewedJobs() {
-
-  }
-
-  getPostedJobs() {
-
   }
 
   isRecruiter(): boolean {

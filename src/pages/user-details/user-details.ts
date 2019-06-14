@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events, ActionSheetController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { DataProvider } from '../../providers/data/data';
 import { User } from '../../models/user';
 import { AuthProvider } from '../../providers/auth/auth';
-import { COLLECTION, EVENTS, STATUS, USER_TYPE, } from '../../utils/const';
+import { COLLECTION, STATUS, USER_TYPE, } from '../../utils/const';
 import { Appointment } from '../../models/appointment';
-import { ViewedJob, Job, AppliedJob, SharedJob } from '../../models/job';
-import { AppointmentsPage } from '../appointments/appointments';
-import { MyJobsPage } from '../my-jobs/my-jobs';
 
 @IonicPage()
 @Component({
@@ -25,13 +22,13 @@ export class UserDetailsPage {
   hired: boolean = false;
   skills: any[] = [];
 
+  userKey: string = '';
   constructor(
     public navCtrl: NavController, public navParams: NavParams,
     private feedbackProvider: FeedbackProvider,
     private dataProvider: DataProvider,
     private authProvider: AuthProvider,
     private actionSheetCtrl: ActionSheetController,
-    private ionEvent: Events,
   ) { }
 
 
@@ -39,21 +36,16 @@ export class UserDetailsPage {
     this.user = this.navParams.get('user');
     this.profile = this.authProvider.getStoredUser();
 
-    const key = this.user.type === USER_TYPE.candidate ? 'uid' : 'rid';
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, key, this.user.uid).subscribe(appointments => {
+    this.userKey = this.dataProvider.getKey(this.user);
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.user.uid).subscribe(appointments => {
       this.getMyAppointment(appointments);
     });
 
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, this.userKey, this.user.uid).subscribe(raters => {
+      this.userRating = this.dataProvider.getUserRating(raters);
+    });
 
-    if (this.authProvider.isRecruiter(this.user)) {
-      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.user.uid).subscribe(raters => {
-        this.userRating = this.dataProvider.getUserRating(raters);
-      });
-    } else {
-      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.user.uid).subscribe(raters => {
-        this.userRating = this.dataProvider.getUserRating(raters);
-      });
-    }
   }
 
   getMyAppointment(appointments: Appointment[]): Appointment[] {

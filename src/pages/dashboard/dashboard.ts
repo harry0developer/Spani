@@ -41,6 +41,7 @@ export class DashboardPage {
   jobs: Job[] = [];
   users: User[] = [];
 
+  userKey: string = '';
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -53,6 +54,7 @@ export class DashboardPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
+    this.userKey = this.dataProvider.getKey(this.profile);
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       this.jobs = jobs;
     });
@@ -67,47 +69,40 @@ export class DashboardPage {
 
     this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
       this.duplicateAppliedJobs = this.getMyJobs(jobs);
-      this.appliedJobs = this.dataProvider.removeDuplicates(this.duplicateAppliedJobs, 'jid');
+      this.appliedJobs = this.dataProvider.removeDuplicates(this.duplicateAppliedJobs, 'uid');
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
       this.duplicateViewedJobs = this.getMyJobs(jobs);
-      this.viewedJobs = this.dataProvider.removeDuplicates(this.duplicateViewedJobs, 'jid');
+      this.viewedJobs = this.dataProvider.removeDuplicates(this.duplicateViewedJobs, 'uid');
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
       this.duplicateSharedJobs = this.getMyJobs(jobs);
-      this.sharedJobs = this.dataProvider.removeDuplicates(this.duplicateSharedJobs, 'jid');
+      this.sharedJobs = this.dataProvider.removeDuplicates(this.duplicateSharedJobs, 'uid');
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
       this.usersIRated = usersIRated;
-      // console.log(usersIRated);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
       this.usersRatedMe = usersRatedMe;
       this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
-      // console.log(usersRatedMe);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
       this.allRatings = ratings;
-      // console.log(ratings);
     });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.profile.uid).subscribe(appointments => {
       this.appointments = appointments;
     });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.messages).subscribe(chats => {
-      // console.log(chats);
-    });
+  }
 
-    this.dataProvider.getMyChats(COLLECTION.messages, this.profile.uid).subscribe(chats => {
-      // console.log(chats);
-    });
-
+  countIratedAndRatedMe(): number {
+    return this.usersIRated.length + this.usersRatedMe.length || 0;
   }
 
   getMyJobs(jobs) {
@@ -128,18 +123,9 @@ export class DashboardPage {
     return this.dataProvider.getProfilePicture(this.profile);
   }
 
-  getJobsSummary() {
-    // return this.viewedJobs.length + this.appliedJobs.length + this.sharedJobs.length || 0;
-  }
-
-  getRaters() {
-    // return this.ratings && this.ratings.iRated && this.ratings.ratedMe ? this.ratings.ratedMe.length + this.ratings.iRated.length : 0;
-  }
-
   isRecruiter(): boolean {
     return this.authProvider.isRecruiter(this.profile);
   }
-
 
   updateSkills() {
     const skills = [
@@ -235,26 +221,5 @@ export class DashboardPage {
 
   viewProfile() {
     this.navCtrl.push(ProfilePage);
-  }
-
-  editProfile() {
-    // let modal = this.modalCtrl.create(SettingsPage);
-    // modal.onDidDismiss(data => {
-    //   if (data) {
-    //     this.updateSettings();
-    //   }
-    // });
-    // modal.present();
-  }
-
-  updateSettings() {
-    // this.feedbackProvider.presentLoading();
-    // this.dataProvider.updateItem(COLLECTION.users, this.profile, this.profile.id).then(() => {
-    //   this.feedbackProvider.dismissLoading();
-    //   this.feedbackProvider.presentToast('Settings updated successfully');
-    // }).catch(err => {
-    //   console.log(err);
-    //   this.feedbackProvider.dismissLoading();
-    // });
   }
 }

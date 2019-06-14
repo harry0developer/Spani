@@ -34,19 +34,15 @@ export class RatersPage {
   }
 
   ionViewDidLoad() {
-    this.profile = this.authProvider.getStoredUser();
-    const ratings = this.navParams.get('ratings');
-    this.users = this.navParams.get('users');
-
     this.feedbackProvider.presentLoading();
-
+    this.profile = this.authProvider.getStoredUser();
+    this.users = this.navParams.get('users');
     this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
-      this.users = users;
       this.feedbackProvider.dismissLoading();
+      this.users = users;
       this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(ratedMe => {
         this.usersRatedMe = this.mapUsersRatedMe(users, ratedMe);
       });
-
       this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(iRated => {
         this.usersIRated = this.mapUsersIRated(users, iRated);
       });

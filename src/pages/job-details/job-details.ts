@@ -6,8 +6,8 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { AppliedJob, SharedJob, ViewedJob } from '../../models/job';
 import { COLLECTION } from '../../utils/const';
 import { SocialSharing } from '@ionic-native/social-sharing';
-import { Observable, forkJoin, combineLatest } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { combineLatest } from 'rxjs';
+
 
 @IonicPage()
 @Component({
@@ -25,9 +25,6 @@ export class JobDetailsPage {
   sharedUsers: SharedJob[] = [];
 
   myRating: string;
-  // viewedJobs: ViewedJob[] = [];
-  // sharedJobs: SharedJob[] = [];
-  // appliedJobs: AppliedJob[] = [];
 
   constructor(
     public navCtrl: NavController,
@@ -57,8 +54,6 @@ export class JobDetailsPage {
       this.feedbackProvider.presentToast('Oops, something went wrong :(');
     });
   }
-
-
 
   getJobPoster() {
     this.feedbackProvider.presentLoading();
