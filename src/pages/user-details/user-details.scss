@@ -1,4 +1,3 @@
-
 page-user-details {
     .toolbar-background {
         border-style: none !important;
@@ -9,6 +8,10 @@ page-user-details {
         color: $primary !important;
     }
  
+    ion-header {
+        border-bottom: 2px solid $primary;
+    }
+    
     .header-md::after, .header-ios::after {
         height: 0;
     }

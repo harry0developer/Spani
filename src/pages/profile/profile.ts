@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ActionSheetController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { slideIn, listSlideUp } from '../../utils/animations';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -7,8 +7,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { COLLECTION } from '../../utils/const';
 import { Appointment } from '../../models/appointment';
 import { AppliedJob, Job, ViewedJob, SharedJob } from '../../models/job';
-
-declare var cordova: any;
+import { User } from '../../models/user';
 
 @IonicPage()
 @Component({
@@ -18,100 +17,41 @@ declare var cordova: any;
 })
 
 export class ProfilePage {
-  profile: any = {};
-
+  profile: User;
+  userRating: string;
+  hired: boolean = false;
+  appointments: Appointment[] = []
   postedJobs: Job[] = [];
-  appointments: Appointment[] = [];
-
-  myRating: string;
-  viewedJobs: ViewedJob[] = [];
-  sharedJobs: SharedJob[] = [];
-  appliedJobs: AppliedJob[] = [];
-
-  defaultImg: string;
-  userKey: string = '';
-
+  skills: any[] = [];
   constructor(
+    public navCtrl: NavController, public navParams: NavParams,
     private feedbackProvider: FeedbackProvider,
-    private authProvider: AuthProvider,
-    private dataProvider: DataProvider
-  ) { }
+    private dataProvider: DataProvider,
+    private authProvider: AuthProvider) { }
+
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
-    this.userKey = this.dataProvider.getKey(this.profile);
-    this.defaultImg = this.profilePicture();
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, this.userKey, this.profile.uid).subscribe(usersRatedMe => {
-      this.myRating = this.dataProvider.getUserRating(usersRatedMe)
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(postedJobs => {
+      this.postedJobs = postedJobs;
     });
-  }
 
-
-  profilePicture(): string {
-    return this.dataProvider.getProfilePicture(this.profile);
-  }
-
-  isRecruiter(): boolean {
-    return this.authProvider.isRecruiter(this.profile);
-  }
-
-
-  settingsPage() {
-    // let modal = this.modalCtrl.create(SettingsPage);
-    // modal.onDidDismiss(data => {
-    //   if (data) {
-    //     this.updateSettings();
-    //   }
-    // });
-    // modal.present();
-  }
-
-  updateSettings() {
-    this.feedbackProvider.presentLoading();
-    this.dataProvider.updateItem(COLLECTION.users, this.profile, this.profile.id).then(() => {
-      this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentToast('Settings updated successfully');
-    }).catch(err => {
-      console.log(err);
-      this.feedbackProvider.dismissLoading();
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
+      this.appointments = appointments;
     });
-  }
-  public presentActionSheet() {
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(raters => {
+      this.userRating = this.dataProvider.getUserRating(raters);
+    });
 
   }
 
-  public takePicture(sourceType) {
+  isRecruiter(user): boolean {
+    return this.authProvider.isRecruiter(user);
   }
 
-  private createFileName() {
-    var d = new Date(),
-      n = d.getTime(),
-      newFileName = n + ".jpg";
-    return newFileName;
+  profilePicture(user): string {
+    return `assets/imgs/users/${user.gender}.svg`;
   }
-
-  private copyFileToLocalDir(namePath, currentName, newFileName) {
-
-  }
-
-  public pathForImage(img) {
-    if (img === null) {
-      return '';
-    } else {
-      return cordova.file.dataDirectory + img;
-    }
-  }
-
-  public uploadImage() {
-
-  }
-
-  saveFilenameToDB(filename: string) {
-
-  };
-
-  showErrorMessage() {
-    this.feedbackProvider.presentAlert("Ooops!", "Something went wrong changing the profile picture, please try again.");
-  }
-
 }
