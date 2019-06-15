@@ -45,6 +45,7 @@ import { JobsListPage } from '../pages/jobs-list/jobs-list';
 import { UserDetailsPage } from '../pages/user-details/user-details';
 import { RatersPage } from '../pages/raters/raters';
 import { TestUiPage } from '../pages/test-ui/test-ui';
+import { NationalityPage } from '../pages/nationality/nationality';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,7 @@ import { TestUiPage } from '../pages/test-ui/test-ui';
     JobsListPage,
     UserDetailsPage,
     RatersPage,
-    TestUiPage
+    NationalityPage
   ],
   imports: [
     BrowserModule,
@@ -95,7 +96,7 @@ import { TestUiPage } from '../pages/test-ui/test-ui';
     JobsListPage,
     UserDetailsPage,
     RatersPage,
-    TestUiPage
+    NationalityPage
   ],
   providers: [
     StatusBar,

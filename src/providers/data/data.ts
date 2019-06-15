@@ -21,7 +21,7 @@ export class DataProvider {
   ) { }
 
   getCountries() {
-    return this.http.get('assets/flag-emojis.pretty.json');
+    return this.http.get('assets/countries.json');
   }
   getAllFromCollection(collectionName: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName).snapshotChanges().pipe(
@@ -183,6 +183,10 @@ export class DataProvider {
 
 
   // ===== HELPERS ======
+
+  cleanPhoneNumber(phoneNumber: string): string {
+    return phoneNumber.replace(/\(/, '').replace(/\)/, '').replace(/\ /, '').replace(/\ /, '');
+  }
 
   getKey(user: User): string {
     return user.type === USER_TYPE.candidate ? 'uid' : 'rid';

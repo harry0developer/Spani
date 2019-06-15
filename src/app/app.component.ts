@@ -2,21 +2,15 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from '../pages/login/login';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { AuthProvider } from '../providers/auth/auth';
 import { DataProvider } from '../providers/data/data';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
-import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
-import { SetupPage } from '../pages/setup/setup';
 import { ProfilePage } from '../pages/profile/profile';
 import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
 import { Network } from '@ionic-native/network';
-import { FeedbackProvider } from '../providers/feedback/feedback';
-import { ErrorPage } from '../pages/error/error';
-import { ERRORS, NETWORK } from '../utils/const';
-import { TestUiPage } from '../pages/test-ui/test-ui';
+import { NETWORK } from '../utils/const';
 
 
 @Component({
@@ -82,7 +76,7 @@ export class MyApp {
 
   logout() {
     this.authProvider.logout().then(() => {
-      this.nav.setRoot(LoginPage);
+      this.nav.setRoot(MultiLoginPage);
     });
   }
 

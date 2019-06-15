@@ -19,18 +19,33 @@
   <div [ngSwitch]="loginType">
     <ion-list *ngSwitchCase="'phoneNumber'">
       <div *ngIf="!showOTPPage">
-        <ion-card padding> 
-          <ion-item class="animated pulse">
-            <ion-label  floating>Phone Number</ion-label>
-            <ion-input [(ngModel)]="data.phonenumber" required phonenumber="phonenumber" minlength="13" #phonenumber="ngModel" [brmasker]="{mask:'(000) 000 0000', len:25,  type:'num'}"
-            type="tel">
-            </ion-input>
-          </ion-item>
-          <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">
-            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
-            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('minlength')">Too short</p>
-          </div>
-          <button ion-button block color="light" class="dark border" [disabled]="!phonenumber.valid" (click)="signinWithPhonenumber()">Login</button>
+        <ion-card padding class="phone-login"> 
+          <p class="info">Select dial code and then enter phone number</p>
+          <ion-grid>
+            <ion-row>
+              <ion-col col-3>
+                <ion-item class="animated pulse">
+                  <ion-input type="tel" placeholder="+27" (focus)="getCountryCode()" [(ngModel)]="country.flag" flag="flag" #flag="ngModel"></ion-input>
+                </ion-item> 
+              </ion-col>
+              <ion-col col-9>
+                <ion-item class="animated pulse">
+                  <span item-start>{{country.dialCode}}</span>
+                  <ion-input [(ngModel)]="data.phonenumber"  placeholder="0822349394"  clearOnEdit=false required phonenumber="phonenumber" #phonenumber="ngModel" pattern=".{9,}"
+                  type="tel"></ion-input>
+                </ion-item>
+                <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
+                  <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('pattern')">Phone Number is too short</p>
+                </div>
+                <div [hidden]="!phonenumber.dirty || !phonenumber.valid && !country.dialCode" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="country.dialCode">Country is required</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+         
+          <button ion-button block primary [disabled]="!country.dialCode || !phonenumber.valid" (click)="signinWithPhonenumber()">Login</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
       </div>
@@ -47,7 +62,7 @@
           <div [hidden]="otpCode.valid || otpCode.pristine" class="validation">
             <p class="animated fadeInLeft" [hidden]="!otpCode.hasError('required')">OTP code is required</p>
           </div>
-          <button ion-button block color="light" class="dark border" [disabled]="!otpCode.valid" (click)="verifyLoginCode()">Verify code</button>
+          <button ion-button block primary [disabled]="!otpCode.valid" (click)="verifyLoginCode()">Verify code</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
         <button ion-button clear block color="dark" (click)="cancelOtpVerification()">Cancel verification</button>
@@ -86,7 +101,7 @@
           <p class="animated fadeInLeft" [hidden]="!password.hasError('pattern')">Password must be 6 characters or longer</p>
         </div>
         <div  id="sign-in-button" ></div>
-        <button ion-button block color="light" class="dark border" [disabled]="!email.valid || !password.valid " (click)="signinWithEmailAndPassword()">Login</button>
+        <button ion-button block primary [disabled]="!email.valid || !password.valid " (click)="signinWithEmailAndPassword()">Login</button>
         <p class="terms">Terms and conditions apply</p>
       </ion-card>
 
