@@ -6,7 +6,7 @@
   </div>
   
   <div padding *ngIf="!showOTPPage" >
-    <ion-segment mode="md" color="dark" [(ngModel)]="signupType">
+    <ion-segment mode="md" color="dark" [(ngModel)]="loginType">
       <ion-segment-button value="phoneNumber">
         Phone Number
       </ion-segment-button>
@@ -16,42 +16,62 @@
     </ion-segment>
   </div>
     
-  <div [ngSwitch]="signupType">
+  <div [ngSwitch]="loginType">
     <ion-list *ngSwitchCase="'phoneNumber'">
       <div *ngIf="!showOTPPage">
-        <ion-card padding> 
-          <ion-item class="animated pulse">
-            <ion-label floating>First Name</ion-label>
-            <ion-input [(ngModel)]="data.firstname" required firstname="firstname" #firstname="ngModel"
-            pattern=".{2,}" type="text"></ion-input>
-          </ion-item>
-          <div [hidden]="firstname.valid || firstname.pristine" class="validation">
-            <p class="animated tada" [hidden]="!firstname.hasError('required')">First Name is required</p>
-          </div>
-      
-          <ion-item class="animated pulse">
-            <ion-label floating>Last Name</ion-label>
-            <ion-input [(ngModel)]="data.lastname" required lastname="lastname" #lastname="ngModel"
-            pattern=".{2,}" type="text"></ion-input>
-          </ion-item>
-          <div [hidden]="lastname.valid || lastname.pristine" class="validation">
-            <p class="animated tada" [hidden]="!lastname.hasError('required')">Last Name is required</p>
-          </div>
-            
-          <ion-item class="animated pulse">
-            <ion-label floating>Phone Number</ion-label>
-            <ion-input [(ngModel)]="data.phonenumber" required phonenumber="phonenumber" minlength="14" #phonenumber="ngModel" [brmasker]="{mask:'(000) 000 0000', len:25,  type:'num'}"
-            type="tel">
-          </ion-input>
-          </ion-item>
-          <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">
-            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
-            <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('minlength')">Phone Number is too short</p>
-          </div> 
+        <ion-card padding class="phone-login"> 
+          <ion-grid class="phone">
+            <p class="info">Select dial code and then enter phone number</p>
+            <ion-row>
+              <ion-col col-3>
+                <ion-item class="animated pulse">
+                  <ion-input type="text" placeholder="+27" (focus)="getCountryCode()" [(ngModel)]="country.flag" flag="flag" #flag="ngModel"></ion-input>
+                </ion-item> 
+              </ion-col>
+              <ion-col col-9>
+                <ion-item class="animated pulse">
+                  <span item-start>{{country.dialCode}}</span>
+                  <ion-input [(ngModel)]="data.phonenumber"  [brmasker]="{mask:'000000000000000', len:15,  type:'num'}" placeholder="0820001234"  clearOnEdit=false required phonenumber="phonenumber" #phonenumber="ngModel" pattern=".{9,}"
+                  type="tel"></ion-input>
+                </ion-item>
+                <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('required')">Phone Number is required</p>
+                  <p class="animated fadeInLeft" [hidden]="!phonenumber.hasError('pattern')">Phone Number is too short</p>
+                </div>
+                <div [hidden]="!phonenumber.dirty || !phonenumber.valid && !country.dialCode" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="country.dialCode">Country is required</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
 
-          <button ion-button block primary [disabled]="!firstname.valid || !lastname.valid || !phonenumber.valid" 
-            (click)="signupWithPhoneNumber()">Create Account</button>
+          <ion-grid class="user-details">
+            <ion-row>
+              <ion-col col-12>
+                <ion-item class="animated pulse">
+                  <ion-label>First Name</ion-label>
+                  <ion-input [(ngModel)]="data.firstname" required firstname="firstname" #firstname="ngModel" type="text"></ion-input>
+                </ion-item>
+                <div [hidden]="firstname.valid || firstname.pristine" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="!firstname.hasError('required')">First name is required</p>
+                </div>
+              </ion-col>
+              <ion-col col-12>
+                <ion-item class="animated pulse">
+                  <ion-label>Last Name</ion-label>
+                  <ion-input [(ngModel)]="data.lastname" required lastname="lastname" #lastname="ngModel" type="text"></ion-input>
+                </ion-item>
+                <div [hidden]="lastname.valid || lastname.pristine" class="validation">
+                  <p class="animated fadeInLeft" [hidden]="!lastname.hasError('required')">Last name is required</p>
+                </div>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <button ion-button block primary [disabled]="!country.dialCode || !phonenumber.valid || !firstname.valid || !lastname.valid" (click)="signupWithPhonenumber()">Signup</button>
+          
           <p class="terms">Terms and conditions apply</p>
+
         </ion-card>
       </div>
 
@@ -59,19 +79,21 @@
         <ion-card padding> 
           <p class="otp-message">Enter the 6 digit code sent to your phone</p>
           <ion-item class="animated pulse">
-            <ion-label  floating>OTP code</ion-label>
-            <ion-input [(ngModel)]="otp" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
-            type="tel">
+            <ion-label>OTP code</ion-label>
+            <ion-input [(ngModel)]="data.otpCode" placeholder="123456" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
+            type="number">
             </ion-input>
           </ion-item>
           <div [hidden]="otpCode.valid || otpCode.pristine" class="validation">
             <p class="animated fadeInLeft" [hidden]="!otpCode.hasError('required')">OTP code is required</p>
           </div>
-          <button ion-button block color="light" class="dark border" [disabled]="!otpCode.valid" (click)="verifyLoginCode()">Verify code</button>
+          <button ion-button block primary [disabled]="!otpCode.valid" (click)="verifyLoginCode()">Verify code</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
-        <button ion-button clear block color="dark" (click)="cancelOtpVerification()">Cancel verification</button>
       </div>
+
+      <!-- <button ion-button block color="dark" class="dark border" (click)="cancelOtpVerification()">Verify code</button> -->
+
     </ion-list>
   
     <ion-list *ngSwitchCase="'emailAddress'">
@@ -109,9 +131,19 @@
 
     </ion-list>
   </div>
-  <!-- <div id="recaptcha-container"></div> -->
-  <div id="my-recaptcha-container"></div>
+  <div id="recaptcha-container"></div>
 </ion-content>
-<ion-footer mode="md" *ngIf="!showOTPPage">
-  <button ion-button block clear small class="clear" (click)="backToLogin()">Back to Login</button>
+<ion-footer mode="md">
+  <div *ngIf="showOTPPage" class="row controls">
+    <button ion-button clear block class="clear"  (click)="cancelOtpVerification()">Cancel verification</button>
+  </div>
+
+  <div *ngIf="!showOTPPage" class="row controls">
+    <div class="col col-6 left">
+      <button ion-button clear small class="clear" (click)="goToSignup()">Sign up</button>
+    </div>
+    <div class="col col-6 right">
+      <button ion-button clear small class="clear" (click)="goToForgotPassword()">Forgot password</button>
+    </div>
+  </div>
 </ion-footer>

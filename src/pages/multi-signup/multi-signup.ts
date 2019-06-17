@@ -1,154 +1,190 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { NavController, Events, ModalController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { DataProvider } from '../../providers/data/data';
+import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { User } from '../../models/user';
-import { USER_TYPE, COLLECTION, EVENTS } from '../../utils/const';
-import { DashboardPage } from '../dashboard/dashboard';
 import { JobsPage } from '../jobs/jobs';
-import { EMAIL_EXISTS } from '../../config';
-import { MultiLoginPage } from '../multi-login/multi-login';
-import { LoginPage } from '../login/login';
-import { SetupPage } from '../setup/setup';
-import { WindowProvider } from '../../providers/window/window';
+import { DashboardPage } from '../dashboard/dashboard';
+import { DataProvider } from '../../providers/data/data';
+import { USER_NOT_FOUND, INVALID_PASSWORD } from '../../config';
+import { Job } from '../../models/job';
 import * as firebase from 'firebase';
+import { WindowProvider } from '../../providers/window/window';
+import { NationalityPage } from '../nationality/nationality';
+import { Country } from '../../models/country';
+import { take, takeLast } from 'rxjs/operators';
+import { User } from '../../models/user';
+import { SetupPage } from '../setup/setup';
 
-@IonicPage()
 @Component({
   selector: 'page-multi-signup',
   templateUrl: 'multi-signup.html',
 })
 export class MultiSignupPage {
-  signupType: string = 'phoneNumber';
-  showOTPPage: boolean = false;
-  countries: any = [];
-
-  data: User = {
-    uid: '',
+  loginType: string = 'phoneNumber';
+  data = {
     email: '',
     password: '',
-    type: '',
-    firstname: '',
-    lastname: '',
-    gender: '',
-    race: '',
-    nationality: '',
+    otpCode: '',
     phonenumber: '',
-    location: null,
-    dob: '',
-    date: '',
-    settings: null,
-    skills: null
-  };
-  otp: string;
-
-
+    firstname: '',
+    lastname: ''
+  }
   type = 'password';
   showPass = false;
+  showOTPPage = false;
+  verificationId: string = '';
 
-
+  // user: any;
+  applicationVerifier: any;
   windowRef: any;
-  phoneNumber: any;
   verificationCode: string;
-  user: any;
+  countries: any = [];
+  users: User[] = [];
+
+
+  country: Country = {
+    name: "South Africa",
+    flag: "🇿🇦",
+    code: "ZA",
+    dialCode: "+27"
+  };
+
   constructor(
-    public navCtrl: NavController,
-    public navParams: NavParams,
-    public dataProvider: DataProvider,
-    public authProvider: AuthProvider,
-    public feedbackProvider: FeedbackProvider,
-    public ionEvents: Events,
-    public win: WindowProvider,
+    private navCtrl: NavController,
+    private authProvider: AuthProvider,
+    private dataProvider: DataProvider,
+    private feedbackProvider: FeedbackProvider,
+    private modalCtrl: ModalController,
+    private ionEvents: Events,
+    private win: WindowProvider
   ) { }
 
   ionViewDidLoad() {
-    this.windowRef = this.win.windowRef
-    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
-      'size': 'invisible'
-    })
 
-    this.windowRef.recaptchaVerifier.render().then(widgetId => {
-      this.windowRef.recaptchaWidgetId = widgetId;
-    }).catch(err => {
-      console.log(err);
+    this.windowRef = this.win.windowRef
+    this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+      'size': 'invisible'
     });
+
+    if (this.windowRef && this.windowRef.recaptchaVerifier) {
+      this.windowRef.recaptchaVerifier.render().then(widgetId => {
+        this.windowRef.recaptchaWidgetId = widgetId;
+      }).catch(err => {
+        console.log(err);
+      });
+    } else {
+      console.log('reCapture error');
+    }
+
   }
 
-  signupWithPhoneNumber() {
+  signupWithPhonenumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
-    const num = "+27" + this.data.phonenumber;
-    this.feedbackProvider.presentLoading();
-    this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
-      this.feedbackProvider.dismissLoading();
-      this.windowRef.confirmationResult = result;
-      console.log('sms sent', result);
-      this.showOTPPage = true;
-    }).catch(error => {
-      console.log('error sending sms');
-      this.feedbackProvider.dismissLoading();
-      console.log(error)
-    });
+    const num = this.country.dialCode + this.data.phonenumber;
+    if (this.isRegistered()) {
+      this.feedbackProvider.presentAlert("Signup failed", "Phone number provided is already registered. Please login");
+    } else {
+      this.feedbackProvider.presentLoading();
+      this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
+        this.windowRef.confirmationResult = result;
+        this.showOTPPage = true;
+        this.feedbackProvider.dismissLoading();
+      }).catch(() => {
+        this.feedbackProvider.dismissLoading();
+        this.feedbackProvider.presentToast("Oops, something went wrong sending sms");
+      });
+    }
+  }
 
+  isRegistered(): boolean {
+    const num = this.country.dialCode + this.data.phonenumber;
+
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
+        return true;
+      }
+    }
+    return false;
   }
 
   verifyLoginCode() {
     this.feedbackProvider.presentLoading();
-    this.windowRef.confirmationResult.confirm(this.otp).then(result => {
-      this.feedbackProvider.dismissLoading();
-      this.data.uid = result.user.uid;
-      this.feedbackProvider.presentModal(SetupPage, { data: this.data });
+    this.windowRef.confirmationResult.confirm(this.data.otpCode).then(u => {
+      this.getDatabaseUserAndNavigateToSetup(u.user);
     }).catch(error => {
       this.feedbackProvider.dismissLoading();
       this.feedbackProvider.presentErrorAlert('OTP code error', 'The OTP code entered does not match the one sent to you by sms');
-      console.log(error, "Incorrect code entered?");
+      // console.log(error, "Incorrect code entered?");
     });
   }
 
-  getDatabaseUserAndNavigate(user: firebase.User) {
-    this.feedbackProvider.presentLoading();
-    this.dataProvider.getItemById(COLLECTION.users, user.uid).subscribe(u => {
-      this.feedbackProvider.dismissLoading();
-      console.log(u);
 
-      this.navigate(u);
-    });
-  }
-
-  signupWithEmailAndPassword() {
-    const data: User = {
-      ...this.data,
-      uid: null,
-      settings: { hide_dob: false, hide_phone: false, hide_email: false },
-      date: this.dataProvider.getDateTime(),
-      skills: null
+  getDatabaseUserAndNavigateToSetup(user: firebase.User) {
+    const data = {
+      firstname: this.data.firstname,
+      lastname: this.data.lastname,
+      phonenumber: this.data.phonenumber,
+      uid: user.uid
     }
-    this.authProvider.signUpWithEmailAndPassword(data).then(() => {
-      console.log('Success');
-    }).catch(err => {
-      if (err.code === EMAIL_EXISTS) {
-        this.feedbackProvider.presentErrorAlert('Signup failed', 'Email already exists, please signin');
-      }
-      console.log(err);
-    });
+    this.feedbackProvider.presentModal(SetupPage, { data })
   }
 
   navigate(user) {
     this.ionEvents.publish(EVENTS.loggedIn, user);
     this.authProvider.storeUser(user);
     if (user.type.toLowerCase() === USER_TYPE.candidate) {
-      this.navCtrl.setRoot(JobsPage)
+      this.authProvider.storeUser(user);
+      this.navCtrl.setRoot(JobsPage);
     } else if (user.type.toLowerCase() === USER_TYPE.recruiter) {
-      this.navCtrl.setRoot(DashboardPage)
+      this.authProvider.storeUser(user);
+      this.navCtrl.setRoot(DashboardPage);
     }
   }
 
-  backToLogin() {
-    this.navCtrl.setRoot(MultiLoginPage);
+  cancelOtpVerification() {
+    this.showOTPPage = false;
   }
 
-  cancelOtpVerification() {
-    this.navCtrl.setRoot(LoginPage);
+  getCountryCode() {
+    let modal = this.modalCtrl.create(NationalityPage);
+    modal.onDidDismiss(data => {
+      if (data) {
+        this.country.name = data.name;
+        this.country.dialCode = data.dial_code;
+        this.country.flag = data.flag;
+      }
+    });
+    modal.present();
+  }
+
+  addJobs() {
+    const job: Job = {
+      jid: this.dataProvider.generateId(15),
+      uid: 'LvdXgZjVXhbps8iUiD9GqOZVuP72',
+      title: 'Helper wanted',
+      description: 'We need a helper with our house chores and baby sitting, we have a place for your to stay.',
+      date: '2019/05/03 10:09:18',
+      skills: ['nanny', 'baby care', 'cleaning', 'washing', 'cooking'],
+      category: 'Security',
+      location: {
+        address: '102 Zola, Soweto Johannesburg',
+        geo: {
+          lat: '-19.10001',
+          lng: '29.669'
+        }
+      }
+    }
+
+    this.dataProvider.addNewItemWithId(COLLECTION.jobs, job, job.jid).then(() => {
+      console.log('success');
+    }).catch((err) => {
+      console.log(err);
+    });
+  }
+
+  goToSignup() {
+    this.navCtrl.setRoot(MultiSignupPage);
   }
 
   showPassword() {

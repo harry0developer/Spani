@@ -114,7 +114,7 @@
           <i class="fa fa-flag" item-start></i>Nationality</ion-label>
         <ion-select [(ngModel)]="data.nationality" multiple="false" required nationality="nationality" #nationality="ngModel">
           <ion-option *ngFor="let country of countries" value="{{country.name}}">
-            {{country.emoji}} {{country.name}}
+            {{country.flag}} {{country.name}}
           </ion-option>
         </ion-select>
       </ion-item>

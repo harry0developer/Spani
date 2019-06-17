@@ -5,9 +5,9 @@ page-multi-signup {
 
     .brand {
         margin-top: 10%;
-        margin-bottom: 5%;
+        margin-bottom: 6%;
         .logo {
-            width: 50px;
+            width: 60px;
         }
     }
         
@@ -15,25 +15,21 @@ page-multi-signup {
         color: $secondary;
     }
  
-    .grid {
-        padding: 0;
-        .col {
-            padding: 0;
-        }
-        ion-item.item-select, ion-item.item-datetime{
-            height: 75px;
-            border-radius: 4px;
+    p.info {
+        text-align: center;
+        font-size: 12px;
+    }
+    .user-details , .phone{
+        .item {
+            margin: 0 auto !important;
+            
         }
     }
     ion-card {
         min-height: 240px;
- 
-        .text-input {
-            // text-align: right;
-            font-weight: normal;
-        }
+      
         .button {
-            margin-top: 10%;
+            margin-top: 20px;
         }
         .terms {
             color: $secondary;
@@ -71,7 +67,13 @@ page-multi-signup {
 
  
     .label {
-        color: $primary !important;
+        color: $dark !important;
+    }
+
+    .footer {
+        .button {
+            color: white;
+        }
     }
 
     .button.eye {
@@ -79,7 +81,12 @@ page-multi-signup {
         font-size: 1em;
     }
 
-    #my-recaptcha-container {
+    #recaptcha-container {
         visibility: hidden;
     }
+    
+    .validation p {
+        margin-bottom: 0 !important;
+    }
+
 }

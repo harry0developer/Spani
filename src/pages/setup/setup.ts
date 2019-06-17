@@ -69,7 +69,6 @@ export class SetupPage {
     this.data.phonenumber = data.phonenumber;
     this.data.uid = data.uid;
     this.getCountries();
-    this.getCategories();
   }
 
   selectChange(e) {
@@ -101,7 +100,6 @@ export class SetupPage {
 
 
   completeAndSignup() {
-    console.log(this.data);
     this.feedbackProvider.presentLoading("Please wait...");
     this.feedbackProvider.presentLoading();
     this.data.date = this.dataProvider.getDateTime();

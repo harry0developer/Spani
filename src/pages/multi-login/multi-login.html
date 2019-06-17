@@ -54,9 +54,9 @@
         <ion-card padding> 
           <p class="otp-message">Enter the 6 digit code sent to your phone</p>
           <ion-item class="animated pulse">
-            <ion-label  floating>OTP code</ion-label>
-            <ion-input [(ngModel)]="data.otpCode" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
-            type="tel">
+            <ion-label>OTP code</ion-label>
+            <ion-input [(ngModel)]="data.otpCode" placeholder="123456" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
+            type="number">
             </ion-input>
           </ion-item>
           <div [hidden]="otpCode.valid || otpCode.pristine" class="validation">
