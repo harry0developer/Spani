@@ -15,7 +15,7 @@
   <div *ngIf="searching" class="spinner-container">
     <ion-spinner></ion-spinner>
   </div>
-  <ion-item *ngFor="let country of countries" (click)="selectCountry(country)">
+  <ion-item *ngFor="let country of filteredCountries" (click)="selectCountry(country)">
     {{country.flag}} {{country.name}}
     <span item-end>{{country.dial_code}}</span>
   </ion-item>

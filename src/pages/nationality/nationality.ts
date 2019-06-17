@@ -15,7 +15,7 @@ export class NationalityPage {
 
   searchTerm: string = '';
   searchControl: FormControl;
-  items: any;
+  filteredCountries: any = [];
   searching: any = false;
 
   constructor(
@@ -43,6 +43,7 @@ export class NationalityPage {
     this.feedbackProvider.presentLoading();
     this.dataProvider.getCountries().subscribe(res => {
       this.countries = res;
+      this.filteredCountries = res;
       this.feedbackProvider.dismissLoading();
     }, err => {
       this.feedbackProvider.dismissLoading();
@@ -54,9 +55,7 @@ export class NationalityPage {
   }
 
   setFilteredItems(searchTerm) {
-    this.countries = this.filterItems(searchTerm);
-    console.log(this.countries);
-
+    this.filteredCountries = this.filterItems(searchTerm);
   }
 
   filterItems(searchTerm) {

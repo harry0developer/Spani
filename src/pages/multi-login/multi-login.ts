@@ -41,10 +41,17 @@ export class MultiLoginPage {
   verificationCode: string;
   user: any;
   countries: any = [];
+  // country: Country = {
+  //   dialCode: '',
+  //   flag: '',
+  //   name: ''
+  // };
+
   country: Country = {
-    dialCode: '',
-    flag: '',
-    name: ''
+    name: "South Africa",
+    flag: "🇿🇦",
+    code: "ZA",
+    dialCode: "+27"
   };
 
   constructor(
