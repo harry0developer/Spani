@@ -15,6 +15,7 @@ import { Country } from '../../models/country';
 import { take, takeLast } from 'rxjs/operators';
 import { User } from '../../models/user';
 import { SetupPage } from '../setup/setup';
+import { SignupPage } from '../signup/signup';
 
 @Component({
   selector: 'page-multi-signup',
@@ -41,6 +42,7 @@ export class MultiSignupPage {
   verificationCode: string;
   countries: any = [];
   users: User[] = [];
+  phoneOTP: boolean = false;
 
 
   country: Country = {
@@ -82,13 +84,14 @@ export class MultiSignupPage {
   signupWithPhonenumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = this.country.dialCode + this.data.phonenumber;
-    if (this.isRegistered()) {
+    if (this.isPhoneNumberRegistered()) {
       this.feedbackProvider.presentAlert("Signup failed", "Phone number provided is already registered. Please login");
     } else {
       this.feedbackProvider.presentLoading();
       this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
         this.windowRef.confirmationResult = result;
         this.showOTPPage = true;
+        this.phoneOTP = true;
         this.feedbackProvider.dismissLoading();
       }).catch(() => {
         this.feedbackProvider.dismissLoading();
@@ -97,7 +100,15 @@ export class MultiSignupPage {
     }
   }
 
-  isRegistered(): boolean {
+  signupWithEmailAndPassword() {
+    if (this.isEmailAddressRegistered()) {
+      this.feedbackProvider.presentAlert("Signup failed", "Email address provided is already registered. Please Login");
+    } else {
+      this.feedbackProvider.presentModal(SetupPage, { data: this.data });
+    }
+  }
+
+  isPhoneNumberRegistered(): boolean {
     const num = this.country.dialCode + this.data.phonenumber;
 
     for (let i = 0; i < this.users.length; i++) {
@@ -108,11 +119,24 @@ export class MultiSignupPage {
     return false;
   }
 
-  verifyLoginCode() {
+  isEmailAddressRegistered(): boolean {
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i] && this.users[i].email && this.data.email && this.users[i].email === this.data.email.toLocaleLowerCase()) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  verifyEmailAddressOTPCode() {
+
+  }
+
+  verifyPhoneNumberOTPCode() {
     this.feedbackProvider.presentLoading();
     this.windowRef.confirmationResult.confirm(this.data.otpCode).then(u => {
       this.getDatabaseUserAndNavigateToSetup(u.user);
-    }).catch(error => {
+    }).catch(() => {
       this.feedbackProvider.dismissLoading();
       this.feedbackProvider.presentErrorAlert('OTP code error', 'The OTP code entered does not match the one sent to you by sms');
       // console.log(error, "Incorrect code entered?");
@@ -125,9 +149,10 @@ export class MultiSignupPage {
       firstname: this.data.firstname,
       lastname: this.data.lastname,
       phonenumber: this.data.phonenumber,
+      email: this.data.email,
       uid: user.uid
     }
-    this.feedbackProvider.presentModal(SetupPage, { data })
+    this.feedbackProvider.presentModal(SetupPage, { data, type: 'email' });
   }
 
   navigate(user) {

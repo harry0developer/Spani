@@ -171,7 +171,6 @@
         <ion-input (ionFocus)="showAddressModal()" [(ngModel)]="pickedAddress" type="text" required address="address" #address="ngModel"></ion-input>
       </ion-item>
 
-
       <ion-grid>
         <ion-row>
           <ion-col col-6>
@@ -181,7 +180,10 @@
             </button>
           </ion-col>
           <ion-col col-6>
-            <button ion-button block color="dark" icon-right round [disabled]="!address.valid" (click)="completeAndSignup()">Complete
+            <button ion-button block color="dark" icon-right round *ngIf="!data.email" [disabled]="!address.valid" (click)="completeAndSignup()">Complete
+              <ion-icon name="checkmark"></ion-icon>
+            </button>
+            <button ion-button block color="dark" icon-right round *ngIf="data.email" [disabled]="!address.valid" (click)="completeEmailAndPasswordSignup()">Complete
               <ion-icon name="checkmark"></ion-icon>
             </button>
           </ion-col>
@@ -190,3 +192,6 @@
     </ion-slide>
   </ion-slides>
 </ion-content>
+<ion-footer mode="md">
+  <button ion-button clear block class="clear"  (click)="cancelRegistration()">Cancel Registration</button>
+</ion-footer>

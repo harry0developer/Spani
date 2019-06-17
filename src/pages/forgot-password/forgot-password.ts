@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { LoginPage } from '../login/login';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { DataProvider } from '../../providers/data/data';
 import { AuthProvider } from '../../providers/auth/auth';
+import { MultiLoginPage } from '../multi-login/multi-login';
 
 @IonicPage()
 @Component({
@@ -29,6 +29,6 @@ export class ForgotPasswordPage {
   }
 
   goToLogin() {
-    this.navCtrl.setRoot(LoginPage);
+    this.navCtrl.setRoot(MultiLoginPage);
   }
 }

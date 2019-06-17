@@ -6,7 +6,6 @@ import { MyApp } from './app.component';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import { LoginPage } from '../pages/login/login';
 import { DashboardPage } from '../pages/dashboard/dashboard';
 import { JobsPage } from '../pages/jobs/jobs';
 import { JobDetailsPage } from '../pages/job-details/job-details';
@@ -50,7 +49,6 @@ import { NationalityPage } from '../pages/nationality/nationality';
 @NgModule({
   declarations: [
     MyApp,
-    LoginPage,
     DashboardPage,
     AppointmentsPage,
     JobsPage,
@@ -81,7 +79,6 @@ import { NationalityPage } from '../pages/nationality/nationality';
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    LoginPage,
     DashboardPage,
     AppointmentsPage,
     JobsPage,

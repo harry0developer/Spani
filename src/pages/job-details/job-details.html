@@ -84,18 +84,17 @@
           </p>
         </ion-item>
       </ion-card>
-
     </div>
+  </ion-list>
+</ion-content>
 
+<ion-footer>
   <div *ngIf="!isRecruiter()">
-    <div padding [hidden]="hasApplied">
-      <button ion-button  color="dark" class="dark" block (click)="applyNow(job)">Apply</button>
+    <div [hidden]="hasApplied">
+      <button ion-button primary  block (click)="applyNow(job)">Apply</button>
     </div>
-    <div padding [hidden]="!hasApplied">
-      <button ion-button  color="dark" class="dark" block (click)="confirmCancelApplication(job)">Cancel Application</button>
+    <div [hidden]="!hasApplied">
+      <button ion-button primary  block (click)="confirmCancelApplication(job)">Cancel Application</button>
     </div>
   </div>
-
-  </ion-list>
-
-</ion-content>
+</ion-footer>

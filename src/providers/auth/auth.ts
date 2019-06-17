@@ -39,17 +39,12 @@ export class AuthProvider {
     return this.angularFireAuth.auth.signInWithEmailAndPassword(email, password);
   }
 
-  signUpWithEmailAndPassword(user: User) {
-    return this.angularFireAuth.auth.createUserWithEmailAndPassword(user.email, user.password).then(res => {
-      user.uid = res.user.uid;
-      this.storeUser(user);
-      this.addUserToDatabase(user);
-    });
+  signUpWithEmailAndPassword(email: string, password: string) {
+    return this.angularFireAuth.auth.createUserWithEmailAndPassword(email, password);
   }
 
   addUserToDatabase(user: User) {
-    const userData = {};
-    return this.angularFireStore.collection('users').doc(user.uid).set(userData);
+    return this.angularFireStore.collection('users').doc(user.uid).set(user);
   }
 
   sendVerificationMail() {

@@ -1,5 +1,8 @@
 <ion-header no-shadow no-border>
   <ion-navbar color="dark">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
     <ion-title>Profile</ion-title> 
   </ion-navbar>
 </ion-header>
@@ -21,7 +24,7 @@
 
       <ion-row class="rating-contacts">
         <ion-col col-5 class="ratings animated slideInLeft">
-          <ion-badge primary>{{userRating}}</ion-badge> 
+          <ion-badge primary>{{ 0}}</ion-badge> 
           <rating [float]="true" [(ngModel)]="userRating" [readonly]="true" ></rating>
         </ion-col>
         <ion-col col-7 class="contacts">

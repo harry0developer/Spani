@@ -8,6 +8,7 @@ import { COLLECTION, EVENTS, USER_TYPE } from '../../utils/const';
 import { AuthProvider } from '../../providers/auth/auth';
 import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
+import { MultiLoginPage } from '../multi-login/multi-login';
 
 @IonicPage()
 @Component({
@@ -49,6 +50,7 @@ export class SetupPage {
   categories: any;
   mode: string = 'vertical';
   selectedIndex = 0;
+  emailSignup: boolean = false;
   constructor(public navCtrl: NavController,
     private viewCtrl: ViewController,
     private ionEvents: Events,
@@ -62,11 +64,11 @@ export class SetupPage {
 
   ionViewDidLoad() {
     const data = this.navParams.get('data');
-    console.log(data);
-
     this.data.firstname = data.firstname;
     this.data.lastname = data.lastname;
     this.data.phonenumber = data.phonenumber;
+    this.data.email = data.email;
+    this.data.password = data.password;
     this.data.uid = data.uid;
     this.getCountries();
   }
@@ -99,8 +101,27 @@ export class SetupPage {
   }
 
 
+  completeEmailAndPasswordSignup() {
+    this.feedbackProvider.presentLoading();
+    this.data.date = this.dataProvider.getDateTime();
+    this.authProvider.signUpWithEmailAndPassword(this.data.email, this.data.password).then(res => {
+      this.data.uid = res.user.uid;
+      this.authProvider.addUserToDatabase(this.data).then(() => {
+        this.feedbackProvider.dismissLoading();
+        console.log('User added successfully');
+        this.navigate(this.data);
+      }).catch(err => {
+        console.log(err);
+        this.feedbackProvider.dismissLoading();
+      });
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+      this.feedbackProvider.presentErrorAlert('Signup failed', 'An error has occured while signing you up, please try again');
+    });
+  }
+
+
   completeAndSignup() {
-    this.feedbackProvider.presentLoading("Please wait...");
     this.feedbackProvider.presentLoading();
     this.data.date = this.dataProvider.getDateTime();
     this.dataProvider.addNewItemWithId(COLLECTION.users, this.data, this.data.uid).then(() => {
@@ -119,11 +140,7 @@ export class SetupPage {
   navigate(user) {
     this.ionEvents.publish(EVENTS.loggedIn, user);
     this.authProvider.storeUser(user);
-    if (user.type === USER_TYPE.candidate) {
-      this.navCtrl.setRoot(JobsPage)
-    } else if (user.type === USER_TYPE.recruiter) {
-      this.navCtrl.setRoot(DashboardPage)
-    }
+    this.navCtrl.setRoot(DashboardPage);
   }
 
   getUserType(type) {
@@ -146,5 +163,9 @@ export class SetupPage {
       }
     });
     modal.present();
+  }
+
+  cancelRegistration() {
+    this.navCtrl.setRoot(MultiLoginPage);
   }
 }

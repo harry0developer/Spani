@@ -55,6 +55,7 @@
     "promise-polyfill": "^8.1.0",
     "rxjs": "6.0.0",
     "rxjs-compat": "6.0.0",
+    "sendgrid": "^5.2.3",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18"
   },

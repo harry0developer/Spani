@@ -175,7 +175,6 @@ export class MultiLoginPage {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithEmailAndPassword(this.data.email, this.data.password).then(res => {
       this.feedbackProvider.dismissLoading();
-      // this.addUserToDatabase(res.user);
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
       if (err.code === USER_NOT_FOUND || err.code == INVALID_PASSWORD) {
@@ -230,13 +229,7 @@ export class MultiLoginPage {
   navigate(user) {
     this.ionEvents.publish(EVENTS.loggedIn, user);
     this.authProvider.storeUser(user);
-    if (user.type.toLowerCase() === USER_TYPE.candidate) {
-      this.authProvider.storeUser(user);
-      this.navCtrl.setRoot(JobsPage);
-    } else if (user.type.toLowerCase() === USER_TYPE.recruiter) {
-      this.authProvider.storeUser(user);
-      this.navCtrl.setRoot(DashboardPage);
-    }
+    this.navCtrl.setRoot(DashboardPage);
   }
 
   cancelOtpVerification() {

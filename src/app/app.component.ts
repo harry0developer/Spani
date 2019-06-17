@@ -10,7 +10,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
 import { Network } from '@ionic-native/network';
-import { NETWORK, EVENTS } from '../utils/const';
+import { EVENTS } from '../utils/const';
 
 
 @Component({
