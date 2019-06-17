@@ -26,9 +26,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { firebaseConfig } from '../config';
 import { SocialSharing } from '@ionic-native/social-sharing';
 
-// import { NgxMaskModule, IConfig } from 'ngx-mask'
-// export let options: Partial<IConfig> | (() => Partial<IConfig>);
-
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { WindowProvider } from '../providers/window/window';
@@ -43,7 +40,6 @@ import { NetworkProvider } from '../providers/network/network';
 import { JobsListPage } from '../pages/jobs-list/jobs-list';
 import { UserDetailsPage } from '../pages/user-details/user-details';
 import { RatersPage } from '../pages/raters/raters';
-import { TestUiPage } from '../pages/test-ui/test-ui';
 import { NationalityPage } from '../pages/nationality/nationality';
 
 @NgModule({

@@ -14,7 +14,7 @@ import { WindowProvider } from '../../providers/window/window';
 import { MultiSignupPage } from '../multi-signup/multi-signup';
 import { NationalityPage } from '../nationality/nationality';
 import { Country } from '../../models/country';
-import { take, takeLast } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { User } from '../../models/user';
 
 @Component({
@@ -65,8 +65,6 @@ export class MultiLoginPage {
 
     this.dataProvider.getAllFromCollection(COLLECTION.users).pipe(take(1)).subscribe(users => {
       this.users = users;
-      console.log(users);
-
     });
 
     if (this.authProvider.isLoggedIn() && this.authProvider.getStoredUser()) {
@@ -160,6 +158,7 @@ export class MultiLoginPage {
       console.log('added');
     })
   }
+
   verifyLoginCode() {
     this.feedbackProvider.presentLoading();
     this.windowRef.confirmationResult.confirm(this.data.otpCode).then(u => {

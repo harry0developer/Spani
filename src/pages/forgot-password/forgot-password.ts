@@ -4,6 +4,9 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { DataProvider } from '../../providers/data/data';
 import { AuthProvider } from '../../providers/auth/auth';
 import { MultiLoginPage } from '../multi-login/multi-login';
+import { Country } from '../../models/country';
+import { User } from '../../models/user';
+import { COLLECTION } from '../../utils/const';
 
 @IonicPage()
 @Component({
@@ -12,9 +15,11 @@ import { MultiLoginPage } from '../multi-login/multi-login';
 })
 export class ForgotPasswordPage {
   data = {
-    email: '',
-    otp: 0
+    email: ''
   }
+
+  users: User;
+
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private feedbackProvider: FeedbackProvider,
@@ -23,9 +28,26 @@ export class ForgotPasswordPage {
   ) {
   }
 
-  confirmEmailAndSentOtp() {
-    console.log(' confirmEmailAndSentOtp');
+  ionViewDidLoad() {
 
+  }
+
+  confirmEmailAndSentOtp() {
+    console.log('confirmEmailAndSentOtp');
+  }
+
+  resetPassword() {
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.users, 'email', this.data.email).subscribe(user => {
+      this.feedbackProvider.dismissLoading();
+      this.sendOTPViaEmail();
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+    });
+  }
+
+  sendOTPViaEmail() {
+    console.log('send email address');
   }
 
   goToLogin() {
