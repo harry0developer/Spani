@@ -74,8 +74,10 @@
     <ion-list *ngSwitchCase="'emailAddress'">
       <ion-card padding>
         <ion-item class="animated pulse">
-          <ion-label  floating>Email Address</ion-label>
-          <ion-input [(ngModel)]="data.email" required email="email" #email="ngModel" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
+          <ion-label>
+            <i class="fa fa-envelope"></i>
+          </ion-label>
+          <ion-input [(ngModel)]="data.email" placeholder="Email address" required email="email" #email="ngModel" pattern="^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$"
           type="email">
         </ion-input>
         </ion-item>
@@ -85,8 +87,10 @@
         </div>
       
         <ion-item class="animated pulse">
-          <ion-label  floating>Password</ion-label>
-          <ion-input [(ngModel)]="data.password" clearOnEdit=false required password="password" #password="ngModel" pattern=".{6,}"
+          <ion-label>
+            <i class="fa fa-lock"></i>
+          </ion-label>
+          <ion-input [(ngModel)]="data.password" placeholder="Password" required clearOnEdit=false password="password" #password="ngModel" pattern=".{6,}"
           type="{{type}}"></ion-input>
           <button *ngIf="!showPass" ion-button clear color="dark" class="eye" item-right (click)="showPassword()">
             <ion-icon name="eye-off"></ion-icon>

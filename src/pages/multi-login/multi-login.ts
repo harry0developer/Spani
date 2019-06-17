@@ -174,7 +174,13 @@ export class MultiLoginPage {
   signinWithEmailAndPassword() {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithEmailAndPassword(this.data.email, this.data.password).then(res => {
-      this.feedbackProvider.dismissLoading();
+      this.dataProvider.getUserById(res.user.uid).pipe(take(1)).subscribe(user => {
+        this.feedbackProvider.dismissLoading();
+        this.navigate(user);
+      }, err => {
+        this.feedbackProvider.dismissLoading();
+        this.feedbackProvider.presentToast('Oops, something went wrong');
+      });
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
       if (err.code === USER_NOT_FOUND || err.code == INVALID_PASSWORD) {

@@ -6,16 +6,14 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { DataProvider } from '../../providers/data/data';
-import { USER_NOT_FOUND, INVALID_PASSWORD } from '../../config';
 import { Job } from '../../models/job';
 import * as firebase from 'firebase';
 import { WindowProvider } from '../../providers/window/window';
 import { NationalityPage } from '../nationality/nationality';
 import { Country } from '../../models/country';
-import { take, takeLast } from 'rxjs/operators';
 import { User } from '../../models/user';
 import { SetupPage } from '../setup/setup';
-import { SignupPage } from '../signup/signup';
+import { MultiLoginPage } from '../multi-login/multi-login';
 
 @Component({
   selector: 'page-multi-signup',
@@ -208,8 +206,8 @@ export class MultiSignupPage {
     });
   }
 
-  goToSignup() {
-    this.navCtrl.setRoot(MultiSignupPage);
+  goToLogin() {
+    this.navCtrl.setRoot(MultiLoginPage);
   }
 
   showPassword() {
