@@ -70,7 +70,8 @@ export class AuthProvider {
   }
 
   getStoredUser(): User {
-    return JSON.parse(localStorage.getItem('user'));
+    const user = localStorage.getItem('user');
+    return user !== 'undefined' ? JSON.parse(user) : null;
   }
 
   clearStoredUser() {

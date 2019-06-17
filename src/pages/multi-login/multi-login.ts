@@ -14,7 +14,8 @@ import { WindowProvider } from '../../providers/window/window';
 import { MultiSignupPage } from '../multi-signup/multi-signup';
 import { NationalityPage } from '../nationality/nationality';
 import { Country } from '../../models/country';
-import { take } from 'rxjs/operators';
+import { take, takeLast } from 'rxjs/operators';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'page-multi-login',
@@ -39,13 +40,9 @@ export class MultiLoginPage {
   applicationVerifier: any;
   windowRef: any;
   verificationCode: string;
-  user: any;
   countries: any = [];
-  // country: Country = {
-  //   dialCode: '',
-  //   flag: '',
-  //   name: ''
-  // };
+  users: User[] = [];
+
 
   country: Country = {
     name: "South Africa",
@@ -65,19 +62,31 @@ export class MultiLoginPage {
   ) { }
 
   ionViewDidLoad() {
-    if (this.authProvider.isLoggedIn()) {
+
+    this.dataProvider.getAllFromCollection(COLLECTION.users).pipe(take(1)).subscribe(users => {
+      this.users = users;
+      console.log(users);
+
+    });
+
+    if (this.authProvider.isLoggedIn() && this.authProvider.getStoredUser()) {
       this.navigate(this.authProvider.getStoredUser());
     } else {
       this.windowRef = this.win.windowRef
-      this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
+      this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
         'size': 'invisible'
-      })
-
-      this.windowRef.recaptchaVerifier.render().then(widgetId => {
-        this.windowRef.recaptchaWidgetId = widgetId;
-      }).catch(err => {
-        console.log(err);
       });
+
+      if (this.windowRef && this.windowRef.recaptchaVerifier) {
+        this.windowRef.recaptchaVerifier.render().then(widgetId => {
+          this.windowRef.recaptchaWidgetId = widgetId;
+        }).catch(err => {
+          console.log(err);
+        });
+      } else {
+        console.log('reCapture error');
+
+      }
     }
 
   }
@@ -96,41 +105,69 @@ export class MultiLoginPage {
 
   signinWithPhonenumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
-    const num = this.data.phonenumber;
-    console.log(num);
-
-    // this.dataProvider.getAllFromCollection(COLLECTION.users).pipe(take(1)).subscribe(users => {
-    //   users.map(user => {
-    // if (user.phone === num) {
-    this.feedbackProvider.presentLoading();
-    this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
-      this.feedbackProvider.dismissLoading();
-      this.windowRef.confirmationResult = result;
-      console.log('sms sent', result);
-      this.showOTPPage = true;
-    }).catch(error => {
-      console.log('error sending sms');
-      this.feedbackProvider.dismissLoading();
-      console.log(error)
-    });
-    // } else {
-    //   this.feedbackProvider.presentAlert('Login failed', 'Phone number is not registered');
-    // }
-    //   })
-    // })
-
+    const num = this.country.dialCode + this.data.phonenumber;
+    if (this.isRegistered()) {
+      this.feedbackProvider.presentLoading();
+      this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
+        this.windowRef.confirmationResult = result;
+        // console.log('sms sent', result);
+        this.showOTPPage = true;
+        this.feedbackProvider.dismissLoading();
+      }).catch(() => {
+        this.feedbackProvider.dismissLoading();
+        this.feedbackProvider.presentToast("Oops, something went wrong sending sms");
+      });
+    } else {
+      this.feedbackProvider.presentAlert("Login failed", "Phone number provided is not registered. Please signup");
+    }
 
   }
 
+  isRegistered(): boolean {
+    const num = this.country.dialCode + this.data.phonenumber;
+
+    for (let i = 0; i < this.users.length; i++) {
+      if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  addUser() {
+    const user: User = {
+      uid: "cJ3Wgcoh5SRjaAb6don3Chg6BIt2",
+      email: 'Kabelo@test.com',
+      password: '123456',
+      type: USER_TYPE.candidate,
+      firstname: 'Kabelo',
+      lastname: 'Modiga',
+      dob: '1997/01/01',
+      gender: 'female',
+      race: 'black',
+      nationality: 'Zimbabwe',
+      phonenumber: '+27829390061',
+      location: null,
+      date: this.dataProvider.getDateTime(),
+      settings: {
+        hide_dob: false,
+        hide_email: false,
+        hide_phone: false,
+      },
+      skills: null
+    }
+    this.dataProvider.addNewItemWithId(COLLECTION.users, user, user.uid).then(() => {
+      console.log('added');
+    })
+  }
   verifyLoginCode() {
     this.feedbackProvider.presentLoading();
-    this.windowRef.confirmationResult.confirm(this.data.otpCode).then(result => {
-      this.feedbackProvider.dismissLoading();
-      this.getDatabaseUserAndNavigate(result.user);
+    this.windowRef.confirmationResult.confirm(this.data.otpCode).then(u => {
+      this.getDatabaseUserAndNavigate(u.user);
     }).catch(error => {
       this.feedbackProvider.dismissLoading();
       this.feedbackProvider.presentErrorAlert('OTP code error', 'The OTP code entered does not match the one sent to you by sms');
-      console.log(error, "Incorrect code entered?");
+      // console.log(error, "Incorrect code entered?");
     });
   }
 
@@ -138,7 +175,6 @@ export class MultiLoginPage {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithEmailAndPassword(this.data.email, this.data.password).then(res => {
       this.feedbackProvider.dismissLoading();
-      this
       // this.addUserToDatabase(res.user);
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
@@ -153,6 +189,8 @@ export class MultiLoginPage {
     this.feedbackProvider.presentLoading();
     this.authProvider.signInWithFacebook().then((res) => {
       this.feedbackProvider.dismissLoading();
+      console.log(res);
+
       this.getDatabaseUserAndNavigate(res.user);
     }).catch(err => {
       this.feedbackProvider.dismissLoading();
@@ -180,12 +218,12 @@ export class MultiLoginPage {
   }
 
   getDatabaseUserAndNavigate(user: firebase.User) {
-    this.feedbackProvider.presentLoading();
     this.dataProvider.getItemById(COLLECTION.users, user.uid).subscribe(u => {
       this.feedbackProvider.dismissLoading();
-      console.log(u);
-
       this.navigate(u);
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+      this.feedbackProvider.presentToast('Oops, something went wrong');
     });
   }
 
@@ -193,9 +231,11 @@ export class MultiLoginPage {
     this.ionEvents.publish(EVENTS.loggedIn, user);
     this.authProvider.storeUser(user);
     if (user.type.toLowerCase() === USER_TYPE.candidate) {
-      this.navCtrl.setRoot(JobsPage)
+      this.authProvider.storeUser(user);
+      this.navCtrl.setRoot(JobsPage);
     } else if (user.type.toLowerCase() === USER_TYPE.recruiter) {
-      this.navCtrl.setRoot(DashboardPage)
+      this.authProvider.storeUser(user);
+      this.navCtrl.setRoot(DashboardPage);
     }
   }
 
@@ -245,27 +285,4 @@ export class MultiLoginPage {
     }
   }
 
-}
-
-
-// sendOtpCode() {
-//   this.feedbackProvider.presentLoading();
-//   this.firebaseRecaptchaVerifier();
-//   const provider = new firebase.auth.PhoneAuthProvider();
-//   provider.verifyPhoneNumber('+27829390061', this.applicationVerifier).then(verificationId => {
-//     this.feedbackProvider.dismissLoading();
-//     console.log(verificationId);
-//     this.showOTPPage = true;
-//     this.data.otpCode = this.data.otpCode.trim();
-//     console.log(this.data);
-
-//     //var verificationCode = window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.');
-//     // return firebase.auth.PhoneAuthProvider.credential(verificationId, verificationCode);
-//   }).then(function (phoneCredential) {
-//     this.feedbackProvider.dismissLoading();
-//     console.log(phoneCredential);
-//   }).catch(err => {
-//     this.feedbackProvider.dismissLoading();
-//     console.log(err);
-//   });
-// }
+} 

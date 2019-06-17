@@ -65,7 +65,6 @@
           <button ion-button block primary [disabled]="!otpCode.valid" (click)="verifyLoginCode()">Verify code</button>
           <p class="terms">Terms and conditions apply</p>
         </ion-card>
-        <button ion-button clear block color="dark" (click)="cancelOtpVerification()">Cancel verification</button>
       </div>
 
       <!-- <button ion-button block color="dark" class="dark border" (click)="cancelOtpVerification()">Verify code</button> -->
@@ -107,11 +106,14 @@
 
     </ion-list>
   </div>
-  <!-- <div id="recaptcha-container"></div> -->
-  <div id="my-recaptcha-container"></div>
+  <div id="recaptcha-container"></div>
 </ion-content>
-<ion-footer mode="md" *ngIf="!showOTPPage">
-  <div class="row controls">
+<ion-footer mode="md">
+  <div *ngIf="showOTPPage" class="row controls">
+    <button ion-button clear block class="clear"  (click)="cancelOtpVerification()">Cancel verification</button>
+  </div>
+
+  <div *ngIf="!showOTPPage" class="row controls">
     <div class="col col-6 left">
       <button ion-button clear small class="clear" (click)="goToSignup()">Sign up</button>
     </div>

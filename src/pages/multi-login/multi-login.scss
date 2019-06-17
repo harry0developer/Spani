@@ -63,12 +63,18 @@ page-multi-login {
         color: $primary !important;
     }
 
+    .footer {
+        .button {
+            color: white;
+        }
+    }
+
     .button.eye {
         color: $primary;
         font-size: 1em;
     }
 
-    #my-recaptcha-container {
+    #recaptcha-container {
         visibility: hidden;
     }
     

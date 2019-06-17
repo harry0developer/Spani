@@ -10,7 +10,7 @@ import { ProfilePage } from '../pages/profile/profile';
 import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
 import { Network } from '@ionic-native/network';
-import { NETWORK } from '../utils/const';
+import { NETWORK, EVENTS } from '../utils/const';
 
 
 @Component({
@@ -43,23 +43,14 @@ export class MyApp {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.network.onDisconnect().subscribe(() => {
-        this.ionEvents.publish(NETWORK.error)
-        // this.feedbackProvider.presentModal(ErrorPage, { type: ERRORS.connection });
+      this.ionEvents.subscribe(EVENTS.loggedIn, (user) => {
+        this.profile = user;
+        console.log(user);
       });
-
-
       this.statusBar.styleDefault();
       this.splashScreen.hide();
-      this.setProfile();
-    });
-  }
-
-
-  setProfile() {
-    if (this.authProvider.isLoggedIn()) {
       this.profile = this.authProvider.getStoredUser();
-    }
+    });
   }
 
   openPage(page) {
