@@ -25,13 +25,13 @@
             <ion-row>
               <ion-col col-3>
                 <ion-item class="animated pulse">
-                  <ion-input type="tel" placeholder="+27" (focus)="getCountryCode()" [(ngModel)]="country.flag" flag="flag" #flag="ngModel"></ion-input>
+                  <ion-input type="text" placeholder="+27" (focus)="getCountryCode()" [(ngModel)]="country.flag" flag="flag" #flag="ngModel"></ion-input>
                 </ion-item> 
               </ion-col>
               <ion-col col-9>
                 <ion-item class="animated pulse">
                   <span item-start>{{country.dialCode}}</span>
-                  <ion-input [(ngModel)]="data.phonenumber"  placeholder="0822349394"  clearOnEdit=false required phonenumber="phonenumber" #phonenumber="ngModel" pattern=".{9,}"
+                  <ion-input [(ngModel)]="data.phonenumber"  [brmasker]="{mask:'000000000000000', len:15,  type:'num'}" placeholder="0820001234"  clearOnEdit=false required phonenumber="phonenumber" #phonenumber="ngModel" pattern=".{9,}"
                   type="tel"></ion-input>
                 </ion-item>
                 <div [hidden]="phonenumber.valid || phonenumber.pristine" class="validation">

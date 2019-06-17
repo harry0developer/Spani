@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
+import { FormControl } from '@angular/forms';
+import { debounceTime } from "rxjs/operators";
 
 @IonicPage()
 @Component({
@@ -10,16 +12,30 @@ import { FeedbackProvider } from '../../providers/feedback/feedback';
 })
 export class NationalityPage {
   countries: any = [];
+
+  searchTerm: string = '';
+  searchControl: FormControl;
+  items: any;
+  searching: any = false;
+
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
     private dataProvider: DataProvider,
     private feedbackProvider: FeedbackProvider,
     private viewCtrl: ViewController) {
+    this.searchControl = new FormControl();
   }
 
   ionViewDidLoad() {
     this.getCountries();
+    this.setFilteredItems('');
+    this.searchControl.valueChanges
+      .pipe(debounceTime(700))
+      .subscribe(search => {
+        this.searching = false;
+        this.setFilteredItems(search);
+      });
   }
 
 
@@ -30,6 +46,22 @@ export class NationalityPage {
       this.feedbackProvider.dismissLoading();
     }, err => {
       this.feedbackProvider.dismissLoading();
+    });
+  }
+
+  onSearchInput() {
+    this.searching = true;
+  }
+
+  setFilteredItems(searchTerm) {
+    this.countries = this.filterItems(searchTerm);
+    console.log(this.countries);
+
+  }
+
+  filterItems(searchTerm) {
+    return this.countries.filter(item => {
+      return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 

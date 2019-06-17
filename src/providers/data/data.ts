@@ -90,7 +90,7 @@ export class DataProvider {
 
 
   getArrayFromObjectList(obj): any[] {
-    return Object.keys(obj).map((k) => obj[k]);
+    return obj ? Object.keys(obj).map((k) => obj[k]) : [];
   }
 
   isUserInJobDocumentArray(jobs: any[], job): any[] {

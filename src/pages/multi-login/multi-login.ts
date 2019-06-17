@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams, Events, ModalController } from 'ionic-angular';
+import { NavController, Events, ModalController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
@@ -12,8 +12,9 @@ import { Job } from '../../models/job';
 import * as firebase from 'firebase';
 import { WindowProvider } from '../../providers/window/window';
 import { MultiSignupPage } from '../multi-signup/multi-signup';
-import { take } from 'rxjs/operators';
 import { NationalityPage } from '../nationality/nationality';
+import { Country } from '../../models/country';
+import { take } from 'rxjs/operators';
 
 @Component({
   selector: 'page-multi-login',
@@ -40,11 +41,12 @@ export class MultiLoginPage {
   verificationCode: string;
   user: any;
   countries: any = [];
-  country = {
+  country: Country = {
     dialCode: '',
     flag: '',
     name: ''
-  }
+  };
+
   constructor(
     private navCtrl: NavController,
     private authProvider: AuthProvider,
@@ -59,8 +61,6 @@ export class MultiLoginPage {
     if (this.authProvider.isLoggedIn()) {
       this.navigate(this.authProvider.getStoredUser());
     } else {
-      this.getCountries();
-
       this.windowRef = this.win.windowRef
       this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('my-recaptcha-container', {
         'size': 'invisible'
@@ -75,9 +75,6 @@ export class MultiLoginPage {
 
   }
 
-  validateCoutryCode() {
-    return this.country.dialCode !== '';
-  }
   getCountryCode() {
     let modal = this.modalCtrl.create(NationalityPage);
     modal.onDidDismiss(data => {
@@ -90,36 +87,30 @@ export class MultiLoginPage {
     modal.present();
   }
 
-
-  getCountries() {
-    this.dataProvider.getCountries().subscribe(res => {
-      this.countries = res;
-    });
-  }
-
   signinWithPhonenumber() {
     const appVerifier = this.windowRef.recaptchaVerifier;
-    const num = "+27" + this.dataProvider.cleanPhoneNumber(this.data.phonenumber);
+    const num = this.data.phonenumber;
+    console.log(num);
 
-    this.dataProvider.getAllFromCollection(COLLECTION.users).pipe(take(1)).subscribe(users => {
-      users.map(user => {
-        if (user.phone === num) {
-          this.feedbackProvider.presentLoading();
-          this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
-            this.feedbackProvider.dismissLoading();
-            this.windowRef.confirmationResult = result;
-            console.log('sms sent', result);
-            this.showOTPPage = true;
-          }).catch(error => {
-            console.log('error sending sms');
-            this.feedbackProvider.dismissLoading();
-            console.log(error)
-          });
-        } else {
-          this.feedbackProvider.presentAlert('Login failed', 'Phone number is not registered');
-        }
-      })
-    })
+    // this.dataProvider.getAllFromCollection(COLLECTION.users).pipe(take(1)).subscribe(users => {
+    //   users.map(user => {
+    // if (user.phone === num) {
+    this.feedbackProvider.presentLoading();
+    this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
+      this.feedbackProvider.dismissLoading();
+      this.windowRef.confirmationResult = result;
+      console.log('sms sent', result);
+      this.showOTPPage = true;
+    }).catch(error => {
+      console.log('error sending sms');
+      this.feedbackProvider.dismissLoading();
+      console.log(error)
+    });
+    // } else {
+    //   this.feedbackProvider.presentAlert('Login failed', 'Phone number is not registered');
+    // }
+    //   })
+    // })
 
 
   }

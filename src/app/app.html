@@ -8,7 +8,7 @@
       <p>{{profile.uid}}</p>
     </div>
     <ion-list *ngIf="profile" class="menu">
-      <ion-item menuClose ion-item icon-left *ngIf="isRecruiter()" (click)="nav.setRoot(pages.dashboardPage)">
+      <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.dashboardPage)">
         <ion-icon class="light" name="home" item-start></ion-icon>
           Dashboard
       </ion-item>

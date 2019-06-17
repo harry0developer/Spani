@@ -11,8 +11,14 @@
 
 
 <ion-content padding>
+  <ion-searchbar [formControl]="searchControl" (ionChange)="onSearchInput()"></ion-searchbar>
+  <div *ngIf="searching" class="spinner-container">
+    <ion-spinner></ion-spinner>
+  </div>
   <ion-item *ngFor="let country of countries" (click)="selectCountry(country)">
     {{country.flag}} {{country.name}}
     <span item-end>{{country.dial_code}}</span>
   </ion-item>
+
+
 </ion-content>
