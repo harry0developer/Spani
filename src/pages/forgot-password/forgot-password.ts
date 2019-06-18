@@ -6,7 +6,9 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { MultiLoginPage } from '../multi-login/multi-login';
 import { Country } from '../../models/country';
 import { User } from '../../models/user';
-import { COLLECTION } from '../../utils/const';
+import { COLLECTION, FIREBASE } from '../../utils/const';
+import { SmtpProvider } from '../../providers/smtp/smtp';
+import { SuccessPage } from '../success/success';
 
 @IonicPage()
 @Component({
@@ -24,7 +26,8 @@ export class ForgotPasswordPage {
     public navParams: NavParams,
     private feedbackProvider: FeedbackProvider,
     private dataProvider: DataProvider,
-    private authProvider: AuthProvider
+    private authProvider: AuthProvider,
+    private smtpProvider: SmtpProvider
   ) {
   }
 
@@ -38,16 +41,18 @@ export class ForgotPasswordPage {
 
   resetPassword() {
     this.feedbackProvider.presentLoading();
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.users, 'email', this.data.email).subscribe(user => {
+    this.authProvider.forgotPassword(this.data.email).then(() => {
       this.feedbackProvider.dismissLoading();
-      this.sendOTPViaEmail();
-    }, err => {
+      this.feedbackProvider.presentAlert("Email Send", "Got to your emails and follow the link to reset your password");
+    }).catch(err => {
       this.feedbackProvider.dismissLoading();
-    });
-  }
-
-  sendOTPViaEmail() {
-    console.log('send email address');
+      if (err.code.toLowerCase() === FIREBASE.NOT_FOUND.toLowerCase()) {
+        this.feedbackProvider.presentAlert("Email not registered", "The email address provided is not registered. Please signup");
+      } else {
+        this.feedbackProvider.presentAlert("Email not sent", "Oops, something went wrong, please try again");
+      }
+      console.log(err);
+    })
   }
 
   goToLogin() {

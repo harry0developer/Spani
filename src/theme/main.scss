@@ -63,6 +63,16 @@ $dark: #2a2a2a;
     color: $primary !important;
 }
 
+.alert-title {
+    font-size: 18px !important;
+    padding-bottom: 10px !important;
+    margin-bottom: 20px !important;
+    border-bottom: 1px solid $primary !important;
+}
+.alert-sub-title {
+    font-size: 14px !important;
+    line-height: 1.4 !important;
+}
 .toolbar-background {
     background-color: $primary !important;
 }
@@ -184,3 +194,9 @@ ion-card {
     margin-bottom: 20px;
 }
 
+ion-card .terms {
+    color: $secondary;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 20px;
+}

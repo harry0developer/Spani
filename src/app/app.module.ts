@@ -29,7 +29,6 @@ import { SocialSharing } from '@ionic-native/social-sharing';
 import { BrMaskerModule } from 'brmasker-ionic-3';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { WindowProvider } from '../providers/window/window';
-import { HttpClientModule } from '@angular/common/http';
 import { MultiSignupPage } from '../pages/multi-signup/multi-signup';
 import { SetupPage } from '../pages/setup/setup';
 import { PlacesPage } from '../pages/places/places';
@@ -41,6 +40,10 @@ import { JobsListPage } from '../pages/jobs-list/jobs-list';
 import { UserDetailsPage } from '../pages/user-details/user-details';
 import { RatersPage } from '../pages/raters/raters';
 import { NationalityPage } from '../pages/nationality/nationality';
+import { SmtpProvider } from '../providers/smtp/smtp';
+import { HttpClientModule } from '@angular/common/http';
+import { HTTP } from '@ionic-native/http';
+import { SuccessPage } from '../pages/success/success';
 
 @NgModule({
   declarations: [
@@ -59,7 +62,8 @@ import { NationalityPage } from '../pages/nationality/nationality';
     JobsListPage,
     UserDetailsPage,
     RatersPage,
-    NationalityPage
+    NationalityPage,
+    SuccessPage
   ],
   imports: [
     BrowserModule,
@@ -89,7 +93,8 @@ import { NationalityPage } from '../pages/nationality/nationality';
     JobsListPage,
     UserDetailsPage,
     RatersPage,
-    NationalityPage
+    NationalityPage,
+    SuccessPage
   ],
   providers: [
     StatusBar,
@@ -103,7 +108,9 @@ import { NationalityPage } from '../pages/nationality/nationality';
     DataProvider,
     FeedbackProvider,
     WindowProvider,
-    NetworkProvider
+    NetworkProvider,
+    SmtpProvider,
+    HTTP
   ]
 })
 export class AppModule { }

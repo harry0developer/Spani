@@ -51,8 +51,8 @@ export class AuthProvider {
     return this.angularFireAuth.auth.currentUser.sendEmailVerification();
   }
 
-  forgotPassword(passwordResetEmail) {
-    return this.angularFireAuth.auth.sendPasswordResetEmail(passwordResetEmail);
+  forgotPassword(email: string) {
+    return this.angularFireAuth.auth.sendPasswordResetEmail(email);
   }
 
   logout() {

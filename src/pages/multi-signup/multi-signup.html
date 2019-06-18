@@ -21,7 +21,10 @@
       <div *ngIf="!showOTPPage">
         <ion-card padding class="phone-login"> 
           <ion-grid class="phone">
-            <p class="info">Select dial code and then enter phone number</p>
+            <p class="info">
+              <i class="fa fa-info-circle"></i>
+              Select dial code and then enter phone number
+            </p>
             <ion-row>
               <ion-col col-3>
                 <ion-item class="animated pulse">
@@ -98,6 +101,10 @@
     <ion-list *ngSwitchCase="'emailAddress'">
       <ion-card padding>
         <ion-grid class="user-details">
+          <p class="info">
+            <i class="fa fa-info-circle"></i>
+            Enter email address and password
+          </p>
           <ion-row>
             <ion-col col-12>
               <ion-item class="animated pulse">
@@ -177,6 +184,6 @@
   </div>
 
   <div *ngIf="!showOTPPage" class="row controls">
-    <button ion-button clear block small class="clear" (click)="goToLogin()">Login</button>
+    <button ion-button clear block class="clear" (click)="goToLogin()">Login</button>
   </div> 
 </ion-footer>

@@ -17,7 +17,11 @@ page-multi-signup {
  
     p.info {
         text-align: center;
-        font-size: 12px;
+        font-size: 14px;
+        padding: 10px;
+        i {
+            color: $primary;
+        }
     }
     .user-details , .phone, .email-signin{
         .item {
@@ -30,13 +34,7 @@ page-multi-signup {
       
         .button {
             margin-top: 20px;
-        }
-        .terms {
-            color: $secondary;
-            font-size: 10px;
-            text-align: center;
-            margin-top: 20px;
-        }
+        } 
         .otp-message {
             font-size: 12px;
             color: $primary;

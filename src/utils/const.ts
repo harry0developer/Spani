@@ -43,3 +43,7 @@ export const JOBS_TYPE = {
     shared: 'Shared',
     viewed: 'Viewed',
 }
+
+export const FIREBASE = {
+    NOT_FOUND: 'auth/user-not-found'
+}
