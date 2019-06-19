@@ -1,13 +1,15 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Events, ModalController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { bounceIn } from '../../utils/animations';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { COLLECTION } from '../../utils/const';
+import { COLLECTION, STORAGE_KEY, MAX_DISTANCE } from '../../utils/const';
 import { Job } from '../../models/job';
 import { JobDetailsPage } from '../job-details/job-details';
+import { FilterPage } from '../filter/filter';
+import { Filter } from '../../models/filter';
 
 @IonicPage()
 @Component({
@@ -19,7 +21,12 @@ export class JobsPage {
 
   profile: User;
   jobs: Job[] = [];
+  tmpJobs: Job[] = [];
 
+  filter: Filter = {
+    category: 'All',
+    distance: MAX_DISTANCE
+  };
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -27,68 +34,74 @@ export class JobsPage {
     private dataProvider: DataProvider,
     private authProvider: AuthProvider,
     private feedbackProvider: FeedbackProvider,
+    private modalCtrl: ModalController,
   ) {
     // this.searchControl = new FormControl();
   }
 
   ionViewDidLoad() {
     this.feedbackProvider.presentLoading();
+    const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
+    this.filter.category = filter && filter.category ? filter.category : 'All';
+    this.filter.distance = filter && filter.distance > 0 ? filter.distance : MAX_DISTANCE;
     this.profile = this.authProvider.getStoredUser();
+    this.initializeJobs();
+  }
+
+  initializeJobs() {
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       const loc = {
         lat: -26.121747,
         lng: 28.173450
       }
-
       this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
+      this.tmpJobs = this.jobs;
+      this.applyJobFilter(this.filter);
       this.feedbackProvider.dismissLoading();
     });
+  }
+
+  getMaxDistance(): number {
+    return MAX_DISTANCE;
   }
 
   getDateFromNow(date: string) {
     return this.dataProvider.getDateTimeMoment(date);
   }
 
-
-
-  setFilteredJobs() {
-    // this.location = this.dataProvider.getLocation();
-    // this.jobs = this.dataProvider.filterJobs(this.searchTerm);
-
-    // if (this.location && this.location.lat && this.location.lng) {
-    //   this.jobs = this.dataProvider.applyHaversine(this.jobs, this.location.lat, this.location.lng);
-    // }
-    // this.tempJobs = this.jobs;
-  }
-
-  getDateTime(date) {
-    // return this.dateProvider.getDateFromNow(date);
-  }
-
   viewJobDetails(job) {
     this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
   }
 
-  doRefresh(refresher) {
-    // this.dataProvider.initializeData();
-    // this.tempJobs = this.jobs;
-    // refresher.complete();
-  }
 
   filterJobs() {
-    // let modal = this.modalCtrl.create(FilterPage);
-
-    // modal.onDidDismiss(filter => {
-    //   const jobz = this.dataProvider.getJobs();
-    //   this.dataProvider.sortByDistance(jobz);
-    //   if (filter && filter !== 'all') {
-    //     const j = jobz.filter(job => job.category.toLowerCase() === filter.toLowerCase());
-    //     this.jobs = this.dataProvider.sortByDistance(j);
-    //   } else {
-    //     this.jobs = this.dataProvider.sortByDistance(jobz);
-    //   }
-    // });
-    // modal.present();
+    let modal = this.modalCtrl.create(FilterPage, { filter: this.filter });
+    modal.onDidDismiss(filter => {
+      this.filter = filter;
+      this.applyJobFilter(filter);
+    });
+    modal.present();
   }
+
+  applyJobFilter(filter: Filter) {
+    this.jobs = this.tmpJobs;
+
+    if (filter.distance && filter.distance > 0) {
+      this.jobs = this.jobs.filter(j => parseInt(j.distance) <= filter.distance);
+    }
+    if (filter.category && filter.category) {
+      this.jobs = this.jobs.filter(j => j.category.toLocaleLowerCase() === filter.category.toLocaleLowerCase());
+    }
+
+    if (filter.distance <= 0 && !filter.category) { //reset filter
+      this.jobs = this.tmpJobs;
+    }
+  }
+
+  doRefresh(refresher) {
+    this.initializeJobs()
+    refresher.complete();
+  }
+
 
 }

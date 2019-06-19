@@ -24,6 +24,7 @@ page-multi-login {
         }
     }
     ion-card {
+        background-color: $secondary !important;
         min-height: 240px;
         .button {
             margin-top: 10%;
@@ -35,6 +36,12 @@ page-multi-login {
             font-weight: bold;
             margin: 20px 0;
         }
+      
+    }
+    .country-code .text-input{
+        font-size: 26px;
+        padding: 4px 0 0 4px  !important;
+        margin: 0 !important;
     }
     .item-inner {
         border-bottom: none !important;

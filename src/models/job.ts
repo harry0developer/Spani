@@ -9,6 +9,7 @@ export interface Job {
     skills: string[];
     date: string;
     location: Location;
+    distance?: string;
 }
 
 export interface AppliedJob {

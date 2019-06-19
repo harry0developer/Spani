@@ -6,7 +6,7 @@ export const COLLECTION = {
     appliedJobs: 'applied-jobs',
     viewedJobs: 'viewed-jobs',
     sharedJobs: 'shared-jobs',
-    messages: 'messages',
+    hitters: 'hitters',
 }
 
 export const SUB_COLLECTION = {
@@ -47,3 +47,10 @@ export const JOBS_TYPE = {
 export const FIREBASE = {
     NOT_FOUND: 'auth/user-not-found'
 }
+
+export const STORAGE_KEY = {
+    filter: 'filter',
+    user: 'user'
+}
+
+export const MAX_DISTANCE: number = 300;

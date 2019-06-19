@@ -23,6 +23,11 @@ export class DataProvider {
   getCountries() {
     return this.http.get('assets/countries.json');
   }
+
+  getCategories() {
+    return this.http.get('assets/categories.json');
+  }
+
   getAllFromCollection(collectionName: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName).snapshotChanges().pipe(
       map(actions => {
@@ -193,6 +198,15 @@ export class DataProvider {
 
 
   // ===== HELPERS ======
+
+  addItemToLocalStorage(key: string, data: any) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  getItemFromLocalStorage(key: string): any {
+    const data = localStorage.getItem(key);
+    return data || data !== 'undefined' || data !== null ? JSON.parse(data) : null;
+  }
 
   cleanPhoneNumber(phoneNumber: string): string {
     return phoneNumber.replace(/\(/, '').replace(/\)/, '').replace(/\ /, '').replace(/\ /, '');

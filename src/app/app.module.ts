@@ -44,6 +44,9 @@ import { SmtpProvider } from '../providers/smtp/smtp';
 import { HttpClientModule } from '@angular/common/http';
 import { HTTP } from '@ionic-native/http';
 import { SuccessPage } from '../pages/success/success';
+import { UsersPage } from '../pages/users/users';
+import { FilterPage } from '../pages/filter/filter';
+import { CategoryPage } from '../pages/category/category';
 
 @NgModule({
   declarations: [
@@ -63,7 +66,10 @@ import { SuccessPage } from '../pages/success/success';
     UserDetailsPage,
     RatersPage,
     NationalityPage,
-    SuccessPage
+    SuccessPage,
+    UsersPage,
+    FilterPage,
+    CategoryPage
   ],
   imports: [
     BrowserModule,
@@ -94,7 +100,10 @@ import { SuccessPage } from '../pages/success/success';
     UserDetailsPage,
     RatersPage,
     NationalityPage,
-    SuccessPage
+    SuccessPage,
+    UsersPage,
+    FilterPage,
+    CategoryPage
   ],
   providers: [
     StatusBar,

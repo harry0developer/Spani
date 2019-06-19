@@ -11,6 +11,16 @@ page-jobs {
 		margin: 0 !important;
 	}
 
+	.filter {
+		padding: 10px 20px !important;
+		text-align: center;
+		.badge {
+			border: 1px solid white;
+			padding: 5px 10px;
+			width: 80%
+		}
+	}
+
 	ion-item {
 		margin: 0 !important;
 		min-height: 90px !important;

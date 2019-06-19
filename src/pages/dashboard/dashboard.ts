@@ -13,6 +13,7 @@ import { ProfilePage } from '../profile/profile';
 import { JobsListPage } from '../jobs-list/jobs-list';
 import { Rating } from '../../models/rating';
 import { RatersPage } from '../raters/raters';
+import { UsersPage } from '../users/users';
 
 @IonicPage()
 @Component({
@@ -26,6 +27,7 @@ export class DashboardPage {
   appliedJobs: AppliedJob[] = [];
   sharedJobs: SharedJob[] = [];
   viewedJobs: ViewedJob[] = [];
+  hitters: User[] = [];
 
   duplicateAppliedJobs: AppliedJob[] = [];
   duplicateSharedJobs: SharedJob[] = [];
@@ -97,6 +99,10 @@ export class DashboardPage {
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.profile.uid).subscribe(appointments => {
       this.appointments = appointments;
+    });
+
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.hitters, 'uid', this.profile.uid).subscribe(users => {
+      this.hitters = users;
     });
 
   }
@@ -209,6 +215,9 @@ export class DashboardPage {
     this.feedbackProvider.presentModal(RatersPage);
   }
 
+  viewHittersJobs() {
+    this.feedbackProvider.presentModal(UsersPage, { data: this.hitters });
+  }
   viewAppointments() {
     this.feedbackProvider.presentModal(AppointmentsPage, { appointments: this.appointments });
   }

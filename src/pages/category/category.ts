@@ -3,32 +3,36 @@ import { IonicPage, NavController, NavParams, ViewController } from 'ionic-angul
 import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { FormControl } from '@angular/forms';
-import { debounceTime } from "rxjs/operators";
+import { debounceTime } from 'rxjs/operators';
+import { STORAGE_KEY, MAX_DISTANCE } from '../../utils/const';
+import { Filter } from '../../models/filter';
 
 @IonicPage()
 @Component({
-  selector: 'page-nationality',
-  templateUrl: 'nationality.html',
+  selector: 'page-category',
+  templateUrl: 'category.html',
 })
-export class NationalityPage {
-  countries: any = [];
-
+export class CategoryPage {
+  categories: any = [];
+  filter: Filter = {
+    category: 'All',
+    distance: MAX_DISTANCE
+  };
   searchTerm: string = '';
   searchControl: FormControl;
-  filteredCountries: any = [];
   searching: any = false;
-
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
-    private dataProvider: DataProvider,
-    private feedbackProvider: FeedbackProvider,
-    private viewCtrl: ViewController) {
+    public dataProvider: DataProvider,
+    public feedbackProvider: FeedbackProvider,
+    public viewCtrl: ViewController,
+  ) {
     this.searchControl = new FormControl();
   }
 
   ionViewDidLoad() {
-    this.getCountries();
+    this.getCategories();
     this.setFilteredItems('');
     this.searchControl.valueChanges
       .pipe(debounceTime(700))
@@ -38,12 +42,10 @@ export class NationalityPage {
       });
   }
 
-
-  getCountries() {
+  getCategories() {
     this.feedbackProvider.presentLoading();
-    this.dataProvider.getCountries().subscribe(res => {
-      this.countries = res;
-      this.filteredCountries = res;
+    this.dataProvider.getCategories().subscribe(res => {
+      this.categories = res;
       this.feedbackProvider.dismissLoading();
     }, err => {
       this.feedbackProvider.dismissLoading();
@@ -55,20 +57,22 @@ export class NationalityPage {
   }
 
   setFilteredItems(searchTerm) {
-    this.filteredCountries = this.filterItems(searchTerm);
+    this.filter.category = this.filterItems(searchTerm);
   }
 
   filterItems(searchTerm) {
-    return this.countries.filter(item => {
+    return this.categories.filter(item => {
       return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 
-  selectCountry(country) {
-    this.viewCtrl.dismiss(country);
+  selectCategory(category) {
+    this.viewCtrl.dismiss(category.name);
   }
+
 
   dismissModal() {
     this.viewCtrl.dismiss();
   }
+
 }

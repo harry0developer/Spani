@@ -11,6 +11,7 @@ import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
 import { Network } from '@ionic-native/network';
 import { EVENTS } from '../utils/const';
+import { FilterPage } from '../pages/filter/filter';
 
 
 @Component({

@@ -1,22 +1,21 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title>Country Code</ion-title>
+    <ion-title>Categories</ion-title>
     <ion-buttons end>
       <button ion-button (click)="dismissModal()">
-        Done
+        Cancel
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content>
   <ion-searchbar [formControl]="searchControl" (ionChange)="onSearchInput()"></ion-searchbar>
   <div *ngIf="searching" class="spinner-container">
     <ion-spinner></ion-spinner>
   </div>
-  <ion-item *ngFor="let country of filteredCountries" (click)="selectCountry(country)">
-    {{country.flag}} {{country.name}}
-    <span item-end>{{country.dial_code}}</span>
+  <ion-item *ngFor="let category of categories" (click)="selectCategory(category)">
+    <i class="{{category.icon}}"></i>{{category.name}}
   </ion-item>
 </ion-content>

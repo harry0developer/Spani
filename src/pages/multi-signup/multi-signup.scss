@@ -30,8 +30,8 @@ page-multi-signup {
         }
     }
     ion-card {
+        background-color: $secondary !important;
         min-height: 240px;
-      
         .button {
             margin-top: 20px;
         } 
@@ -43,6 +43,13 @@ page-multi-signup {
             margin: 20px 0;
         }
     }
+
+    .country-code .text-input{
+        font-size: 26px;
+        padding: 4px 0 0 4px !important;
+        margin: 0 !important;
+    }
+
     .item-inner {
         border-bottom: none !important;
     }

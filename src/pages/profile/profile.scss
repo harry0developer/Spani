@@ -156,6 +156,11 @@ page-profile {
                 font-size: 18px;
                 width: 26px;
             } 
+
+            [item-end] {
+                width: 60%;
+                text-align: right;
+            }
             
         }
     }

@@ -3,7 +3,7 @@
     <ion-title>
       Job Details
     </ion-title>
-    <ion-buttons *ngIf="job" [hidden]="isRecruiter()" start>
+    <ion-buttons *ngIf="job" [hidden]="isRecruiter()" end>
       <button ion-button icon-left (click)="presentShareJobActionSheet(job)">
         <ion-icon name="share-alt"></ion-icon>Share
       </button>
