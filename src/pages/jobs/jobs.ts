@@ -40,23 +40,23 @@ export class JobsPage {
   }
 
   ionViewDidLoad() {
-    this.feedbackProvider.presentLoading();
     const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
     this.filter.category = filter && filter.category ? filter.category : 'All';
     this.filter.distance = filter && filter.distance > 0 ? filter.distance : MAX_DISTANCE;
     this.profile = this.authProvider.getStoredUser();
-    this.initializeJobs();
-  }
-
-  initializeJobs() {
+    this.feedbackProvider.presentLoading();
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       const loc = {
         lat: -26.121747,
         lng: 28.173450
       }
       this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
+      console.log(this.jobs);
+
       this.tmpJobs = this.jobs;
       this.applyJobFilter(this.filter);
+      this.feedbackProvider.dismissLoading();
+    }, err => {
       this.feedbackProvider.dismissLoading();
     });
   }
@@ -72,7 +72,6 @@ export class JobsPage {
   viewJobDetails(job) {
     this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
   }
-
 
   filterJobs() {
     let modal = this.modalCtrl.create(FilterPage, { filter: this.filter });
@@ -93,15 +92,27 @@ export class JobsPage {
       this.jobs = this.jobs.filter(j => j.category.toLocaleLowerCase() === filter.category.toLocaleLowerCase());
     }
 
-    if (filter.distance <= 0 && !filter.category) { //reset filter
+    if (filter.distance === MAX_DISTANCE && filter.category === 'All') { //reset filter
       this.jobs = this.tmpJobs;
     }
   }
 
   doRefresh(refresher) {
-    this.initializeJobs()
-    refresher.complete();
+    this.feedbackProvider.presentLoading();
+    this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
+      const loc = {
+        lat: -26.121747,
+        lng: 28.173450
+      }
+      this.jobs = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
+      this.tmpJobs = this.jobs;
+      this.applyJobFilter(this.filter);
+      this.feedbackProvider.dismissLoading();
+      refresher.complete();
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+      refresher.complete();
+    });
   }
-
 
 }
