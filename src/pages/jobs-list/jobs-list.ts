@@ -42,7 +42,6 @@ export class JobsListPage {
   mappJobsWithUsers(jobsToBeMapped: any[], allJobs: any[]) {
     this.feedbackProvider.presentLoading();
     let usersArray: any[] = [];
-    const mappedJobs = [];
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
       jobsToBeMapped.map(mj => {
         jobs.map(job => {

@@ -79,6 +79,7 @@ export class DataProvider {
     const key = new Date().getTime().toString();
     this.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
       if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
+        console.log('Jobs exist, adding to the array');
         const jobsArray = this.getArrayFromObjectList(jobs);
         if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
           const newJobs = { ...jobs, [key]: newJob };
@@ -88,6 +89,8 @@ export class DataProvider {
         }
       } else { //Job is NOT root document eg /viewed-jobs/otherjobIdNotThisOne
         const newJobs = { [key]: newJob };
+        console.log('trying to add new job', newJobs);
+
         this.updateCollection(collection, newJobs, newJob.jid);
       }
 

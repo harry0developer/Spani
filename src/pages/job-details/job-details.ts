@@ -4,7 +4,7 @@ import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { AppliedJob, SharedJob, ViewedJob } from '../../models/job';
-import { COLLECTION } from '../../utils/const';
+import { COLLECTION, USER_TYPE } from '../../utils/const';
 import { SocialSharing } from '@ionic-native/social-sharing';
 import { combineLatest } from 'rxjs';
 
@@ -39,21 +39,45 @@ export class JobDetailsPage {
     this.feedbackProvider.presentLoading();
     this.profile = this.authProvider.getStoredUser();
     this.job = this.navParams.get('job');
+    let foundJob = null;
+    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(viewedJobs => {
+      const jobs = this.dataProvider.getArrayFromObjectList(viewedJobs);
 
-    combineLatest(
-      this.dataProvider.getDocumentFromCollection(COLLECTION.appliedJobs, this.job.jid),
-      this.dataProvider.getDocumentFromCollection(COLLECTION.viewedJobs, this.job.jid),
-      this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.job.jid)
-    ).subscribe(([appliedJobs, viewedJobs, sharedJobs]) => {
-      this.appliedUsers = this.dataProvider.getArrayFromObjectList(appliedJobs.data());
-      this.viewedUsers = this.dataProvider.getArrayFromObjectList(viewedJobs.data());
-      this.sharedUsers = this.dataProvider.getArrayFromObjectList(sharedJobs.data());
+      jobs.map(j => {
+        if (j.id === this.job.jid) {
+          foundJob = j;
+        }
+      });
+
+      if (!foundJob) {
+        const newJob: any = {
+          uid: this.profile.uid,
+          rid: this.job.uid,
+          jid: this.job.jid,
+          date: this.dataProvider.getDateTime()
+        }
+        console.log(newJob);
+        this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, newJob);
+      }
       this.feedbackProvider.dismissLoading();
     }, err => {
       this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentToast('Oops, something went wrong :(');
     });
+
+
+    this.dataProvider.getDocumentFromCollection(COLLECTION.appliedJobs, this.job.jid).subscribe(appliedJobs => {
+      this.appliedUsers = this.dataProvider.getArrayFromObjectList(appliedJobs.data());
+    });
+    this.dataProvider.getDocumentFromCollection(COLLECTION.viewedJobs, this.job.jid).subscribe(viewedJobs => {
+      this.viewedUsers = this.dataProvider.getArrayFromObjectList(viewedJobs.data());
+    });
+    this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.job.jid).subscribe(sharedJobs => {
+      this.sharedUsers = this.dataProvider.getArrayFromObjectList(sharedJobs.data());
+    });
+
   }
+
+
 
   getJobPoster() {
     this.feedbackProvider.presentLoading();
