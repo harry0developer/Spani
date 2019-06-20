@@ -9,6 +9,7 @@ import { Message } from '../../models/message';
 import { User } from '../../models/user';
 import { COLLECTION, USER_TYPE } from '../../utils/const';
 import { Rating } from '../../models/rating';
+import { Job } from '../../models/job';
 
 @Injectable()
 export class DataProvider {
@@ -206,6 +207,25 @@ export class DataProvider {
   getItemFromLocalStorage(key: string): any {
     const data = localStorage.getItem(key);
     return data || data !== 'undefined' || data !== null ? JSON.parse(data) : null;
+  }
+
+  getMyJobs(jobs: Job[], user: User) {
+    let myJobs = [];
+    jobs.map(job => {
+      const j = this.getArrayFromObjectList(job);
+      for (let i = 1; i < j.length; i++) {
+        if (user.type === USER_TYPE.candidate) {
+          if (j[i].uid === user.uid) {
+            myJobs.push(j[i]);
+          }
+        } else {
+          if (j[i].rid === user.uid) {
+            myJobs.push(j[i]);
+          }
+        }
+      }
+    });
+    return myJobs;
   }
 
   cleanPhoneNumber(phoneNumber: string): string {

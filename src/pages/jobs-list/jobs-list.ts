@@ -35,18 +35,32 @@ export class JobsListPage {
     this.tag = this.navParams.get('tag');
     const jobsToBeMapped = this.navParams.get('jobs');
     const allJobs = this.navParams.get('allJobs');
-    const loc = {
-      lat: -26.121747,
-      lng: 28.173450
-    }
+    this.mappJobsWithUsers(jobsToBeMapped, allJobs);
+  }
+
+
+  mappJobsWithUsers(jobsToBeMapped: any[], allJobs: any[]) {
+    this.feedbackProvider.presentLoading();
+    let usersArray: any[] = [];
+    const mappedJobs = [];
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
-      let jobsToBeMapedWithUser = [];
-      jobsToBeMapped.map(j => {
-        jobsToBeMapedWithUser.push(Object.assign(j, { users: this.dataProvider.countJobOccurrence(allJobs, j.jid) }));
+      jobsToBeMapped.map(mj => {
+        jobs.map(job => {
+          if (mj.jid === job.jid) {
+            usersArray = this.dataProvider.getArrayFromObjectList(this.getUserFromJobs(job, allJobs)[0]);
+            usersArray.shift(); // remove key eg. list = ["adadsasd", {}, {}, {}]
+            this.jobs.push(Object.assign(job, { users: usersArray }));
+          }
+        })
       });
-      const mappedJobs = this.dataProvider.mapJobs(jobs, jobsToBeMapedWithUser);
-      this.jobs = this.dataProvider.applyHaversine(mappedJobs, loc.lat, loc.lng);
+      this.feedbackProvider.dismissLoading();
+    }, err => {
+      this.feedbackProvider.dismissLoading();
     });
+  }
+
+  getUserFromJobs(job: any, allJobs: any[]) {
+    return allJobs.filter(j => j.id === job.jid);
   }
 
   getDateFromNow(job): string {

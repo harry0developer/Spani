@@ -1,4 +1,4 @@
-import { Location } from "./user";
+import { Location, User } from "./user";
 
 export interface Job {
     jid?: string;
@@ -10,6 +10,7 @@ export interface Job {
     date: string;
     location: Location;
     distance?: string;
+    users?: User[];
 }
 
 export interface AppliedJob {

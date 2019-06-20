@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Events, ModalController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, ModalController } from 'ionic-angular';
 import { DataProvider } from '../../providers/data/data';
 import { AppointmentsPage } from '../appointments/appointments';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
 import { Job, AppliedJob, SharedJob, ViewedJob } from '../../models/job';
-import { COLLECTION, STATUS, JOBS_TYPE, USER_TYPE } from '../../utils/const';
+import { COLLECTION, STATUS, JOBS_TYPE } from '../../utils/const';
 import { Appointment } from '../../models/appointment';
 import { Message } from '../../models/message';
 import { ProfilePage } from '../profile/profile';
@@ -27,11 +27,13 @@ export class DashboardPage {
   appliedJobs: AppliedJob[] = [];
   sharedJobs: SharedJob[] = [];
   viewedJobs: ViewedJob[] = [];
-  hitters: User[] = [];
 
-  duplicateAppliedJobs: AppliedJob[] = [];
-  duplicateSharedJobs: SharedJob[] = [];
-  duplicateViewedJobs: ViewedJob[] = [];
+  allPostedJobs: Job[] = [];
+  allAppliedJobs: AppliedJob[] = [];
+  allSharedJobs: SharedJob[] = [];
+  allViewedJobs: ViewedJob[] = [];
+
+  hitters: User[] = [];
 
   myRating: string;
   allRatings: Rating[] = [];
@@ -39,6 +41,8 @@ export class DashboardPage {
   usersRatedMe: Rating[] = [];
   appointments: Appointment[] = [];
   chats: Message[] = [];
+
+
 
   jobs: Job[] = [];
   users: User[] = [];
@@ -58,6 +62,7 @@ export class DashboardPage {
     this.profile = this.authProvider.getStoredUser();
     this.userKey = this.dataProvider.getKey(this.profile);
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
+      this.allPostedJobs = jobs;
       this.jobs = jobs;
     });
 
@@ -70,18 +75,18 @@ export class DashboardPage {
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
-      this.duplicateAppliedJobs = this.getMyJobs(jobs);
-      this.appliedJobs = this.dataProvider.removeDuplicates(this.duplicateAppliedJobs, 'uid');
+      this.allAppliedJobs = jobs;
+      this.appliedJobs = this.getMyJobs(jobs);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-      this.duplicateViewedJobs = this.getMyJobs(jobs);
-      this.viewedJobs = this.dataProvider.removeDuplicates(this.duplicateViewedJobs, 'uid');
+      this.allViewedJobs = jobs;
+      this.viewedJobs = this.getMyJobs(jobs);
     });
 
     this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
-      this.duplicateSharedJobs = this.getMyJobs(jobs);
-      this.sharedJobs = this.dataProvider.removeDuplicates(this.duplicateSharedJobs, 'uid');
+      this.allSharedJobs = jobs;
+      this.sharedJobs = this.getMyJobs(jobs);
     });
 
     this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
@@ -107,23 +112,25 @@ export class DashboardPage {
 
   }
 
-  countIratedAndRatedMe(): number {
-    return this.usersIRated.length + this.usersRatedMe.length || 0;
-  }
+  getMyJobs(jobs): any[] {
+    const myJobs: Job[] = [];
+    const jobsArray = this.dataProvider.getArrayFromObjectList(jobs);
+    let jobUsers;
 
-  getMyJobs(jobs) {
-    let myJobs = [];
-    jobs.map(job => {
-      const j = this.dataProvider.getArrayFromObjectList(job);
-      for (let i = 1; i < j.length; i++) {
-        if (j[i].rid === this.profile.uid) {
-          myJobs.push(j[i]);
+    for (let i = 0; i < jobsArray.length; i++) {
+      jobUsers = this.dataProvider.getArrayFromObjectList(jobsArray[i]);
+      for (let i = 1; i < jobUsers.length; i++) { // jobUsers['id', {}, {}]
+        if (jobUsers[i].uid === this.profile.uid) {
+          myJobs.push(jobUsers[i]);
         }
       }
-    });
+    }
     return myJobs;
   }
 
+  countIratedAndRatedMe(): number {
+    return this.usersIRated.length + this.usersRatedMe.length || 0;
+  }
 
   profilePicture(): string {
     return this.dataProvider.getProfilePicture(this.profile);
@@ -196,19 +203,19 @@ export class DashboardPage {
   }
 
   viewPostedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.postedJobs, allJobs: this.postedJobs, tag: JOBS_TYPE.posted });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.postedJobs, allJobs: this.allPostedJobs, tag: JOBS_TYPE.posted });
   }
 
   viewAppliedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.appliedJobs, allJobs: this.duplicateAppliedJobs, tag: JOBS_TYPE.applied });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.appliedJobs, allJobs: this.allAppliedJobs, tag: JOBS_TYPE.applied });
   }
 
   viewSharedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: JOBS_TYPE.shared });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.sharedJobs, allJobs: this.allSharedJobs, tag: JOBS_TYPE.shared });
   }
 
   viewViewedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.duplicateViewedJobs, tag: JOBS_TYPE.viewed });
+    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.allViewedJobs, tag: JOBS_TYPE.viewed });
   }
 
   viewRaters() {
