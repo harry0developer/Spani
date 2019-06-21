@@ -5,7 +5,7 @@ import { bounceIn } from '../../utils/animations';
 import { AuthProvider } from '../../providers/auth/auth';
 import { User } from '../../models/user';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { COLLECTION, STORAGE_KEY, MAX_DISTANCE } from '../../utils/const';
+import { COLLECTION, STORAGE_KEY, FILTER } from '../../utils/const';
 import { Job } from '../../models/job';
 import { JobDetailsPage } from '../job-details/job-details';
 import { FilterPage } from '../filter/filter';
@@ -24,8 +24,8 @@ export class JobsPage {
   tmpJobs: Job[] = [];
 
   filter: Filter = {
-    category: 'All',
-    distance: MAX_DISTANCE
+    category: FILTER.category,
+    distance: FILTER.max_distance
   };
   constructor(
     public navCtrl: NavController,
@@ -41,8 +41,8 @@ export class JobsPage {
 
   ionViewDidLoad() {
     const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
-    this.filter.category = filter && filter.category ? filter.category : 'All';
-    this.filter.distance = filter && filter.distance > 0 ? filter.distance : MAX_DISTANCE;
+    this.filter.category = filter && filter.category ? filter.category : FILTER.category;
+    this.filter.distance = filter && filter.distance > 0 ? filter.distance : FILTER.max_distance;
     this.profile = this.authProvider.getStoredUser();
     this.feedbackProvider.presentLoading();
     this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
@@ -62,7 +62,7 @@ export class JobsPage {
   }
 
   getMaxDistance(): number {
-    return MAX_DISTANCE;
+    return FILTER.max_distance;
   }
 
   getDateFromNow(date: string) {
@@ -76,23 +76,27 @@ export class JobsPage {
   filterJobs() {
     let modal = this.modalCtrl.create(FilterPage, { filter: this.filter });
     modal.onDidDismiss(filter => {
-      this.filter = filter;
-      this.applyJobFilter(filter);
+      if (filter) {
+        this.filter = filter;
+        this.applyJobFilter(filter);
+      }
     });
     modal.present();
   }
 
   applyJobFilter(filter: Filter) {
     this.jobs = this.tmpJobs;
+    console.log(filter);
+
 
     if (filter.distance && filter.distance > 0) {
       this.jobs = this.jobs.filter(j => parseInt(j.distance) <= filter.distance);
     }
-    if (filter.category && filter.category) {
+    if (filter.category && filter.category && filter.category !== FILTER.category) {
       this.jobs = this.jobs.filter(j => j.category.toLocaleLowerCase() === filter.category.toLocaleLowerCase());
     }
 
-    if (filter.distance === MAX_DISTANCE && filter.category === 'All') { //reset filter
+    if (filter.distance === FILTER.max_distance && filter.category.toLocaleLowerCase() === FILTER.category) { //reset filter
       this.jobs = this.tmpJobs;
     }
   }

@@ -74,10 +74,7 @@ export class JobDetailsPage {
     this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.job.jid).subscribe(sharedJobs => {
       this.sharedUsers = this.dataProvider.getArrayFromObjectList(sharedJobs.data());
     });
-
   }
-
-
 
   getJobPoster() {
     this.feedbackProvider.presentLoading();

@@ -53,4 +53,7 @@ export const STORAGE_KEY = {
     user: 'user'
 }
 
-export const MAX_DISTANCE: number = 300;
+export const FILTER = {
+    max_distance: 300,
+    category: 'All'
+} 

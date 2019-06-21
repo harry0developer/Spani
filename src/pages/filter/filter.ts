@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams, ViewController, ModalController } 
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { CategoryPage } from '../category/category';
 import { DataProvider } from '../../providers/data/data';
-import { STORAGE_KEY, MAX_DISTANCE } from '../../utils/const';
+import { STORAGE_KEY, FILTER } from '../../utils/const';
 import { Filter } from '../../models/filter';
 
 @IonicPage()
@@ -13,8 +13,8 @@ import { Filter } from '../../models/filter';
 })
 export class FilterPage {
   filter: Filter = {
-    category: 'All',
-    distance: MAX_DISTANCE
+    category: FILTER.category,
+    distance: FILTER.max_distance
   };
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
@@ -30,7 +30,7 @@ export class FilterPage {
   }
 
   getMaxDistance(): number {
-    return MAX_DISTANCE;
+    return FILTER.max_distance;
   }
 
   getCategories() {
@@ -44,7 +44,7 @@ export class FilterPage {
   }
 
   dismissModal() {
-    this.viewCtrl.dismiss(this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter));
+    this.viewCtrl.dismiss(null);
   }
 
   applyFilter() {
@@ -53,8 +53,8 @@ export class FilterPage {
   }
 
   clearFilter() {
-    this.filter.category = 'All';
-    this.filter.distance = MAX_DISTANCE;
+    this.filter.category = FILTER.category,
+      this.filter.distance = FILTER.max_distance
     this.dataProvider.addItemToLocalStorage(STORAGE_KEY.filter, this.filter);
     this.viewCtrl.dismiss(this.filter);
   }

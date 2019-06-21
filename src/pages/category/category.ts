@@ -4,8 +4,8 @@ import { DataProvider } from '../../providers/data/data';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
-import { STORAGE_KEY, MAX_DISTANCE } from '../../utils/const';
 import { Filter } from '../../models/filter';
+import { FILTER } from '../../utils/const';
 
 @IonicPage()
 @Component({
@@ -15,8 +15,8 @@ import { Filter } from '../../models/filter';
 export class CategoryPage {
   categories: any = [];
   filter: Filter = {
-    category: 'All',
-    distance: MAX_DISTANCE
+    category: FILTER.category,
+    distance: FILTER.max_distance
   };
   searchTerm: string = '';
   searchControl: FormControl;
