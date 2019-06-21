@@ -55,7 +55,10 @@
 
       <div *ngIf="showOTPPage">
         <ion-card padding> 
-          <p class="otp-message">Enter the 6 digit code sent to your phone</p>
+          <p class="otp-message">
+            <i class="fa fa-info-circle"></i>
+            Enter the 6 digit code sent to your phone
+          </p>
           <ion-item class="animated pulse">
             <ion-label>OTP code</ion-label>
             <ion-input [(ngModel)]="data.otpCode" placeholder="123456" required otpCode="otpCode" #otpCode="ngModel" [brmasker]="{mask:'000000', len:6,  type:'num'}"
