@@ -7,11 +7,11 @@ import { AuthProvider } from '../providers/auth/auth';
 import { DataProvider } from '../providers/data/data';
 import { MultiLoginPage } from '../pages/multi-login/multi-login';
 import { ProfilePage } from '../pages/profile/profile';
-import { JobsPage } from '../pages/jobs/jobs';
 import { User } from '../models/user';
 import { Network } from '@ionic-native/network';
 import { EVENTS } from '../utils/const';
 import { FilterPage } from '../pages/filter/filter';
+import { ServicesPage } from '../pages/services/services';
 
 
 @Component({
@@ -36,7 +36,7 @@ export class MyApp {
     this.initializeApp();
 
     this.pages = {
-      jobsPage: JobsPage,
+      servicesPage: ServicesPage,
       dashboardPage: DashboardPage,
       profilePage: ProfilePage
     }

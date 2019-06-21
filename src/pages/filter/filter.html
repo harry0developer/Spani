@@ -1,6 +1,6 @@
 <ion-header>
   <ion-navbar color="dark">
-    <ion-title>Filter Jobs</ion-title>
+    <ion-title>Filter Services</ion-title>
     <ion-buttons end>
       <button ion-button (click)="dismissModal()">
         Cancel
@@ -23,7 +23,7 @@
 
   <ion-card>
     <ion-item-divider color="light">
-      Select job distance
+      Select service distance
       <ion-badge item-end>{{filter?.distance || 0}} km</ion-badge> 
     </ion-item-divider>
     <ion-range min="0" max="100" step="5" pin="true" [(ngModel)]="filter.distance" color="primary">

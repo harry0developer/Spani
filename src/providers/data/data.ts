@@ -25,8 +25,8 @@ export class DataProvider {
     return this.http.get('assets/countries.json');
   }
 
-  getCategories() {
-    return this.http.get('assets/categories.json');
+  getJobServices() {
+    return this.http.get('assets/job-services.json').toPromise();
   }
 
   getAllFromCollection(collectionName: string): Observable<any> {

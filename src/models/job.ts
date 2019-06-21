@@ -7,6 +7,8 @@ export interface Job {
     description: string;
     category: string;
     skills: string[];
+    type: string;
+    experience: string;
     date: string;
     location: Location;
     distance?: string;

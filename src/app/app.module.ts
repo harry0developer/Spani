@@ -7,8 +7,6 @@ import { MyApp } from './app.component';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { DashboardPage } from '../pages/dashboard/dashboard';
-import { JobsPage } from '../pages/jobs/jobs';
-import { JobDetailsPage } from '../pages/job-details/job-details';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { AppointmentsPage } from '../pages/appointments/appointments';
 
@@ -47,14 +45,15 @@ import { SuccessPage } from '../pages/success/success';
 import { UsersPage } from '../pages/users/users';
 import { FilterPage } from '../pages/filter/filter';
 import { CategoryPage } from '../pages/category/category';
+import { PostJobPage } from '../pages/post-job/post-job';
+import { ServicesPage } from '../pages/services/services';
+import { ServiceDetailsPage } from '../pages/service-details/service-details';
 
 @NgModule({
   declarations: [
     MyApp,
     DashboardPage,
     AppointmentsPage,
-    JobsPage,
-    JobDetailsPage,
     ForgotPasswordPage,
     MultiLoginPage,
     MultiSignupPage,
@@ -69,7 +68,11 @@ import { CategoryPage } from '../pages/category/category';
     SuccessPage,
     UsersPage,
     FilterPage,
-    CategoryPage
+    CategoryPage,
+    PostJobPage,
+    ServicesPage,
+    ServiceDetailsPage,
+    ServiceDetailsPage
   ],
   imports: [
     BrowserModule,
@@ -79,7 +82,6 @@ import { CategoryPage } from '../pages/category/category';
     AngularFireDatabaseModule,
     BrMaskerModule,
     HttpClientModule,
-    // NgxMaskModule.forRoot(options),
     RatingModule
   ],
   bootstrap: [IonicApp],
@@ -87,8 +89,6 @@ import { CategoryPage } from '../pages/category/category';
     MyApp,
     DashboardPage,
     AppointmentsPage,
-    JobsPage,
-    JobDetailsPage,
     ForgotPasswordPage,
     MultiLoginPage,
     MultiSignupPage,
@@ -103,7 +103,11 @@ import { CategoryPage } from '../pages/category/category';
     SuccessPage,
     UsersPage,
     FilterPage,
-    CategoryPage
+    CategoryPage,
+    PostJobPage,
+    ServicesPage,
+    ServiceDetailsPage,
+    ServiceDetailsPage
   ],
   providers: [
     StatusBar,

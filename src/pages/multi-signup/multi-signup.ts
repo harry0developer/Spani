@@ -141,7 +141,6 @@ export class MultiSignupPage {
     });
   }
 
-
   getDatabaseUserAndNavigateToSetup(user: firebase.User) {
     const data = {
       firstname: this.data.firstname,
@@ -179,31 +178,6 @@ export class MultiSignupPage {
       }
     });
     modal.present();
-  }
-
-  addJobs() {
-    const job: Job = {
-      jid: this.dataProvider.generateId(15),
-      uid: 'LvdXgZjVXhbps8iUiD9GqOZVuP72',
-      title: 'Helper wanted',
-      description: 'We need a helper with our house chores and baby sitting, we have a place for your to stay.',
-      date: '2019/05/03 10:09:18',
-      skills: ['nanny', 'baby care', 'cleaning', 'washing', 'cooking'],
-      category: 'Security',
-      location: {
-        address: '102 Zola, Soweto Johannesburg',
-        geo: {
-          lat: '-19.10001',
-          lng: '29.669'
-        }
-      }
-    }
-
-    this.dataProvider.addNewItemWithId(COLLECTION.jobs, job, job.jid).then(() => {
-      console.log('success');
-    }).catch((err) => {
-      console.log(err);
-    });
   }
 
   goToLogin() {

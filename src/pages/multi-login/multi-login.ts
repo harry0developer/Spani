@@ -3,7 +3,6 @@ import { NavController, Events, ModalController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { DataProvider } from '../../providers/data/data';
 import { USER_NOT_FOUND, INVALID_PASSWORD } from '../../config';
@@ -16,6 +15,7 @@ import { NationalityPage } from '../nationality/nationality';
 import { Country } from '../../models/country';
 import { take } from 'rxjs/operators';
 import { User } from '../../models/user';
+import { Service } from '../../models/services';
 
 @Component({
   selector: 'page-multi-login',
@@ -241,30 +241,6 @@ export class MultiLoginPage {
     this.showOTPPage = false;
   }
 
-  addJobs() {
-    const job: Job = {
-      jid: this.dataProvider.generateId(15),
-      uid: 'LvdXgZjVXhbps8iUiD9GqOZVuP72',
-      title: 'Helper wanted',
-      description: 'We need a helper with our house chores and baby sitting, we have a place for your to stay.',
-      date: '2019/05/03 10:09:18',
-      skills: ['nanny', 'baby care', 'cleaning', 'washing', 'cooking'],
-      category: 'Security',
-      location: {
-        address: '102 Zola, Soweto Johannesburg',
-        geo: {
-          lat: '-19.10001',
-          lng: '29.669'
-        }
-      }
-    }
-
-    this.dataProvider.addNewItemWithId(COLLECTION.jobs, job, job.jid).then(() => {
-      console.log('success');
-    }).catch((err) => {
-      console.log(err);
-    });
-  }
 
   goToSignup() {
     this.navCtrl.setRoot(MultiSignupPage);

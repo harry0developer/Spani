@@ -56,4 +56,9 @@ export const STORAGE_KEY = {
 export const FILTER = {
     max_distance: 300,
     category: 'All'
-} 
+}
+
+export const JOB_ACTION = {
+    edit: 'edit',
+    new: 'new'
+}

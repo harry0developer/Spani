@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Events, ViewController } from 'ionic-angular';
 import { Job } from '../../models/job';
-import { JobDetailsPage } from '../job-details/job-details';
 import { User } from '../../models/user';
 import { DataProvider } from '../../providers/data/data';
 import { AuthProvider } from '../../providers/auth/auth';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
 import { COLLECTION } from '../../utils/const';
 import { bounceIn } from '../../utils/animations';
+import { PostJobPage } from '../post-job/post-job';
+import { ServiceDetailsPage } from '../service-details/service-details';
 
 @IonicPage()
 @Component({
@@ -70,6 +71,12 @@ export class JobsListPage {
     return this.dataProvider.getDateTimeMoment(job.date);
   }
 
+
+  openPostJobPage() {
+    this.navCtrl.push(PostJobPage)
+
+  }
+
   sortArrayByDate(array: any[]): any[] {
     return array.sort((a, b) => {
       return a.date - b.date;
@@ -77,7 +84,7 @@ export class JobsListPage {
   }
 
   viewJobDetails(job) {
-    this.navCtrl.push(JobDetailsPage, { job: job, page: 'jobs' });
+    this.navCtrl.push(ServiceDetailsPage, { job: job, page: 'jobs' });
   }
 
   dismissModal() {
