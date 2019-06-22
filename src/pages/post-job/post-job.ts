@@ -28,8 +28,8 @@ export class PostJobPage {
     location: {
       address: '',
       geo: {
-        lat: '',
-        lng: '',
+        lat: 0,
+        lng: 0,
       }
     }
   };

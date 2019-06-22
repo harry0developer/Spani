@@ -21,17 +21,14 @@ import { ServiceDetailsPage } from '../service-details/service-details';
 export class ServicesPage {
 
   profile: User;
-  // services: Service[] = [];
+  services: Service[] = [];
+  categories: any;
   tmpServices: Service[] = [];
 
   filter: Filter = {
     category: FILTER.category,
     distance: FILTER.max_distance
   };
-
-  services = [
-
-  ]
   constructor(
     public navCtrl: NavController,
     public navParams: NavParams,
@@ -44,6 +41,25 @@ export class ServicesPage {
   }
 
   ionViewDidLoad() {
+    this.feedbackProvider.presentLoading();
+    this.profile = this.authProvider.getStoredUser();
+
+    this.dataProvider.getJobServices().then(res => {
+      this.categories = res;
+    }).catch(err => {
+      console.log(err);
+    });
+
+    this.dataProvider.getAllFromCollection(COLLECTION.services).subscribe(services => {
+      const loc = {
+        lat: -26.121747,
+        lng: 28.173450
+      }
+      this.services = this.dataProvider.applyHaversine(services, loc.lat, loc.lng);
+      this.feedbackProvider.dismissLoading();
+    }, err => {
+      this.feedbackProvider.dismissLoading();
+    });
     // const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
     // this.filter.category = filter && filter.category ? filter.category : FILTER.category;
     // this.filter.distance = filter && filter.distance > 0 ? filter.distance : FILTER.max_distance;
@@ -64,49 +80,15 @@ export class ServicesPage {
     //   this.feedbackProvider.dismissLoading();
     // });
 
-    this.services = [
-      {
-        title: "Event planning and management",
-        category: "Event Management",
-        description: "We plan events for all types of ceremonies, funerals, parties, graduations at reasonable rate",
-        services: ["Event planning", "Event management", "Decorations", "Theming"],
-        date: this.dataProvider.getDateTime(),
-        location: {
-          address: "123 Small street, Johannesburg, 10001",
-          geo: {
-            lat: 19.12321,
-            lng: -24.0213
-          }
-        },
-        contact: {
-          firstname: "Palesa",
-          lastname: "Moshumi",
-          email: "palesa@moshumi.com",
-          phone: "0821101909"
-        }
-      },
+  }
 
-      {
-        title: "CCTV Installations",
-        category: "Safety and Security",
-        description: "We are specialists in safety and security tools and services",
-        services: ["CCTV", "Securty Fence", "Securty Doors", "Securty Buglers"],
-        date: this.dataProvider.getDateTime(),
-        location: {
-          address: "99 Miller Warehouse, Johannesburg, 1090",
-          geo: {
-            lat: 18.12321,
-            lng: -24.0213
-          }
-        },
-        contact: {
-          firstname: "James",
-          lastname: "Van Heerde",
-          email: "james@sec44.com",
-          phone: "0845561878"
-        }
+  getServiceIcon(service: Service): string {
+    for (let i = 0; i < this.categories.length; i++) {
+      if (this.categories[i].category.toLocaleLowerCase() === service.category.toLocaleLowerCase()) {
+        return this.categories[i].icon;
       }
-    ]
+    }
+    return "default";
   }
 
   addService() {

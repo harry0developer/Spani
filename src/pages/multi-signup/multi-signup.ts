@@ -107,14 +107,15 @@ export class MultiSignupPage {
   }
 
   isPhoneNumberRegistered(): boolean {
-    const num = this.country.dialCode + this.data.phonenumber;
-
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
-        return true;
-      }
-    }
     return false;
+    // const num = this.country.dialCode + this.data.phonenumber;
+
+    // for (let i = 0; i < this.users.length; i++) {
+    //   if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
+    //     return true;
+    //   }
+    // }
+    // return false;
   }
 
   isEmailAddressRegistered(): boolean {

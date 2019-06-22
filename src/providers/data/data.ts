@@ -289,8 +289,8 @@ export class DataProvider {
       };
       jobs.map(job => {
         let placeLocation = {
-          lat: job.location.geo.latitude,
-          lng: job.location.geo.longitude
+          lat: job.location.geo.lat,
+          lng: job.location.geo.lng
         };
         job.distance = this.getDistanceBetweenPoints(
           usersLocation,

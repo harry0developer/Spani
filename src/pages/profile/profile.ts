@@ -34,23 +34,23 @@ export class ProfilePage {
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
-      this.appointments = appointments;
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, 'rid', this.profile.uid).subscribe(appointments => {
+    //   this.appointments = appointments;
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(raters => {
-      this.userRating = this.dataProvider.getUserRating(raters);
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(raters => {
+    //   this.userRating = this.dataProvider.getUserRating(raters);
+    // });
 
-    if (this.isRecruiter(this.profile)) {
-      this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(postedJobs => {
-        this.postedJobs = postedJobs;
-      });
-    } else {
-      this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-        this.viewedJobs = this.dataProvider.getMyServices(jobs, this.profile);
-      });
-    }
+    // if (this.isRecruiter(this.profile)) {
+    //   this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(postedJobs => {
+    //     this.postedJobs = postedJobs;
+    //   });
+    // } else {
+    //   this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
+    //     this.viewedJobs = this.dataProvider.getMyServices(jobs, this.profile);
+    //   });
+    // }
 
   }
 
