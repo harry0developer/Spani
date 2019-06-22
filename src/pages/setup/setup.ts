@@ -23,24 +23,21 @@ export class SetupPage {
     uid: '',
     email: '',
     password: '',
-    type: '',
     firstname: '',
     lastname: '',
     gender: '',
     race: '',
-    nationality: '',
-    phonenumber: '',
+    phone: '',
     location: {
       address: '',
       geo: {
-        lat: '',
-        lng: ''
+        lat: 0,
+        lng: 0
       }
     },
     dob: '',
-    date: '',
+    dateCreated: '',
     settings: null,
-    skills: null,
   }
   pickedAddress: string;
 
@@ -66,7 +63,7 @@ export class SetupPage {
     const data = this.navParams.get('data');
     this.data.firstname = data.firstname;
     this.data.lastname = data.lastname;
-    this.data.phonenumber = data.phonenumber;
+    this.data.phone = data.phone;
     this.data.email = data.email;
     this.data.password = data.password;
     this.data.uid = data.uid;
@@ -103,7 +100,7 @@ export class SetupPage {
 
   completeEmailAndPasswordSignup() {
     this.feedbackProvider.presentLoading();
-    this.data.date = this.dataProvider.getDateTime();
+    this.data.dateCreated = this.dataProvider.getDateTime();
     this.authProvider.signUpWithEmailAndPassword(this.data.email, this.data.password).then(res => {
       this.data.uid = res.user.uid;
       this.authProvider.addUserToDatabase(this.data).then(() => {
@@ -123,7 +120,7 @@ export class SetupPage {
 
   completeAndSignup() {
     this.feedbackProvider.presentLoading();
-    this.data.date = this.dataProvider.getDateTime();
+    this.data.dateCreated = this.dataProvider.getDateTime();
     this.dataProvider.addNewItemWithId(COLLECTION.users, this.data, this.data.uid).then(() => {
       this.feedbackProvider.dismissLoading();
       this.navigate(this.data);
@@ -144,7 +141,6 @@ export class SetupPage {
   }
 
   getUserType(type) {
-    this.data.type = type;
     this.goNext();
   }
 

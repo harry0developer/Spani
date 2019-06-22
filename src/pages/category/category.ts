@@ -6,6 +6,7 @@ import { FormControl } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { Filter } from '../../models/filter';
 import { FILTER } from '../../utils/const';
+import { Service } from '../../models/services';
 
 @IonicPage()
 @Component({
@@ -14,6 +15,7 @@ import { FILTER } from '../../utils/const';
 })
 export class CategoryPage {
   categories: any = [];
+  tmpCategories: any = [];
   filter: Filter = {
     category: FILTER.category,
     distance: FILTER.max_distance
@@ -32,7 +34,8 @@ export class CategoryPage {
   }
 
   ionViewDidLoad() {
-    this.getCategories();
+    this.categories = this.navParams.get('categories');
+    this.tmpCategories = this.categories;
     this.setFilteredItems('');
     this.searchControl.valueChanges
       .pipe(debounceTime(700))
@@ -42,14 +45,13 @@ export class CategoryPage {
       });
   }
 
-  getCategories() {
-    this.feedbackProvider.presentLoading();
-    this.dataProvider.getCategories().subscribe(res => {
-      this.categories = res;
-      this.feedbackProvider.dismissLoading();
-    }, err => {
-      this.feedbackProvider.dismissLoading();
-    });
+  getServiceIcon(service: Service): string {
+    for (let i = 0; i < this.categories.length; i++) {
+      if (this.categories[i].category.toLocaleLowerCase() === service.category.toLocaleLowerCase()) {
+        return this.categories[i].icon;
+      }
+    }
+    return "default";
   }
 
   onSearchInput() {
@@ -57,17 +59,17 @@ export class CategoryPage {
   }
 
   setFilteredItems(searchTerm) {
-    this.filter.category = this.filterItems(searchTerm);
+    this.categories = this.filterItems(searchTerm);
   }
 
   filterItems(searchTerm) {
-    return this.categories.filter(item => {
-      return item.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
+    return this.tmpCategories.filter(item => {
+      return item.category.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1;
     });
   }
 
   selectCategory(category) {
-    this.viewCtrl.dismiss(category.name);
+    this.viewCtrl.dismiss(category.category);
   }
 
 

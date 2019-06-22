@@ -25,8 +25,8 @@ export class DataProvider {
     return this.http.get('assets/countries.json');
   }
 
-  getJobServices() {
-    return this.http.get('assets/job-services.json').toPromise();
+  getServices() {
+    return this.http.get('assets/services.json').toPromise();
   }
 
   getCategories() {

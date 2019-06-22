@@ -44,7 +44,7 @@ export class ServicesPage {
     this.feedbackProvider.presentLoading();
     this.profile = this.authProvider.getStoredUser();
 
-    this.dataProvider.getJobServices().then(res => {
+    this.dataProvider.getServices().then(res => {
       this.categories = res;
     }).catch(err => {
       console.log(err);
@@ -135,7 +135,7 @@ export class ServicesPage {
   }
 
   filterJobs() {
-    let modal = this.modalCtrl.create(FilterPage, { filter: this.filter });
+    let modal = this.modalCtrl.create(FilterPage, { filter: this.filter, categories: this.categories });
     modal.onDidDismiss(filter => {
       if (filter) {
         this.filter = filter;

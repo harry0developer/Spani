@@ -16,6 +16,7 @@ export class FilterPage {
     category: FILTER.category,
     distance: FILTER.max_distance
   };
+  categories: any = [];
   constructor(public navCtrl: NavController,
     public navParams: NavParams,
     private viewCtrl: ViewController,
@@ -27,6 +28,7 @@ export class FilterPage {
 
   ionViewDidLoad() {
     this.filter = this.navParams.get(STORAGE_KEY.filter);
+    this.categories = this.navParams.get('categories');
   }
 
   getMaxDistance(): number {
@@ -34,7 +36,7 @@ export class FilterPage {
   }
 
   getCategories() {
-    let modal = this.modalCtrl.create(CategoryPage, { filter: this.filter });
+    let modal = this.modalCtrl.create(CategoryPage, { filter: this.filter, categories: this.categories });
     modal.onDidDismiss(category => {
       if (category) {
         this.filter.category = category;

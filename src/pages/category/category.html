@@ -15,7 +15,10 @@
   <div *ngIf="searching" class="spinner-container">
     <ion-spinner></ion-spinner>
   </div>
-  <ion-item *ngFor="let category of categories" (click)="selectCategory(category)">
-    <i class="{{category.icon}}"></i>{{category.name}}
+  <ion-item *ngFor="let service of categories" (click)="selectCategory(service)">
+    <ion-avatar item-start>
+      <img src="assets/imgs/categories/{{getServiceIcon(service)}}.svg" class="category-icon">
+    </ion-avatar>
+    {{service.category}}
   </ion-item>
 </ion-content>

@@ -168,6 +168,7 @@ export class MultiLoginPage {
       category: 'Beauty & Spa',
       services: ["funerals", "office", "other events", "weddings", "other"],
       dateCreated: this.dataProvider.getDateTime(),
+      icon: "",
       company: "Phutilicious Catering Co.",
       location: {
         address: '440 Cosmocity ext 9, Johannesburg',

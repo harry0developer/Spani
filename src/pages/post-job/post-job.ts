@@ -56,9 +56,9 @@ export class PostJobPage {
       console.log(this.data);
     }
 
-    this.dataProvider.getJobServices().then(services => {
-      console.log(services);
-    });
+    // this.dataProvider.getJobServices().then(services => {
+    //   console.log(services);
+    // });
   }
 
   getSkills(all, cat) {
