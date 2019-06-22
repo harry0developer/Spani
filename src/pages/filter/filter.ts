@@ -13,7 +13,7 @@ import { Filter } from '../../models/filter';
 })
 export class FilterPage {
   filter: Filter = {
-    category: FILTER.category,
+    category: FILTER.all,
     distance: FILTER.max_distance
   };
   categories: any = [];
@@ -55,7 +55,7 @@ export class FilterPage {
   }
 
   clearFilter() {
-    this.filter.category = FILTER.category,
+    this.filter.category = FILTER.all,
       this.filter.distance = FILTER.max_distance
     this.dataProvider.addItemToLocalStorage(STORAGE_KEY.filter, this.filter);
     this.viewCtrl.dismiss(this.filter);

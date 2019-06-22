@@ -24,7 +24,7 @@ export class JobsPage {
   tmpJobs: Job[] = [];
 
   filter: Filter = {
-    category: FILTER.category,
+    category: FILTER.all,
     distance: FILTER.max_distance
   };
   constructor(
@@ -41,7 +41,7 @@ export class JobsPage {
 
   ionViewDidLoad() {
     const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
-    this.filter.category = filter && filter.category ? filter.category : FILTER.category;
+    this.filter.category = filter && filter.category ? filter.category : FILTER.all;;
     this.filter.distance = filter && filter.distance > 0 ? filter.distance : FILTER.max_distance;
     this.profile = this.authProvider.getStoredUser();
     this.feedbackProvider.presentLoading();
@@ -92,11 +92,11 @@ export class JobsPage {
     if (filter.distance && filter.distance > 0) {
       this.jobs = this.jobs.filter(j => parseInt(j.distance) <= filter.distance);
     }
-    if (filter.category && filter.category && filter.category !== FILTER.category) {
+    if (filter.category && filter.category && filter.category !== FILTER.all) {
       this.jobs = this.jobs.filter(j => j.category.toLocaleLowerCase() === filter.category.toLocaleLowerCase());
     }
 
-    if (filter.distance === FILTER.max_distance && filter.category.toLocaleLowerCase() === FILTER.category) { //reset filter
+    if (filter.distance === FILTER.max_distance && filter.category.toLocaleLowerCase() === FILTER.all) { //reset filter
       this.jobs = this.tmpJobs;
     }
   }

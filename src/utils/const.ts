@@ -7,7 +7,10 @@ export const COLLECTION = {
     viewedJobs: 'viewed-jobs',
     sharedJobs: 'shared-jobs',
     hitters: 'hitters',
-    services: 'services'
+    services: 'services',
+    viewedServices: 'viewed-services',
+    sharedServices: 'shared-services',
+    requestedServices: 'requested-services',
 }
 
 export const SUB_COLLECTION = {
@@ -56,7 +59,7 @@ export const STORAGE_KEY = {
 
 export const FILTER = {
     max_distance: 300,
-    category: 'All'
+    all: 'All'
 }
 
 export const JOB_ACTION = {

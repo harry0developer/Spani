@@ -24,9 +24,9 @@ export class ServicesPage {
   services: Service[] = [];
   categories: any;
   tmpServices: Service[] = [];
-
+  loading: boolean;
   filter: Filter = {
-    category: FILTER.category,
+    category: FILTER.all,
     distance: FILTER.max_distance
   };
   constructor(
@@ -42,6 +42,7 @@ export class ServicesPage {
 
   ionViewDidLoad() {
     this.feedbackProvider.presentLoading();
+    this.loading = true;
     this.profile = this.authProvider.getStoredUser();
 
     this.dataProvider.getServices().then(res => {
@@ -50,35 +51,24 @@ export class ServicesPage {
       console.log(err);
     });
 
+    const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
+    this.filter.category = filter && filter.category ? filter.category : FILTER.all;
+    this.filter.distance = filter && filter.distance > 0 ? filter.distance : FILTER.max_distance;
+    this.profile = this.authProvider.getStoredUser();
     this.dataProvider.getAllFromCollection(COLLECTION.services).subscribe(services => {
       const loc = {
         lat: -26.121747,
         lng: 28.173450
       }
       this.services = this.dataProvider.applyHaversine(services, loc.lat, loc.lng);
+      this.tmpServices = this.services;
+      this.applyJobFilter(this.filter);
+      this.loading = false;
       this.feedbackProvider.dismissLoading();
     }, err => {
+      this.loading = false;
       this.feedbackProvider.dismissLoading();
     });
-    // const filter = this.dataProvider.getItemFromLocalStorage(STORAGE_KEY.filter);
-    // this.filter.category = filter && filter.category ? filter.category : FILTER.category;
-    // this.filter.distance = filter && filter.distance > 0 ? filter.distance : FILTER.max_distance;
-    // this.profile = this.authProvider.getStoredUser();
-    // this.feedbackProvider.presentLoading();
-    // this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
-    //   const loc = {
-    //     lat: -26.121747,
-    //     lng: 28.173450
-    //   }
-    //   this.services = this.dataProvider.applyHaversine(jobs, loc.lat, loc.lng);
-    //   console.log(this.services);
-
-    //   this.tmpServices = this.services;
-    //   this.applyJobFilter(this.filter);
-    //   this.feedbackProvider.dismissLoading();
-    // }, err => {
-    //   this.feedbackProvider.dismissLoading();
-    // });
 
   }
 
@@ -147,17 +137,17 @@ export class ServicesPage {
 
   applyJobFilter(filter: Filter) {
     this.services = this.tmpServices;
+    console.log(this.services);
     console.log(filter);
-
 
     if (filter.distance && filter.distance > 0) {
       this.services = this.services.filter(j => parseInt(j.distance) <= filter.distance);
     }
-    if (filter.category && filter.category && filter.category !== FILTER.category) {
+    if (filter.category && filter.category && filter.category !== FILTER.all) {
       this.services = this.services.filter(j => j.category.toLocaleLowerCase() === filter.category.toLocaleLowerCase());
     }
 
-    if (filter.distance === FILTER.max_distance && filter.category.toLocaleLowerCase() === FILTER.category) { //reset filter
+    if (filter.distance === FILTER.max_distance && filter.category.toLocaleLowerCase() === FILTER.all) { //reset filter
       this.services = this.tmpServices;
     }
   }

@@ -14,6 +14,7 @@ import { JobsListPage } from '../jobs-list/jobs-list';
 import { Rating } from '../../models/rating';
 import { RatersPage } from '../raters/raters';
 import { UsersPage } from '../users/users';
+import { Service, UserAction } from '../../models/services';
 
 @IonicPage()
 @Component({
@@ -23,29 +24,23 @@ import { UsersPage } from '../users/users';
 export class DashboardPage {
   profile: User = null;
 
-  postedJobs: Job[] = [];
-  appliedJobs: AppliedJob[] = [];
-  sharedJobs: SharedJob[] = [];
-  viewedJobs: ViewedJob[] = [];
-
-  allPostedJobs: Job[] = [];
-  allAppliedJobs: AppliedJob[] = [];
-  allSharedJobs: SharedJob[] = [];
-  allViewedJobs: ViewedJob[] = [];
-
-  hitters: User[] = [];
 
   myRating: string;
   allRatings: Rating[] = [];
   usersIRated: Rating[] = [];
   usersRatedMe: Rating[] = [];
-  appointments: Appointment[] = [];
-  chats: Message[] = [];
 
+  myServices: Service[] = [];
 
+  allViewedServices: UserAction[] = [];
+  viewedServices: UserAction[] = [];
 
-  jobs: Job[] = [];
-  users: User[] = [];
+  allSharedServices: UserAction[] = []
+  sharedServices: UserAction[] = []
+
+  requestedServices: UserAction[] = [];
+  allRequestedServices: UserAction[] = []
+
 
   userKey: string = '';
   constructor(
@@ -57,109 +52,85 @@ export class DashboardPage {
     public dataProvider: DataProvider
   ) { }
 
-
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
-    // this.userKey = this.dataProvider.getKey(this.profile);
-    // this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
-    //   this.allPostedJobs = jobs;
-    //   this.jobs = jobs;
-    // });
 
-    // this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
-    //   this.users = users;
-    // });
+    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.services, 'uid', this.profile.uid).subscribe(services => {
+      this.myServices = services;
+    });
 
-    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
-    //   this.postedJobs = jobs;
-    // });
+    this.dataProvider.getAllFromCollection(COLLECTION.viewedServices).subscribe(viewedServices => {
+      this.allViewedServices = viewedServices;
+      this.viewedServices = this.getMyServices(viewedServices);
+    });
 
-    // this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
-    //   this.allAppliedJobs = jobs;
-    //   this.appliedJobs = this.getMyServices(jobs);
-    // });
+    this.dataProvider.getAllFromCollection(COLLECTION.sharedServices).subscribe(sharedServices => {
+      this.allSharedServices = sharedServices;
+      this.sharedServices = this.getMyServices(sharedServices);
+    });
 
-    // this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-    //   this.allViewedJobs = jobs;
-    //   this.viewedJobs = this.getMyServices(jobs);
-    // });
-
-    // this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
-    //   this.allSharedJobs = jobs;
-    //   this.sharedJobs = this.getMyServices(jobs);
-    // });
-
-    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
-    //   this.usersIRated = usersIRated;
-    // });
-
-    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
-    //   this.usersRatedMe = usersRatedMe;
-    //   this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
-    // });
-
-    // this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
-    //   this.allRatings = ratings;
-    // });
-
-    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.profile.uid).subscribe(appointments => {
-    //   this.appointments = appointments;
-    // });
-
-    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.hitters, 'uid', this.profile.uid).subscribe(users => {
-    //   this.hitters = users;
-    // });
+    this.dataProvider.getAllFromCollection(COLLECTION.requestedServices).subscribe(requestedServices => {
+      this.allRequestedServices = requestedServices;
+      this.requestedServices = this.getMyServices(requestedServices);
+    });
 
   }
 
-  getMyServices(jobs): any[] {
-    const myJobs: Job[] = [];
-    const jobsArray = this.dataProvider.getArrayFromObjectList(jobs);
-    let jobUsers;
 
-    for (let i = 0; i < jobsArray.length; i++) {
-      jobUsers = this.dataProvider.getArrayFromObjectList(jobsArray[i]);
-      for (let i = 1; i < jobUsers.length; i++) { // jobUsers['id', {}, {}]
-        if (jobUsers[i].uid === this.profile.uid) {
-          myJobs.push(jobUsers[i]);
+  addRequests() {
+    const req: UserAction = {
+      sid: '9ztxr1oOj6PK554PHFHC',
+      uid: 'S6DThtbqj9Q5fKL2A9Jyob0u6Kv1',
+      xid: 'w4hqPS2ZlSNWQG611OqbDOJhcHP2',
+      date: this.dataProvider.getDateTime()
+    }
+
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.requestedServices, req);
+
+  }
+
+  addViewed() {
+    const viewed: UserAction = {
+      sid: 'JoPX6xgk2N2cArRdQuTF',
+      uid: 'E2VprUJr2QWeV6ZJeVgxQxHMhHs1',
+      xid: 'C4ddMBE8lxSEFmHGZPzG6ZJSkQh1',
+      date: this.dataProvider.getDateTime()
+    }
+
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedServices, viewed);
+  }
+
+  addShared() {
+    const viewed: UserAction = {
+      sid: 'JoPX6xgk2N2cArRdQuTF',
+      uid: 'E2VprUJr2QWeV6ZJeVgxQxHMhHs1',
+      xid: 'w4hqPS2ZlSNWQG611OqbDOJhcHP2',
+      date: this.dataProvider.getDateTime()
+    }
+
+    this.dataProvider.addUserActionToJobCollection(COLLECTION.sharedServices, viewed);
+  }
+
+  getMyServices(services): any[] {
+    const myServices: Job[] = [];
+    const viewedServicesArray = this.dataProvider.getArrayFromObjectList(services);
+    let viewedUsers;
+
+    for (let i = 0; i < viewedServicesArray.length; i++) {
+      viewedUsers = this.dataProvider.getArrayFromObjectList(viewedServicesArray[i]);
+      for (let i = 1; i < viewedUsers.length; i++) { // viewedUsers['id', {}, {}]
+        if (viewedUsers[i].xid === this.profile.uid) {
+          myServices.push(viewedUsers[i]);
         }
       }
     }
-    return myJobs;
+    return myServices;
   }
 
   countIratedAndRatedMe(): number {
     return this.usersIRated.length + this.usersRatedMe.length || 0;
   }
 
-  profilePicture(): string {
-    return this.dataProvider.getProfilePicture(this.profile);
-  }
-
-  isRecruiter(): boolean {
-    return this.authProvider.isRecruiter(this.profile);
-  }
-
-  updateSkills() {
-    // const skills = [
-    //   {
-    //     name: 'Cooking, Laundry and Cleaning',
-    //     category: 'Cleaning',
-    //     experience: '1-2 years'
-    //   },
-    //   {
-    //     name: 'Baby Sitting',
-    //     category: 'Nanny',
-    //     experience: '2-3 years'
-    //   }
-    // ];
-    // this.users[9].skills = skills;
-    // this.dataProvider.updateItem(COLLECTION.users, this.users[9], this.users[9].uid).then(() => {
-    //   console.log('User updated');
-    // }).catch(err => {
-    //   console.log(err);
-    // })
-  }
   rateUser() {
     const rate: Rating = {
       rating: 3.5,
@@ -176,63 +147,53 @@ export class DashboardPage {
     }
   }
 
-  addSharedJobs() {
-    const job = {
-      jid: 'wQPrEsBTWvPr7ji1559071534354',
-      uid: 'bxvezgEa2OcitrM8r5zjshNpnkb2',//'bxvezgEa2OcitrM8r5zjshNpnkb2', 
-      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
-      date: this.dataProvider.getDateTime()
-    };
-    this.dataProvider.addUserActionToJobCollection(COLLECTION.sharedJobs, job);
+  profilePicture(): string {
+    return this.dataProvider.getProfilePicture(this.profile);
   }
 
-  addAppointment() {
-    const app: Appointment = {
-      uid: 'ZTrFYN4arQao1yuAW7SmNDd21f93',
-      rid: 'yuoVVtSUNHSo5hgJqCe1Ufz99JT2',
-      status: STATUS.complete,
-      dateCreated: this.dataProvider.getDateTime(),
-      dateCompleted: '',
-    }
-    this.dataProvider.addNewItem(COLLECTION.appointments, app).then(() => {
-      console.log('Appointment made');
-    }).catch(err => {
-      console.log;
-
-    })
+  viewMyServices() {
+    console.log('my services');
   }
 
-  viewPostedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.postedJobs, allJobs: this.allPostedJobs, tag: JOBS_TYPE.posted });
+  viewRequestedServices() {
+    console.log('service requests');
   }
 
-  viewAppliedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.appliedJobs, allJobs: this.allAppliedJobs, tag: JOBS_TYPE.applied });
+  viewSharedServices() {
+    console.log('service shared');
   }
 
-  viewSharedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.sharedJobs, allJobs: this.allSharedJobs, tag: JOBS_TYPE.shared });
-  }
+  // viewPostedJobs() {
+  //   this.feedbackProvider.presentModal(JobsListPage, { jobs: this.postedJobs, allJobs: this.allPostedJobs, tag: JOBS_TYPE.posted });
+  // }
 
-  viewViewedJobs() {
-    this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.allViewedJobs, tag: JOBS_TYPE.viewed });
-  }
+  // viewAppliedJobs() {
+  //   this.feedbackProvider.presentModal(JobsListPage, { jobs: this.appliedJobs, allJobs: this.allAppliedJobs, tag: JOBS_TYPE.applied });
+  // }
 
-  viewRaters() {
-    this.feedbackProvider.presentModal(RatersPage);
-  }
+  // viewSharedJobs() {
+  //   this.feedbackProvider.presentModal(JobsListPage, { jobs: this.sharedJobs, allJobs: this.allSharedJobs, tag: JOBS_TYPE.shared });
+  // }
 
-  viewHittersJobs() {
-    this.feedbackProvider.presentModal(UsersPage, { data: this.hitters });
-  }
-  viewAppointments() {
-    this.feedbackProvider.presentModal(AppointmentsPage, { appointments: this.appointments });
-  }
+  // viewViewedJobs() {
+  //   this.feedbackProvider.presentModal(JobsListPage, { jobs: this.viewedJobs, allJobs: this.allViewedJobs, tag: JOBS_TYPE.viewed });
+  // }
+
+  // viewRaters() {
+  //   this.feedbackProvider.presentModal(RatersPage);
+  // }
+
+  // viewHittersJobs() {
+  //   this.feedbackProvider.presentModal(UsersPage, { data: this.hitters });
+  // }
+  // viewAppointments() {
+  //   this.feedbackProvider.presentModal(AppointmentsPage, { appointments: this.appointments });
+  // }
 
   getItemById(jid): any {
-    this.jobs.find(j => {
-      return j.jid === jid;
-    });
+    // this.jobs.find(j => {
+    //   return j.jid === jid;
+    // });
   }
 
   viewProfile() {

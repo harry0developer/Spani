@@ -8,15 +8,16 @@
     </div>
     <ion-list *ngIf="profile" class="menu">
       <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.dashboardPage)">
-        <ion-icon class="light" name="home" item-start></ion-icon>
+        <i class="fa fa-th-large"></i>
           Dashboard
       </ion-item>
       <ion-item menuClose ion-item icon-left *ngIf="!isRecruiter()" (click)="nav.setRoot(pages.servicesPage)">
-        <ion-icon class="light" name="people" item-start></ion-icon>
+        <i class="fa fa-concierge-bell"></i>
           Services
       </ion-item> 
       <ion-item menuClose ion-item icon-left (click)="nav.setRoot(pages.profilePage)">
-        <ion-icon class="light" name="person" item-start></ion-icon>
+        <i class="fa fa-user"></i>
+        <!-- <ion-icon class="light" name="person" item-start></ion-icon> -->
           Profile
       </ion-item>
     </ion-list>

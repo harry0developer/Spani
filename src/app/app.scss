@@ -37,6 +37,10 @@
 		ion-item {
 			background-color: $primary !important;
 			color: $white !important;
+			i {
+				margin-right: 10px;
+				font-size: 18px;
+			}
 		} 
 		.item-inner{
 			border-bottom: none !important;

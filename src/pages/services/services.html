@@ -67,8 +67,10 @@
       </ion-list>
     </div>
   </div>
-  <ion-card padding text-wrap class="not-found" *ngIf="!services || services.length < 1">
-    <i class="fa fa-4x fa-briefcase"></i>
-    <p>Service not found matching that criteria.</p>
-  </ion-card>
+  <div *ngIf="!services || services.length < 1">
+    <ion-card padding text-wrap class="not-found" *ngIf="!loading">
+      <i class="fa fa-4x fa-briefcase"></i>
+      <p>Service not found matching that criteria.</p>
+    </ion-card>
+  </div>
 </ion-content>

@@ -79,23 +79,23 @@ export class DataProvider {
 
   // ========== master add document array ==============
 
-  addUserActionToJobCollection(collection: string, newJob: any) {
+  addUserActionToJobCollection(collection: string, newService: any) {
     const key = new Date().getTime().toString();
-    this.getDocumentFromCollectionById(collection, newJob.jid).subscribe(jobs => {
-      if (!!jobs) { //Job is root document eg /viewed-jobs/jobid
-        console.log('Jobs exist, adding to the array');
-        const jobsArray = this.getArrayFromObjectList(jobs);
-        if (!this.isUserInJobDocumentArray(jobsArray, newJob)) { // add job to existing database jobs
-          const newJobs = { ...jobs, [key]: newJob };
-          this.updateCollection(collection, newJobs, newJob.jid);
+    this.getDocumentFromCollectionById(collection, newService.sid).subscribe(services => {
+      if (!!services) { //Job is root document eg /viewed-services/jobid
+        console.log('services exist, adding to the array');
+        const servicesArray = this.getArrayFromObjectList(services);
+        if (!this.isUserInJobDocumentArray(servicesArray, newService)) { // add job to existing database services
+          const newServices = { ...services, [key]: newService };
+          this.updateCollection(collection, newServices, newService.sid);
         } else { //check if user has 
           console.log('do nothing');
         }
-      } else { //Job is NOT root document eg /viewed-jobs/otherjobIdNotThisOne
-        const newJobs = { [key]: newJob };
-        console.log('trying to add new job', newJobs);
+      } else { //Job is NOT root document eg /viewed-services/otherjobIdNotThisOne
+        const newServices = { [key]: newService };
+        console.log('trying to add new job', newServices);
 
-        this.updateCollection(collection, newJobs, newJob.jid);
+        this.updateCollection(collection, newServices, newService.sid);
       }
 
     });
@@ -106,14 +106,14 @@ export class DataProvider {
     return obj ? Object.keys(obj).map((k) => obj[k]) : [];
   }
 
-  isUserInJobDocumentArray(jobs: any[], job): any[] {
-    return jobs.find(res => {
-      return res.uid === job.uid && res.jid === job.jid;
+  isUserInJobDocumentArray(services: any[], service): any[] {
+    return services.find(res => {
+      return res.xid === service.xid && res.sid === service.sid;
     });
   }
 
-  updateCollection(collection, newJobs, id) {
-    this.addNewItemWithId(collection, newJobs, id).then(() => {
+  updateCollection(collection, newService, id) {
+    this.addNewItemWithId(collection, newService, id).then(() => {
       console.log('item added');
     }).catch(err => {
       console.log(err);

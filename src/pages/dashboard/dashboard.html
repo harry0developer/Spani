@@ -33,81 +33,70 @@
     </ion-row>
   </ion-grid> -->
 
-  <!-- <button ion-button (click)="updateSkills()">Add skill</button> -->
+  <!-- <button ion-button (click)="addRequests()">Add Request</button> -->
+  <!-- <button ion-button (click)="addViewed()">Add Viewed</button> -->
+  <!-- <button ion-button (click)="addShared()">Add Shared</button> -->
 
-  <ion-grid *ngIf="profile">
+  <ion-grid class="bottom" *ngIf="profile">
     <ion-row>
-      <ion-col col-6 *ngIf="isRecruiter()" class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewPostedJobs()">
+      <ion-col col-6 class="animated zoomIn">
+        <ion-card class="summary" (tap)="viewMyServices()">
           <ion-item>
             <div class="card-icon">
               <i class="fa fa-folder"></i>
             </div>
             <div class="card-details" text-wrap>
-              <h2>{{postedJobs?.length || 0}}</h2>
-              <p>Posted Jobs</p>
+              <h2>{{myServices?.length || 0}}</h2>
+              <p>My Services</p>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
-      <ion-col col-6 *ngIf="!isRecruiter()" class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewHittersJobs()">
+      <ion-col col-6 class="animated zoomIn">
+        <ion-card class="summary" (tap)="ViewViewedServices()">
           <ion-item>
             <div class="card-icon">
               <i class="fa fa-users"></i>
             </div>
             <div class="card-details" text-wrap>
-              <h2>{{hits?.length || 0}}</h2>
-              <p>Profile Hits</p>
+              <h2>{{viewedServices?.length || 0}}</h2>
+              <p>Viewed Services</p>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
-      <ion-col col-6 class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewViewedJobs()">
-          <ion-item>
-            <div class="card-icon">
-              <i class="fa fa-eye"></i>
-            </div>
-            <div class="card-details" text-wrap>
-              <h2>{{viewedJobs.length }}</h2>
-              <p>Viewed Jobs</p>
-            </div>
-          </ion-item>
-        </ion-card>
-      </ion-col> 
+      
     </ion-row>
-
     <ion-row>
       <ion-col col-6 class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewSharedJobs()">
-          <ion-item>
-            <div class="card-icon">
-              <i class="fa fa-share"></i>
-            </div>
-            <div class="card-details" text-wrap>
-              <h2>{{sharedJobs.length }}</h2>
-              <p>Shared Jobs</p>
-            </div>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-
-      <ion-col col-6 class="animated zoomIn">
-        <ion-card class="summary" (tap)="viewAppliedJobs()">
+        <ion-card class="summary" (tap)="viewRequestedServices()">
           <ion-item>
             <div class="card-icon">
               <i class="fa fa-clipboard-list"></i>
             </div>
             <div class="card-details" text-wrap>
-              <h2>{{appliedJobs.length }}</h2>
-              <p>Applied Jobs</p>
+              <h2>{{requestedServices.length }}</h2>
+              <p>Service Requests</p>
+            </div>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+
+      <ion-col col-6 class="animated zoomIn">
+        <ion-card class="summary" (tap)="viewSharedServices()">
+          <ion-item>
+            <div class="card-icon">
+              <i class="fa fa-share"></i>
+            </div>
+            <div class="card-details" text-wrap>
+              <h2>{{sharedServices.length }}</h2>
+              <p>Service Shared</p>
             </div>
           </ion-item>
         </ion-card>
       </ion-col>
     </ion-row>
-
+<!--
     <ion-row>
       <ion-col col-6 class="animated zoomIn"> 
         <ion-card class="summary" *ngIf="appointments" (tap)="viewAppointments()">
@@ -135,7 +124,7 @@
           </ion-item>
         </ion-card>
       </ion-col>
-    </ion-row>
+    </ion-row> -->
 
     <!-- <ion-row>
       <ion-col col-6 class="animated zoomIn">

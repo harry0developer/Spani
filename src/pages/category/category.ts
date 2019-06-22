@@ -17,7 +17,7 @@ export class CategoryPage {
   categories: any = [];
   tmpCategories: any = [];
   filter: Filter = {
-    category: FILTER.category,
+    category: FILTER.all,
     distance: FILTER.max_distance
   };
   searchTerm: string = '';

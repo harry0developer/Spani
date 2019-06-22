@@ -14,3 +14,11 @@ export interface Service {
     distance?: string;
     postedBy?: string;
 }
+
+
+export interface UserAction {
+    uid: string; // user posted
+    xid: string; // user viewed
+    sid: string; // service id
+    date: string;
+}
