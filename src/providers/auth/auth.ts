@@ -83,7 +83,7 @@ export class AuthProvider {
   }
 
   isRecruiter(user: User): boolean {
-    return user && user.type && user.type.toLowerCase() === USER_TYPE.recruiter;
+    return user && user.type && user.type.toLowerCase() === USER_TYPE.provider;
   }
 
   // firebaseRecaptchaVerifier(){

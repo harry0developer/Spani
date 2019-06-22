@@ -60,59 +60,59 @@ export class DashboardPage {
 
   ionViewDidLoad() {
     this.profile = this.authProvider.getStoredUser();
-    this.userKey = this.dataProvider.getKey(this.profile);
-    this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
-      this.allPostedJobs = jobs;
-      this.jobs = jobs;
-    });
+    // this.userKey = this.dataProvider.getKey(this.profile);
+    // this.dataProvider.getAllFromCollection(COLLECTION.jobs).subscribe(jobs => {
+    //   this.allPostedJobs = jobs;
+    //   this.jobs = jobs;
+    // });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
-      this.users = users;
-    });
+    // this.dataProvider.getAllFromCollection(COLLECTION.users).subscribe(users => {
+    //   this.users = users;
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
-      this.postedJobs = jobs;
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.jobs, 'uid', this.profile.uid).subscribe(jobs => {
+    //   this.postedJobs = jobs;
+    // });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
-      this.allAppliedJobs = jobs;
-      this.appliedJobs = this.getMyJobs(jobs);
-    });
+    // this.dataProvider.getAllFromCollection(COLLECTION.appliedJobs).subscribe(jobs => {
+    //   this.allAppliedJobs = jobs;
+    //   this.appliedJobs = this.getMyServices(jobs);
+    // });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-      this.allViewedJobs = jobs;
-      this.viewedJobs = this.getMyJobs(jobs);
-    });
+    // this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
+    //   this.allViewedJobs = jobs;
+    //   this.viewedJobs = this.getMyServices(jobs);
+    // });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
-      this.allSharedJobs = jobs;
-      this.sharedJobs = this.getMyJobs(jobs);
-    });
+    // this.dataProvider.getAllFromCollection(COLLECTION.sharedJobs).subscribe(jobs => {
+    //   this.allSharedJobs = jobs;
+    //   this.sharedJobs = this.getMyServices(jobs);
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
-      this.usersIRated = usersIRated;
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'rid', this.profile.uid).subscribe(usersIRated => {
+    //   this.usersIRated = usersIRated;
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
-      this.usersRatedMe = usersRatedMe;
-      this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.ratings, 'uid', this.profile.uid).subscribe(usersRatedMe => {
+    //   this.usersRatedMe = usersRatedMe;
+    //   this.myRating = this.dataProvider.getUserRating(this.usersRatedMe)
+    // });
 
-    this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
-      this.allRatings = ratings;
-    });
+    // this.dataProvider.getAllFromCollection(COLLECTION.ratings).subscribe(ratings => {
+    //   this.allRatings = ratings;
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.profile.uid).subscribe(appointments => {
-      this.appointments = appointments;
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appointments, this.userKey, this.profile.uid).subscribe(appointments => {
+    //   this.appointments = appointments;
+    // });
 
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.hitters, 'uid', this.profile.uid).subscribe(users => {
-      this.hitters = users;
-    });
+    // this.dataProvider.getCollectionByKeyValuePair(COLLECTION.hitters, 'uid', this.profile.uid).subscribe(users => {
+    //   this.hitters = users;
+    // });
 
   }
 
-  getMyJobs(jobs): any[] {
+  getMyServices(jobs): any[] {
     const myJobs: Job[] = [];
     const jobsArray = this.dataProvider.getArrayFromObjectList(jobs);
     let jobUsers;
@@ -141,24 +141,24 @@ export class DashboardPage {
   }
 
   updateSkills() {
-    const skills = [
-      {
-        name: 'Cooking, Laundry and Cleaning',
-        category: 'Cleaning',
-        experience: '1-2 years'
-      },
-      {
-        name: 'Baby Sitting',
-        category: 'Nanny',
-        experience: '2-3 years'
-      }
-    ];
-    this.users[9].skills = skills;
-    this.dataProvider.updateItem(COLLECTION.users, this.users[9], this.users[9].uid).then(() => {
-      console.log('User updated');
-    }).catch(err => {
-      console.log(err);
-    })
+    // const skills = [
+    //   {
+    //     name: 'Cooking, Laundry and Cleaning',
+    //     category: 'Cleaning',
+    //     experience: '1-2 years'
+    //   },
+    //   {
+    //     name: 'Baby Sitting',
+    //     category: 'Nanny',
+    //     experience: '2-3 years'
+    //   }
+    // ];
+    // this.users[9].skills = skills;
+    // this.dataProvider.updateItem(COLLECTION.users, this.users[9], this.users[9].uid).then(() => {
+    //   console.log('User updated');
+    // }).catch(err => {
+    //   console.log(err);
+    // })
   }
   rateUser() {
     const rate: Rating = {

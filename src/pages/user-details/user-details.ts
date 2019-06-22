@@ -50,7 +50,7 @@ export class UserDetailsPage {
 
   getMyAppointment(appointments: Appointment[]): Appointment[] {
     let appontmentz: Appointment[] = [];
-    if (this.user.type === USER_TYPE.candidate) {
+    if (this.user.type === USER_TYPE.client) {
       appointments.map(a => {
         if (a.rid === this.profile.uid) {
           this.appointment = a;

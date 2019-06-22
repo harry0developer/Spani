@@ -155,10 +155,10 @@ export class MultiSignupPage {
   navigate(user) {
     this.ionEvents.publish(EVENTS.loggedIn, user);
     this.authProvider.storeUser(user);
-    if (user.type.toLowerCase() === USER_TYPE.candidate) {
+    if (user.type.toLowerCase() === USER_TYPE.client) {
       this.authProvider.storeUser(user);
       this.navCtrl.setRoot(JobsPage);
-    } else if (user.type.toLowerCase() === USER_TYPE.recruiter) {
+    } else if (user.type.toLowerCase() === USER_TYPE.provider) {
       this.authProvider.storeUser(user);
       this.navCtrl.setRoot(DashboardPage);
     }

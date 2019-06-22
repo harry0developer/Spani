@@ -36,19 +36,9 @@
   </ion-refresher>
 
   <div *ngIf="services">
-    <div [@listAnimation]="services.length">
-      <!-- <ion-card class="filter"> 
-        <ion-grid>
-          <ion-row>
-            <ion-col col-6>
-              <div>Category <ion-badge>{{filter?.category || 'All'}}</ion-badge></div>
-            </ion-col>
-            <ion-col col-6>
-              <div>Distance <ion-badge>{{filter?.distance || getMaxDistance()}} km</ion-badge></div>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card> -->
+
+    <button ion-button (click)='addService()'>Add service</button>
+    <div [@listAnimation]="services.length"> 
       <ion-list *ngFor="let service of services">
         <ion-card>
           <ion-item *ngIf="service" class="service" (click)="viewServiceDetails(service)">
@@ -70,7 +60,7 @@
               <div [hidden]="!service.distance" class="col col-6 info-bar ">
                 <div class="distance" item-end>
                   <i class="fa fa-map-marker" item-start></i>
-                  <span>{{service.distance}} km away</span>
+                  <span>{{service?.distance || 18}} km away</span>
                 </div>
               </div>
             </div>

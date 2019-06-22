@@ -102,61 +102,86 @@ export class MultiLoginPage {
   }
 
   signinWithPhonenumber() {
-    const appVerifier = this.windowRef.recaptchaVerifier;
-    const num = this.country.dialCode + this.data.phonenumber;
-    if (this.isRegistered()) {
-      this.feedbackProvider.presentLoading();
-      this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
-        this.windowRef.confirmationResult = result;
-        // console.log('sms sent', result);
-        this.showOTPPage = true;
-        this.feedbackProvider.dismissLoading();
-      }).catch(() => {
-        this.feedbackProvider.dismissLoading();
-        this.feedbackProvider.presentToast("Oops, something went wrong sending sms");
-      });
-    } else {
-      this.feedbackProvider.presentAlert("Login failed", "Phone number provided is not registered. Please signup");
-    }
+    // const appVerifier = this.windowRef.recaptchaVerifier;
+    // const num = this.country.dialCode + this.data.phonenumber;
+    // if (this.isRegistered()) {
+    //   this.feedbackProvider.presentLoading();
+    //   this.authProvider.signInWithPhoneNumber(num, appVerifier).then(result => {
+    //     this.windowRef.confirmationResult = result;
+    //     // console.log('sms sent', result);
+    //     this.showOTPPage = true;
+    //     this.feedbackProvider.dismissLoading();
+    //   }).catch(() => {
+    //     this.feedbackProvider.dismissLoading();
+    //     this.feedbackProvider.presentToast("Oops, something went wrong sending sms");
+    //   });
+    // } else {
+    //   this.feedbackProvider.presentAlert("Login failed", "Phone number provided is not registered. Please signup");
+    // }
 
   }
 
-  isRegistered(): boolean {
-    const num = this.country.dialCode + this.data.phonenumber;
+  // isRegistered(): boolean {
+  //   const num = this.country.dialCode + this.data.phonenumber;
 
-    for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
-        return true;
-      }
-    }
-    return false;
-  }
+  //   for (let i = 0; i < this.users.length; i++) {
+  //     if (this.users[i] && this.users[i].phonenumber && this.users[i].phonenumber.includes(num.substr(4, 15))) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
 
   addUser() {
     const user: User = {
-      uid: "cJ3Wgcoh5SRjaAb6don3Chg6BIt2",
-      email: 'Kabelo@test.com',
-      password: '123456',
-      type: USER_TYPE.candidate,
-      firstname: 'Kabelo',
-      lastname: 'Modiga',
-      dob: '1997/01/01',
-      gender: 'female',
-      race: 'black',
-      nationality: 'Zimbabwe',
-      phonenumber: '+27829390061',
-      location: null,
-      date: this.dataProvider.getDateTime(),
+      uid: "E2VprUJr2QWeV6ZJeVgxQxHMhHs1",
+      email: 'james@test.com',
+      firstname: 'James',
+      lastname: 'Williamson',
+      dob: '1986/02/22',
+      gender: 'male',
+      race: 'white',
+      phone: '+27821001060',
+      location: {
+        address: '101 Drooison min straat, Free state',
+        geo: {
+          lat: 21.200,
+          lng: -19.2122
+        }
+      },
+      dateCreated: this.dataProvider.getDateTime(),
       settings: {
         hide_dob: false,
         hide_email: false,
         hide_phone: false,
-      },
-      skills: null
+      }
     }
     this.dataProvider.addNewItemWithId(COLLECTION.users, user, user.uid).then(() => {
       console.log('added');
-    })
+    });
+  }
+
+  addService() {
+    const service: Service = {
+      title: 'We feed, You celebrate',
+      description: 'We are feed young and old at all sorts of events, we are popular for feeding weddings, funerals and all other ceremonies',
+      category: 'Beauty & Spa',
+      services: ["funerals", "office", "other events", "weddings", "other"],
+      dateCreated: this.dataProvider.getDateTime(),
+      company: "Phutilicious Catering Co.",
+      location: {
+        address: '440 Cosmocity ext 9, Johannesburg',
+        geo: {
+          lat: 21.200,
+          lng: -19.2122
+        }
+      },
+      uid: 'w4hqPS2ZlSNWQG611OqbDOJhcHP2'
+    }
+
+    this.dataProvider.addNewItem(COLLECTION.services, service).then(() => {
+      console.log('added');
+    });
   }
 
   verifyLoginCode() {

@@ -1,11 +1,11 @@
 export const firebaseConfig = {
-    apiKey: "AIzaSyDS6ICZ1nA2TKShuYx8uRY_dDWS5Kewt_4",
-    authDomain: "my-spani.firebaseapp.com",
-    databaseURL: "https://my-spani.firebaseio.com",
-    projectId: "my-spani",
-    storageBucket: "my-spani.appspot.com",
-    messagingSenderId: "454356312005",
-    appId: "1:454356312005:web:52cff5d083245bdf"
+    apiKey: "AIzaSyBn3Z10bEpwzfoTQBm76a1DxRFGQszAZmk",
+    authDomain: "espani-dc4b1.firebaseapp.com",
+    databaseURL: "https://espani-dc4b1.firebaseio.com",
+    projectId: "espani-dc4b1",
+    storageBucket: "espani-dc4b1.appspot.com",
+    messagingSenderId: "1075234011937",
+    appId: "1:1075234011937:web:aa5e3669ff2aaf31"
 }
 
 export const EMAIL_EXISTS = 'auth/email-already-in-use';

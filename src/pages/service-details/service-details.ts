@@ -34,44 +34,44 @@ export class ServiceDetailsPage {
   ) { }
 
   ionViewDidLoad() {
-    this.feedbackProvider.presentLoading();
-    this.profile = this.authProvider.getStoredUser();
+    // this.feedbackProvider.presentLoading();
+    // this.profile = this.authProvider.getStoredUser();
     this.service = this.navParams.get('service');
-    let foundService = null;
-    this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(viewedJobs => {
-      const jobs = this.dataProvider.getArrayFromObjectList(viewedJobs);
+    // let foundService = null;
+    // this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(viewedJobs => {
+    //   const jobs = this.dataProvider.getArrayFromObjectList(viewedJobs);
 
-      jobs.map(j => {
-        if (j.id === this.service.jid) {
-          foundService = j;
-        }
-      });
+    //   jobs.map(j => {
+    //     if (j.id === this.service.jid) {
+    //       foundService = j;
+    //     }
+    //   });
 
-      if (!foundService) {
-        const newJob: any = {
-          uid: this.profile.uid,
-          rid: this.service.uid,
-          jid: this.service.jid,
-          date: this.dataProvider.getDateTime()
-        }
-        console.log(newJob);
-        this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, newJob);
-      }
-      this.feedbackProvider.dismissLoading();
-    }, err => {
-      this.feedbackProvider.dismissLoading();
-    });
+    //   if (!foundService) {
+    //     const newJob: any = {
+    //       uid: this.profile.uid,
+    //       rid: this.service.uid,
+    //       jid: this.service.jid,
+    //       date: this.dataProvider.getDateTime()
+    //     }
+    //     console.log(newJob);
+    //     this.dataProvider.addUserActionToJobCollection(COLLECTION.viewedJobs, newJob);
+    //   }
+    //   this.feedbackProvider.dismissLoading();
+    // }, err => {
+    //   this.feedbackProvider.dismissLoading();
+    // });
 
 
-    this.dataProvider.getDocumentFromCollection(COLLECTION.appliedJobs, this.service.jid).subscribe(appliedJobs => {
-      this.appliedUsers = this.dataProvider.getArrayFromObjectList(appliedJobs.data());
-    });
-    this.dataProvider.getDocumentFromCollection(COLLECTION.viewedJobs, this.service.jid).subscribe(viewedJobs => {
-      this.viewedUsers = this.dataProvider.getArrayFromObjectList(viewedJobs.data());
-    });
-    this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.service.jid).subscribe(sharedJobs => {
-      this.sharedUsers = this.dataProvider.getArrayFromObjectList(sharedJobs.data());
-    });
+    // this.dataProvider.getDocumentFromCollection(COLLECTION.appliedJobs, this.service.jid).subscribe(appliedJobs => {
+    //   this.appliedUsers = this.dataProvider.getArrayFromObjectList(appliedJobs.data());
+    // });
+    // this.dataProvider.getDocumentFromCollection(COLLECTION.viewedJobs, this.service.jid).subscribe(viewedJobs => {
+    //   this.viewedUsers = this.dataProvider.getArrayFromObjectList(viewedJobs.data());
+    // });
+    // this.dataProvider.getDocumentFromCollection(COLLECTION.sharedJobs, this.service.jid).subscribe(sharedJobs => {
+    //   this.sharedUsers = this.dataProvider.getArrayFromObjectList(sharedJobs.data());
+    // });
   }
 
   getJobPoster() {

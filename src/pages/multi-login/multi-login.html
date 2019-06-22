@@ -18,6 +18,7 @@
     
   <div [ngSwitch]="loginType">
     <ion-list *ngSwitchCase="'phoneNumber'">
+      <button ion-button (click)="addService()">Add Service</button>
       <div *ngIf="!showOTPPage">
         <ion-card padding class="phone-login"> 
           <p class="info">

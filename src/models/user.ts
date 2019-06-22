@@ -3,34 +3,24 @@ export interface User {
     uid: string;
     email: string;
     password?: string;
-    type: string;
     firstname: string;
     lastname: string;
     dob: string;
     gender: string;
     race: string;
-    nationality: string;
-    phonenumber?: string;
+    phone?: string;
     location?: Location;
-    date: string;
     settings: Settings,
-    skills: Skills[]
-}
-
-export interface Skills {
-    name: string;
-    category: string;
-    experience: string;
+    dateCreated: string;
 }
 
 export interface Location {
     address: string;
     geo: {
-        lat: string,
-        lng: string
+        lat: number,
+        lng: number
     }
 }
-
 
 export interface Settings {
     hide_dob: boolean,

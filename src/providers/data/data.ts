@@ -29,6 +29,10 @@ export class DataProvider {
     return this.http.get('assets/job-services.json').toPromise();
   }
 
+  getCategories() {
+    return this.http.get('assets/categories.json');
+  }
+
   getAllFromCollection(collectionName: string): Observable<any> {
     return this.angularFireStore.collection<any>(collectionName).snapshotChanges().pipe(
       map(actions => {
@@ -212,23 +216,23 @@ export class DataProvider {
     return data || data !== 'undefined' || data !== null ? JSON.parse(data) : null;
   }
 
-  getMyJobs(jobs: Job[], user: User) {
-    let myJobs = [];
-    jobs.map(job => {
-      const j = this.getArrayFromObjectList(job);
-      for (let i = 1; i < j.length; i++) {
-        if (user.type === USER_TYPE.candidate) {
-          if (j[i].uid === user.uid) {
-            myJobs.push(j[i]);
-          }
-        } else {
-          if (j[i].rid === user.uid) {
-            myJobs.push(j[i]);
-          }
-        }
-      }
-    });
-    return myJobs;
+  getMyServices(jobs: Job[], user: User) {
+    // let myJobs = [];
+    // jobs.map(job => {
+    //   const j = this.getArrayFromObjectList(job);
+    //   for (let i = 1; i < j.length; i++) {
+    //     if (user.type === USER_TYPE.provider) {
+    //       if (j[i].uid === user.uid) {
+    //         myJobs.push(j[i]);
+    //       }
+    //     } else {
+    //       if (j[i].rid === user.uid) {
+    //         myJobs.push(j[i]);
+    //       }
+    //     }
+    //   }
+    // });
+    // return myJobs;
   }
 
   cleanPhoneNumber(phoneNumber: string): string {
@@ -236,7 +240,7 @@ export class DataProvider {
   }
 
   getKey(user: User): string {
-    return user.type === USER_TYPE.candidate ? 'uid' : 'rid';
+    return ""; //user.type === USER_TYPE.provider ? 'uid' : 'rid';
   }
 
   getUserRating(ratings: Rating[]): string {

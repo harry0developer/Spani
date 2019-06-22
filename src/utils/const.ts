@@ -7,6 +7,7 @@ export const COLLECTION = {
     viewedJobs: 'viewed-jobs',
     sharedJobs: 'shared-jobs',
     hitters: 'hitters',
+    services: 'services'
 }
 
 export const SUB_COLLECTION = {
@@ -15,8 +16,8 @@ export const SUB_COLLECTION = {
     applied: 'applied',
 }
 export const USER_TYPE = {
-    candidate: 'candidate',
-    recruiter: 'recruiter'
+    provider: 'provider',
+    client: 'client'
 }
 
 export const EVENTS = {

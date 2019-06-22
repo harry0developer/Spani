@@ -48,7 +48,7 @@ export class ProfilePage {
       });
     } else {
       this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(jobs => {
-        this.viewedJobs = this.dataProvider.getMyJobs(jobs, this.profile);
+        this.viewedJobs = this.dataProvider.getMyServices(jobs, this.profile);
       });
     }
 

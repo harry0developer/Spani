@@ -6,11 +6,10 @@ export interface Service {
     title: string;
     description: string;
     category: string;
-    skills: string[];
-    type: string;
-    date: string;
+    services: string[];
+    company: string;
+    dateCreated: string;
     location: Location;
     distance?: string;
     postedBy?: string;
-    users?: User[];
 }
