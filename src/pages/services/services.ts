@@ -131,7 +131,7 @@ export class ServicesPage {
   }
 
   viewServiceDetails(service: Service) {
-    this.navCtrl.push(ServiceDetailsPage, { service: service, page: 'services' });
+    this.navCtrl.push(ServiceDetailsPage, { service: service, page: 'services', categories: this.categories });
   }
 
   filterJobs() {

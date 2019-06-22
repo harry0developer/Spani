@@ -20,7 +20,7 @@
 <ion-content>
   <div class="banner" *ngIf="service">
     <div class="top_img">
-      <img src="assets/imgs/category/{{service.category}}_light.svg" class="animated zoomIn">
+      <img src="assets/imgs/categories/{{getServiceIcon(service)}}.svg" class="animated zoomIn">
     </div>
     <h2 class="animated slideInLeft">{{service.title}}</h2>
     <p class="animated slideInRight">Posted {{getDateFromNow(service.date)}}</p>
@@ -68,19 +68,19 @@
         </ion-item>
       </ion-card>
 
-      <ion-card class="center" *ngIf="service.contact && service.contact.firstname">
+      <ion-card class="center" *ngIf="service.postedBy && service.postedBy.firstname">
         
         <ion-item text-wrap>
-          <h2 class="animated slideInDown">{{ service.contact.firstname }} {{service.contact.lastname}} </h2>
+          <h2 class="animated slideInDown">{{ service.postedBy.firstname }} {{service.postedBy.lastname}} </h2>
           <p class="animated slideInUp">
-            <span [hidden]="!service.contact.email">
+            <span [hidden]="!service.postedBy.email">
               <i class="animated slideInLeft fa fa-envelope icon" item-start></i>
-              {{ service.contact.email}} 
+              {{ service.postedBy.email}} 
             </span>
             <br>
-            <span [hidden]="!service.contact.phone">
+            <span [hidden]="!service.postedBy.phone">
               <i class="animated slideInLeft fa fa-phone icon" item-start></i>
-              {{ service.contact.phone}} 
+              {{ service.postedBy.phone}} 
             </span>
           </p>
         </ion-item>
@@ -90,12 +90,5 @@
 </ion-content>
 
 <ion-footer>
-  <div *ngIf="!isRecruiter()">
-    <div [hidden]="hasApplied">
-      <button ion-button primary  block (click)="applyNow(service)">Apply</button>
-    </div>
-    <div [hidden]="!hasApplied">
-      <button ion-button primary  block (click)="confirmCancelApplication(service)">Cancel Application</button>
-    </div>
-  </div>
+  <button ion-button primary  block (click)="requestService(service)">Request service</button>
 </ion-footer>

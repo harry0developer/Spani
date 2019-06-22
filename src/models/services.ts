@@ -1,9 +1,10 @@
 import { Location, User } from "./user";
 
 export interface Service {
-    jid?: string;
+    id?: string;
     uid: string;
     title: string;
+    icon: string;
     description: string;
     category: string;
     services: string[];

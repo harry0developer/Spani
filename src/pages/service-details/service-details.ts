@@ -6,6 +6,7 @@ import { AuthProvider } from '../../providers/auth/auth';
 import { AppliedJob, SharedJob, ViewedJob } from '../../models/job';
 import { COLLECTION, USER_TYPE } from '../../utils/const';
 import { SocialSharing } from '@ionic-native/social-sharing';
+import { Service } from '../../models/services';
 
 @IonicPage()
 @Component({
@@ -13,7 +14,7 @@ import { SocialSharing } from '@ionic-native/social-sharing';
   templateUrl: 'service-details.html',
 })
 export class ServiceDetailsPage {
-  service: any;
+  service: Service;
   profile: any;
 
   hasApplied: boolean = false;
@@ -23,6 +24,8 @@ export class ServiceDetailsPage {
   sharedUsers: SharedJob[] = [];
 
   myRating: string;
+
+  categories: any;
 
   constructor(
     public navCtrl: NavController,
@@ -37,6 +40,8 @@ export class ServiceDetailsPage {
     // this.feedbackProvider.presentLoading();
     // this.profile = this.authProvider.getStoredUser();
     this.service = this.navParams.get('service');
+    this.categories = this.navParams.get('categories');
+    this.getServicePoster();
     // let foundService = null;
     // this.dataProvider.getAllFromCollection(COLLECTION.viewedJobs).subscribe(viewedJobs => {
     //   const jobs = this.dataProvider.getArrayFromObjectList(viewedJobs);
@@ -74,10 +79,12 @@ export class ServiceDetailsPage {
     // });
   }
 
-  getJobPoster() {
+  getServicePoster() {
     this.feedbackProvider.presentLoading();
     this.dataProvider.getItemById(COLLECTION.users, this.service.uid).subscribe(v => {
       this.service.postedBy = v;
+      console.log(v);
+
       this.feedbackProvider.dismissLoading();
     }, err => {
       this.feedbackProvider.dismissLoading();
@@ -108,43 +115,57 @@ export class ServiceDetailsPage {
     });
   }
 
-  applyNow(job) {
-    this.feedbackProvider.presentLoading();
-    const appliedJob: AppliedJob = {
-      uid: this.profile.uid,
-      jid: job.id,
-      rid: job.postedBy.uid,
-      date: this.dataProvider.getDateTime()
-    }
-    this.dataProvider.addNewItem(COLLECTION.appliedJobs, appliedJob).then(() => {
-      this.hasApplied = true;
-      this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentToast('You have successfully applied');
-    }).catch(err => {
-      console.log(err);
-      this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentErrorAlert('Job application', 'Error while applying for a job');
-    });
-  }
 
-  withdrawApplication(job) {
-    this.feedbackProvider.presentLoading();
-    this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'jid', job.id).subscribe(doc => {
-      const deleteJob = doc.filter(dJob => dJob.jid === job.id);
-      if (deleteJob[0]) {
-        this.dataProvider.removeItem(COLLECTION.appliedJobs, deleteJob[0].id).then(() => {
-          this.hasApplied = false;
-          this.feedbackProvider.dismissLoading();
-          this.feedbackProvider.presentToast('Job application cancelled successfully');
-        }).catch(err => {
-          console.log(err);
-          this.feedbackProvider.dismissLoading();
-          this.feedbackProvider.presentErrorAlert('Cancel Application', 'An error occured while cancelling job application');
-        });
+  getServiceIcon(service: Service): string {
+    for (let i = 0; i < this.categories.length; i++) {
+      if (this.categories[i].category.toLocaleLowerCase() === service.category.toLocaleLowerCase()) {
+        return this.categories[i].icon;
       }
-
-    });
+    }
+    return "default";
   }
+
+  requestService() {
+
+  }
+
+  // applyNow(job) {
+  //   this.feedbackProvider.presentLoading();
+  //   const appliedJob: AppliedJob = {
+  //     uid: this.profile.uid,
+  //     jid: job.id,
+  //     rid: job.postedBy.uid,
+  //     date: this.dataProvider.getDateTime()
+  //   }
+  //   this.dataProvider.addNewItem(COLLECTION.appliedJobs, appliedJob).then(() => {
+  //     this.hasApplied = true;
+  //     this.feedbackProvider.dismissLoading();
+  //     this.feedbackProvider.presentToast('You have successfully applied');
+  //   }).catch(err => {
+  //     console.log(err);
+  //     this.feedbackProvider.dismissLoading();
+  //     this.feedbackProvider.presentErrorAlert('Job application', 'Error while applying for a job');
+  //   });
+  // }
+
+  // withdrawApplication(job) {
+  //   this.feedbackProvider.presentLoading();
+  //   this.dataProvider.getCollectionByKeyValuePair(COLLECTION.appliedJobs, 'jid', job.id).subscribe(doc => {
+  //     const deleteJob = doc.filter(dJob => dJob.jid === job.id);
+  //     if (deleteJob[0]) {
+  //       this.dataProvider.removeItem(COLLECTION.appliedJobs, deleteJob[0].id).then(() => {
+  //         this.hasApplied = false;
+  //         this.feedbackProvider.dismissLoading();
+  //         this.feedbackProvider.presentToast('Job application cancelled successfully');
+  //       }).catch(err => {
+  //         console.log(err);
+  //         this.feedbackProvider.dismissLoading();
+  //         this.feedbackProvider.presentErrorAlert('Cancel Application', 'An error occured while cancelling job application');
+  //       });
+  //     }
+
+  //   });
+  // }
 
   getDateFromNow(date: string) {
     return this.dataProvider.getDateTimeMoment(date);
@@ -182,14 +203,14 @@ export class ServiceDetailsPage {
     return this.authProvider.isRecruiter(this.profile);
   }
 
-  hasUserApplied(): boolean {
-    let applied = false;
-    this.appliedUsers.forEach(appliedJob => {
-      if (appliedJob.uid === this.profile.uid && appliedJob.uid === this.profile.uid && this.profile.uid === appliedJob.uid && this.service.jid === appliedJob.jid) {
-        applied = true;
-      }
-    });
-    return applied;
+  hasUserApplied() {
+    // let applied = false;
+    // this.appliedUsers.forEach(appliedJob => {
+    //   if (appliedJob.uid === this.profile.uid && appliedJob.uid === this.profile.uid && this.profile.uid === appliedJob.uid && this.service.jid === appliedJob.jid) {
+    //     applied = true;
+    //   }
+    // });
+    // return applied;
   }
 
   isJobViewed(): boolean {
@@ -201,27 +222,27 @@ export class ServiceDetailsPage {
     }
   }
 
-  confirmCancelApplication(job) {
-    let actionSheet = this.actionSheetCtrl.create({
-      title: 'You are about to cancel job application',
-      buttons: [
-        {
-          text: 'Cancel Application',
-          role: 'destructive',
-          handler: () => {
-            this.withdrawApplication(job);
-          }
-        },
-        {
-          text: "Don't Cancel",
-          role: 'cancel',
-          handler: () => {
-          }
-        }
-      ]
-    });
-    actionSheet.present();
-  }
+  // confirmCancelApplication(job) {
+  //   let actionSheet = this.actionSheetCtrl.create({
+  //     title: 'You are about to cancel job application',
+  //     buttons: [
+  //       {
+  //         text: 'Cancel Application',
+  //         role: 'destructive',
+  //         handler: () => {
+  //           this.withdrawApplication(job);
+  //         }
+  //       },
+  //       {
+  //         text: "Don't Cancel",
+  //         role: 'cancel',
+  //         handler: () => {
+  //         }
+  //       }
+  //     ]
+  //   });
+  //   actionSheet.present();
+  // }
 
 
   viewAppliedUsers() {
@@ -285,22 +306,22 @@ export class ServiceDetailsPage {
 
 
   addToShareduserssharedUsers(job, platform) {
-    this.feedbackProvider.presentLoading();
-    const sharedJob: SharedJob = {
-      jid: job.jid,
-      uid: this.profile.uid,
-      rid: this.service.postedBy.uid,
-      dateShared: this.dataProvider.getDateTime(),
-      platform,
-    }
-    this.dataProvider.addNewItem(COLLECTION.sharedJobs, sharedJob).then(() => {
-      this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentToast('Job shared successfully');
-    }).catch(err => {
-      console.log(err);
-      this.feedbackProvider.dismissLoading();
-      this.feedbackProvider.presentErrorAlert('Job share', 'An error occured while sharing a job');
-    });
+    // this.feedbackProvider.presentLoading();
+    // const sharedJob: SharedJob = {
+    //   jid: job.jid,
+    //   uid: this.profile.uid,
+    //   rid: this.service.postedBy.uid,
+    //   dateShared: this.dataProvider.getDateTime(),
+    //   platform,
+    // }
+    // this.dataProvider.addNewItem(COLLECTION.sharedJobs, sharedJob).then(() => {
+    //   this.feedbackProvider.dismissLoading();
+    //   this.feedbackProvider.presentToast('Job shared successfully');
+    // }).catch(err => {
+    //   console.log(err);
+    //   this.feedbackProvider.dismissLoading();
+    //   this.feedbackProvider.presentErrorAlert('Job share', 'An error occured while sharing a job');
+    // });
 
   }
 
