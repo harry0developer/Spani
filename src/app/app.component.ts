@@ -62,10 +62,6 @@ export class MyApp {
     return this.dataProvider.getProfilePicture(this.profile);
   }
 
-  isRecruiter(): boolean {
-    return this.authProvider.isRecruiter(this.profile);
-  }
-
   logout() {
     this.authProvider.logout().then(() => {
       this.nav.setRoot(MultiLoginPage);

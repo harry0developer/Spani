@@ -82,9 +82,6 @@ export class AuthProvider {
     return this.angularFireAuth.auth.signOut();
   }
 
-  isRecruiter(user: User): boolean {
-    return user && user.type && user.type.toLowerCase() === USER_TYPE.provider;
-  }
 
   // firebaseRecaptchaVerifier(){
   //   let applicationVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {

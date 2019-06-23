@@ -34,7 +34,6 @@ import { ProfilePage } from '../pages/profile/profile';
 import { ErrorPage } from '../pages/error/error';
 import { Network } from '@ionic-native/network';
 import { NetworkProvider } from '../providers/network/network';
-import { JobsListPage } from '../pages/jobs-list/jobs-list';
 import { UserDetailsPage } from '../pages/user-details/user-details';
 import { RatersPage } from '../pages/raters/raters';
 import { NationalityPage } from '../pages/nationality/nationality';
@@ -61,7 +60,6 @@ import { ServiceDetailsPage } from '../pages/service-details/service-details';
     PlacesPage,
     ProfilePage,
     ErrorPage,
-    JobsListPage,
     UserDetailsPage,
     RatersPage,
     NationalityPage,
@@ -96,7 +94,6 @@ import { ServiceDetailsPage } from '../pages/service-details/service-details';
     PlacesPage,
     ProfilePage,
     ErrorPage,
-    JobsListPage,
     UserDetailsPage,
     RatersPage,
     NationalityPage,
