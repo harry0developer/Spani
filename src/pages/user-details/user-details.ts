@@ -50,29 +50,17 @@ export class UserDetailsPage {
 
   getMyAppointment(appointments: Appointment[]): Appointment[] {
     let appontmentz: Appointment[] = [];
-    if (this.user.type === USER_TYPE.client) {
-      appointments.map(a => {
-        if (a.rid === this.profile.uid) {
-          this.appointment = a;
-        }
-      });
-    } else {
-      appointments.map(a => {
-        if (a.rid === this.profile.uid) {
-          this.appointment = a;
-        }
-      });
-    }
+    appointments.map(a => {
+      if (a.rid === this.profile.uid) {
+        this.appointment = a;
+      }
+    });
 
     return appontmentz;
   }
 
   isUserInAppointment(): boolean {
     return this.appointment && this.appointment.status === STATUS.inProgress;
-  }
-
-  isRecruiter(user): boolean {
-    return this.authProvider.isRecruiter(user);
   }
 
   profilePicture(user): string {

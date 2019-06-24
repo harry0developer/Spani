@@ -14,7 +14,7 @@
         </ion-col>
         <ion-col col-8>
           <ion-row>
-            <ion-col col-4 class="animated slideInDown" *ngIf="isRecruiter()">
+            <ion-col col-4 class="animated slideInDown">
               <h2>{{postedJobs?.length || 0}}</h2>
               <p>Posted</p>
             </ion-col>
@@ -22,7 +22,7 @@
               <h2>{{viewedJobs?.length || 0}}</h2>
               <p>Viewed</p>
             </ion-col>
-            <ion-col col-4 class="animated slideInDown" *ngIf="!isRecruiter()">
+            <ion-col col-4 class="animated slideInDown">
               <h2>{{appliedJobs?.length || 0}}</h2>
               <p>Applied</p>
             </ion-col>

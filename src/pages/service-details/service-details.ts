@@ -199,10 +199,6 @@ export class ServiceDetailsPage {
     return users;
   }
 
-  isRecruiter(): boolean {
-    return this.authProvider.isRecruiter(this.profile);
-  }
-
   hasUserApplied() {
     // let applied = false;
     // this.appliedUsers.forEach(appliedJob => {

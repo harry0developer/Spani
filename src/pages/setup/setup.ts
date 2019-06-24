@@ -6,7 +6,6 @@ import { User } from '../../models/user';
 import { PlacesPage } from '../places/places';
 import { COLLECTION, EVENTS, USER_TYPE } from '../../utils/const';
 import { AuthProvider } from '../../providers/auth/auth';
-import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { MultiLoginPage } from '../multi-login/multi-login';
 

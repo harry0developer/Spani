@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, Events, ModalController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { COLLECTION, USER_TYPE, EVENTS } from '../../utils/const';
+import { USER_TYPE, EVENTS } from '../../utils/const';
 import { FeedbackProvider } from '../../providers/feedback/feedback';
-import { JobsPage } from '../jobs/jobs';
 import { DashboardPage } from '../dashboard/dashboard';
 import { DataProvider } from '../../providers/data/data';
 import { Job } from '../../models/job';
@@ -158,7 +157,7 @@ export class MultiSignupPage {
     this.authProvider.storeUser(user);
     if (user.type.toLowerCase() === USER_TYPE.client) {
       this.authProvider.storeUser(user);
-      this.navCtrl.setRoot(JobsPage);
+      this.navCtrl.setRoot(DashboardPage);
     } else if (user.type.toLowerCase() === USER_TYPE.provider) {
       this.authProvider.storeUser(user);
       this.navCtrl.setRoot(DashboardPage);

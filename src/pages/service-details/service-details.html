@@ -3,12 +3,12 @@
     <ion-title>
       Service Details
     </ion-title>
-    <ion-buttons *ngIf="service" [hidden]="isRecruiter()" end>
+    <ion-buttons *ngIf="service" end>
       <button ion-button icon-left (click)="presentShareJobActionSheet(service)">
         <ion-icon name="share-alt"></ion-icon>Share
       </button>
     </ion-buttons>
-    <ion-buttons *ngIf="service" [hidden]="!isRecruiter()" end>
+    <ion-buttons *ngIf="service" end>
       <button ion-button icon-left (click)="manageJob(service)">
         <!-- <ion-icon name="create"></ion-icon> -->
         <i class="fa fa-2x fa-ellipsis-h"></i>

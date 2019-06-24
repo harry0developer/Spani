@@ -54,9 +54,6 @@ export class ProfilePage {
 
   }
 
-  isRecruiter(user): boolean {
-    return this.authProvider.isRecruiter(user);
-  }
 
   profilePicture(user): string {
     return `assets/imgs/users/${user.gender}.svg`;
